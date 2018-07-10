@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#5e2925</color>
+    <color name="colorPrimaryDark">#511c18</color>
+    <color name="colorAccent">#3894d7</color>
+    <color name="textColor">#000000</color>
+    <color name="colorPrimaryDoubleDark">#4c211e</color>
+    <color name="colorHomeButton">#D7CCC8</color>
+    <color name="spinnerWhite">#ffffff</color>
+</resources>

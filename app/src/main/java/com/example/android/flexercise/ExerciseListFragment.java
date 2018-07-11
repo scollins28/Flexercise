@@ -17,12 +17,14 @@ public class ExerciseListFragment extends android.support.v4.app.Fragment{
 
     View rootView;
     ImageButton exerciseBackButton;
+    com.github.clans.fab.FloatingActionButton newExerciseFabButton;
 
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
       rootView = inflater.inflate( R.layout.exercise_list_fragment, container, false );
 
         exerciseBackButton = rootView.findViewById( R.id.exercise_back_button );
+        newExerciseFabButton = rootView.findViewById( R.id.exercise_fab_menu_item_one );
 
         View.OnClickListener listener = new View.OnClickListener() {
             @Override
@@ -31,6 +33,9 @@ public class ExerciseListFragment extends android.support.v4.app.Fragment{
                 if (v == exerciseBackButton ) {
                     position = 0;
                 }
+                if (v == newExerciseFabButton) {
+                    position = 1;
+                }
                 mCallback.onExerciseButtonSelected( position );
             }
         };
@@ -38,19 +43,8 @@ public class ExerciseListFragment extends android.support.v4.app.Fragment{
         //Attaching the click listener to the buttons
 
         exerciseBackButton.setOnClickListener( listener );
+        newExerciseFabButton.setOnClickListener( listener );
 
-
-        //Creating the FAB
-/*
-        com.github.clans.fab.FloatingActionButton exerciseListFab = rootView.findViewById(R.id.exerciseListFab);
-        exerciseListFab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Here's a Snackbar", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-*/
        return rootView;
     }
 

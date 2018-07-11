@@ -11,48 +11,48 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 
-public class WorkoutListFragment extends android.support.v4.app.Fragment{
+public class NewWorkoutFragment extends android.support.v4.app.Fragment{
 
     View rootView;
-    ImageButton workoutListBackButton;
-    com.github.clans.fab.FloatingActionButton newWorkoutFabButton;
+    ImageButton newWorkoutBackButton;
+    Button newWorkoutDoneButton;
 
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        rootView = inflater.inflate( R.layout.workout_list_fragment, container, false );
+        rootView = inflater.inflate( R.layout.new_workout_fragment, container, false );
 
-        workoutListBackButton = rootView.findViewById( R.id.workout_list_back_button );
-        newWorkoutFabButton = rootView.findViewById( R.id.workout_fab_menu_item_one);
+        newWorkoutBackButton = rootView.findViewById( R.id.new_workout_back_button );
+        newWorkoutDoneButton = rootView.findViewById( R.id.new_workout_done_button);
 
         View.OnClickListener listener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 int position = 0;
-                if (v == workoutListBackButton ) {
+                if (v == newWorkoutBackButton) {
                     position = 0;
                 }
-                else if (v == newWorkoutFabButton){
+                else if (v == newWorkoutDoneButton){
                     position = 1;
                 }
-                mCallback.onWorkoutListButtonSelected( position );
+                mCallback.onNewWorkoutButtonSelected( position );
             }
         };
 
         //Attaching the click listener to the buttons
 
-        workoutListBackButton.setOnClickListener( listener );
-        newWorkoutFabButton.setOnClickListener( listener );
+        newWorkoutBackButton.setOnClickListener( listener );
+        newWorkoutDoneButton.setOnClickListener( listener );
 
         return rootView;
     }
 
-    WorkoutListFragment.onWorkoutListButtonSelected mCallback;
+    NewWorkoutFragment.onNewWorkoutButtonSelected mCallback;
 
 
 
     //Interface for the click listener to send which button has been pushed to the home screen, and activate the fragment transaction
-    public interface onWorkoutListButtonSelected {
-        void onWorkoutListButtonSelected (int position);
+    public interface onNewWorkoutButtonSelected {
+        void onNewWorkoutButtonSelected (int position);
     }
 
     //Attaching the interface to the MasterListFragment
@@ -60,7 +60,7 @@ public class WorkoutListFragment extends android.support.v4.app.Fragment{
     public void onAttach(Context context) {
         super.onAttach( context );
         try {
-            mCallback = (WorkoutListFragment.onWorkoutListButtonSelected) context;
+            mCallback = (NewWorkoutFragment.onNewWorkoutButtonSelected) context;
         } catch (ClassCastException e) {
             throw new ClassCastException( context.toString() + "must implement click listener" );
         }

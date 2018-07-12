@@ -30,7 +30,7 @@
     <string name="exercise_starting_weight_hint_KG">Enter starting weight (KG)</string>
     <string name="add_to_workout">Add to workout?</string>
     <string name="select_all_that_apply">Select all workouts</string>
-    <string name="exercise_notes">Notes</string>
+    <string name="exercise_notes">Notes:</string>
     <string name="notes_hint">Add notes</string>
     <string name="exercise_name_hint">Exercise name</string>
     <string name="details_exercise_name">Exercise name</string>

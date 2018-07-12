@@ -85,7 +85,17 @@
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#fff">
+        android:background="#fff"
+        >
+
+        <com.baoyz.swipemenulistview.SwipeMenuListView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/exercises_list_view"
+            >
+
+
+        </com.baoyz.swipemenulistview.SwipeMenuListView>
 
         <com.github.clans.fab.FloatingActionMenu
             android:id="@+id/exercise_fab_menu"

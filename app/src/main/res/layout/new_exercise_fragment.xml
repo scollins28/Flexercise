@@ -192,7 +192,8 @@
                     fab:menu_shadowRadius="4dp"
                     fab:menu_shadowXOffset="1dp"
                     fab:menu_shadowYOffset="3dp"
-                    fab:menu_showShadow="true" />
+                    fab:menu_showShadow="true"
+                    />
 
             </android.support.constraint.ConstraintLayout>
 
@@ -518,14 +519,12 @@
                     android:id="@+id/exercise_notes_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
                     android:layout_marginLeft="8dp"
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="8dp"
                     android:text="@string/exercise_notes"
                     android:textColor="@color/textColor"
                     android:textSize="16sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 

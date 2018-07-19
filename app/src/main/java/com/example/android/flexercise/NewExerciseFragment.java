@@ -1,8 +1,9 @@
 package com.example.android.flexercise;
 
-import android.app.Fragment;
+
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -14,11 +15,15 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
+
+import com.example.android.flexercise.Database.ExerciseUpdateWorkoutLists;
 
 import java.util.ArrayList;
 
 import io.apptik.widget.multiselectspinner.MultiSelectSpinner;
 
+import static android.provider.BaseColumns._ID;
 import static com.example.android.flexercise.Database.ExerciseContract.ExerciseTable.ADD_TO_WORKOUT;
 import static com.example.android.flexercise.Database.ExerciseContract.ExerciseTable.CATEGORY_FIVE_STATE;
 import static com.example.android.flexercise.Database.ExerciseContract.ExerciseTable.CATEGORY_FOUR_STATE;
@@ -33,6 +38,28 @@ import static com.example.android.flexercise.Database.ExerciseContract.ExerciseT
 import static com.example.android.flexercise.Database.ExerciseContract.ExerciseTable.NOTES;
 import static com.example.android.flexercise.Database.ExerciseContract.ExerciseTable.NUMBER_OF_SETS;
 import static com.example.android.flexercise.Database.ExerciseContract.ExerciseTable.STARTING_WEIGHT;
+import static com.example.android.flexercise.Database.ExerciseContract.ExerciseTable.WORKOUT_EIGHT;
+import static com.example.android.flexercise.Database.ExerciseContract.ExerciseTable.WORKOUT_EIGHTEEN;
+import static com.example.android.flexercise.Database.ExerciseContract.ExerciseTable.WORKOUT_ELEVEN;
+import static com.example.android.flexercise.Database.ExerciseContract.ExerciseTable.WORKOUT_FIFTEEN;
+import static com.example.android.flexercise.Database.ExerciseContract.ExerciseTable.WORKOUT_FIVE;
+import static com.example.android.flexercise.Database.ExerciseContract.ExerciseTable.WORKOUT_FOUR;
+import static com.example.android.flexercise.Database.ExerciseContract.ExerciseTable.WORKOUT_FOURTEEN;
+import static com.example.android.flexercise.Database.ExerciseContract.ExerciseTable.WORKOUT_NINE;
+import static com.example.android.flexercise.Database.ExerciseContract.ExerciseTable.WORKOUT_NINETEEN;
+import static com.example.android.flexercise.Database.ExerciseContract.ExerciseTable.WORKOUT_ONE;
+import static com.example.android.flexercise.Database.ExerciseContract.ExerciseTable.WORKOUT_SEVEN;
+import static com.example.android.flexercise.Database.ExerciseContract.ExerciseTable.WORKOUT_SEVENTEEN;
+import static com.example.android.flexercise.Database.ExerciseContract.ExerciseTable.WORKOUT_SIX;
+import static com.example.android.flexercise.Database.ExerciseContract.ExerciseTable.WORKOUT_SIXTEEN;
+import static com.example.android.flexercise.Database.ExerciseContract.ExerciseTable.WORKOUT_TEN;
+import static com.example.android.flexercise.Database.ExerciseContract.ExerciseTable.WORKOUT_THIRTEEN;
+import static com.example.android.flexercise.Database.ExerciseContract.ExerciseTable.WORKOUT_THREE;
+import static com.example.android.flexercise.Database.ExerciseContract.ExerciseTable.WORKOUT_TWELVE;
+import static com.example.android.flexercise.Database.ExerciseContract.ExerciseTable.WORKOUT_TWENTY;
+import static com.example.android.flexercise.Database.ExerciseContract.ExerciseTable.WORKOUT_TWO;
+import static com.example.android.flexercise.Database.WorkoutsDatabase.WorkoutContract.WorkoutsTable.WORKOUT_CONTENT_URI;
+import static com.example.android.flexercise.Database.WorkoutsDatabase.WorkoutContract.WorkoutsTable.WORKOUT_NAME;
 
 public class NewExerciseFragment extends android.support.v4.app.Fragment{
 
@@ -55,11 +82,23 @@ public class NewExerciseFragment extends android.support.v4.app.Fragment{
     int categoriesFabValue = 0;
     ConstraintLayout categoriesHiddenLayout;
     Context mContext;
+    TextView maxWeightTv;
+    TextView startingWeightTv;
+    static Context context;
+    EditText startingWeightEditText;
+    EditText maxWeightEditText;
+    ArrayList <String> options;
+    public static int newID;
+
+    public NewExerciseFragment(){
+
+    }
 
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         rootView = inflater.inflate( R.layout.new_exercise_fragment, container, false );
         mContext = getActivity();
+        context = mContext;
         newExerciseBackButton = rootView.findViewById( R.id.new_exercise_back_button );
         newExerciseDoneButton = rootView.findViewById( R.id.new_exercise_done_button);
         newExerciseCategoryOneButton = rootView.findViewById( R.id.button_one );
@@ -70,6 +109,23 @@ public class NewExerciseFragment extends android.support.v4.app.Fragment{
         newExerciseCategorySixButton = rootView.findViewById( R.id.button_six );
         categoriesFab = rootView.findViewById( R.id.category_name_cl );
         categoriesHiddenLayout = rootView.findViewById( R.id.categories_buttons );
+        maxWeightTv = rootView.findViewById( R.id.exercise_max_weight_tv );
+        startingWeightTv = rootView.findViewById( R.id.exercise_starting_weight_tv );
+        maxWeightEditText = rootView.findViewById( R.id.exercise_max_weight_edit_text);
+        startingWeightEditText = rootView.findViewById( R.id.exercise_starting_weight_edit_text );
+
+        if (HomeScreen.kgValue==1){
+            maxWeightTv.setText( R.string.exercise_max_weight_KG );
+            maxWeightEditText.setHint( R.string.exercise_max_weight_hint_KG );
+            startingWeightTv.setText( R.string.exercise_starting_weight_KG);
+            startingWeightEditText.setHint( R.string.exercise_starting_weight_hint_KG);
+        }
+        else {
+            maxWeightTv.setText( R.string.exercise_max_weight_LBS );
+            maxWeightEditText.setHint( R.string.exercise_max_weight_hint_LBS );
+            startingWeightTv.setText( R.string.exercise_starting_weight_LBS);
+            startingWeightEditText.setHint( R.string.exercise_starting_weight_hint_LBS);
+        }
 
 
         View.OnClickListener listener = new View.OnClickListener() {
@@ -82,6 +138,7 @@ public class NewExerciseFragment extends android.support.v4.app.Fragment{
                 else if (v == newExerciseDoneButton){
                     Exercise newExercise = addExercise();
                     insertNewData (newExercise);
+                    new ExerciseUpdateWorkoutLists(newExercise, mContext);
                     position = 1;
                 }
                 mCallback.onNewExerciseButtonSelected( position );
@@ -104,24 +161,9 @@ public class NewExerciseFragment extends android.support.v4.app.Fragment{
                 else if (v == newExerciseCategoryOneButton) {
                     if (newExerciseCategoryOneValue==0){
                         newExerciseCategoryOneValue = 1;
-                        newExerciseCategoryTwoValue = 0;
-                        newExerciseCategoryThreeValue = 0;
-                        newExerciseCategoryFourValue = 0;
-                        newExerciseCategoryFiveValue = 0;
-                        newExerciseCategorySixValue = 0;
                         newExerciseCategoryOneButton.setBackgroundColor( getResources().getColor(R.color.colorAccent ));
                         newExerciseCategoryOneButton.setTextColor( getResources().getColor(R.color.spinnerWhite));
-                        newExerciseCategoryTwoButton.setBackgroundColor( getResources().getColor(R.color.colorHomeButton ));
-                        newExerciseCategoryTwoButton.setTextColor( getResources().getColor(R.color.textColor));
-                        newExerciseCategoryThreeButton.setBackgroundColor( getResources().getColor(R.color.colorHomeButton));
-                        newExerciseCategoryThreeButton.setTextColor( getResources().getColor(R.color.textColor));
-                        newExerciseCategoryFourButton.setBackgroundColor( getResources().getColor(R.color.colorHomeButton ));
-                        newExerciseCategoryFourButton.setTextColor( getResources().getColor(R.color.textColor));
-                        newExerciseCategoryFiveButton.setBackgroundColor( getResources().getColor(R.color.colorHomeButton));
-                        newExerciseCategoryFiveButton.setTextColor( getResources().getColor(R.color.textColor));
-                        newExerciseCategorySixButton.setBackgroundColor( getResources().getColor(R.color.colorHomeButton));
-                        newExerciseCategorySixButton.setTextColor( getResources().getColor(R.color.textColor));
-                    }
+                        }
                     else {
                         newExerciseCategoryOneValue = 0;
                         newExerciseCategoryOneButton.setBackgroundColor( getResources().getColor(R.color.colorHomeButton ));
@@ -130,25 +172,10 @@ public class NewExerciseFragment extends android.support.v4.app.Fragment{
                 }
                 else if (v == newExerciseCategoryTwoButton) {
                     if (newExerciseCategoryTwoValue==0){
-                        newExerciseCategoryOneValue = 0;
                         newExerciseCategoryTwoValue = 1;
-                        newExerciseCategoryThreeValue = 0;
-                        newExerciseCategoryFourValue = 0;
-                        newExerciseCategoryFiveValue = 0;
-                        newExerciseCategorySixValue = 0;
-                        newExerciseCategoryOneButton.setBackgroundColor( getResources().getColor(R.color.colorHomeButton ));
-                        newExerciseCategoryOneButton.setTextColor( getResources().getColor(R.color.textColor));
                         newExerciseCategoryTwoButton.setBackgroundColor( getResources().getColor(R.color.colorAccent));
                         newExerciseCategoryTwoButton.setTextColor( getResources().getColor(R.color.spinnerWhite));
-                        newExerciseCategoryThreeButton.setBackgroundColor( getResources().getColor(R.color.colorHomeButton));
-                        newExerciseCategoryThreeButton.setTextColor( getResources().getColor(R.color.textColor));
-                        newExerciseCategoryFourButton.setBackgroundColor( getResources().getColor(R.color.colorHomeButton ));
-                        newExerciseCategoryFourButton.setTextColor( getResources().getColor(R.color.textColor));
-                        newExerciseCategoryFiveButton.setBackgroundColor( getResources().getColor(R.color.colorHomeButton));
-                        newExerciseCategoryFiveButton.setTextColor( getResources().getColor(R.color.textColor));
-                        newExerciseCategorySixButton.setBackgroundColor( getResources().getColor(R.color.colorHomeButton));
-                        newExerciseCategorySixButton.setTextColor( getResources().getColor(R.color.textColor));
-                    }
+                        }
                     else {
                         newExerciseCategoryTwoValue = 0;
                         newExerciseCategoryTwoButton.setBackgroundColor( getResources().getColor(R.color.colorHomeButton ));
@@ -157,25 +184,10 @@ public class NewExerciseFragment extends android.support.v4.app.Fragment{
                 }
                 else if (v == newExerciseCategoryThreeButton) {
                     if (newExerciseCategoryThreeValue==0){
-                        newExerciseCategoryOneValue = 0;
-                        newExerciseCategoryTwoValue = 0;
                         newExerciseCategoryThreeValue = 1;
-                        newExerciseCategoryFourValue = 0;
-                        newExerciseCategoryFiveValue = 0;
-                        newExerciseCategorySixValue = 0;
-                        newExerciseCategoryOneButton.setBackgroundColor( getResources().getColor(R.color.colorHomeButton ));
-                        newExerciseCategoryOneButton.setTextColor( getResources().getColor(R.color.textColor));
-                        newExerciseCategoryTwoButton.setBackgroundColor( getResources().getColor(R.color.colorHomeButton ));
-                        newExerciseCategoryTwoButton.setTextColor( getResources().getColor(R.color.textColor));
                         newExerciseCategoryThreeButton.setBackgroundColor( getResources().getColor(R.color.colorAccent));
                         newExerciseCategoryThreeButton.setTextColor( getResources().getColor(R.color.spinnerWhite));
-                        newExerciseCategoryFourButton.setBackgroundColor( getResources().getColor(R.color.colorHomeButton ));
-                        newExerciseCategoryFourButton.setTextColor( getResources().getColor(R.color.textColor));
-                        newExerciseCategoryFiveButton.setBackgroundColor( getResources().getColor(R.color.colorHomeButton));
-                        newExerciseCategoryFiveButton.setTextColor( getResources().getColor(R.color.textColor));
-                        newExerciseCategorySixButton.setBackgroundColor( getResources().getColor(R.color.colorHomeButton));
-                        newExerciseCategorySixButton.setTextColor( getResources().getColor(R.color.textColor));
-                    }
+                        }
                     else {
                         newExerciseCategoryThreeValue = 0;
                         newExerciseCategoryThreeButton.setBackgroundColor( getResources().getColor(R.color.colorHomeButton ));
@@ -184,25 +196,10 @@ public class NewExerciseFragment extends android.support.v4.app.Fragment{
                 }
                 else if (v == newExerciseCategoryFourButton) {
                     if (newExerciseCategoryFourValue==0){
-                        newExerciseCategoryOneValue = 0;
-                        newExerciseCategoryTwoValue = 0;
-                        newExerciseCategoryThreeValue = 0;
                         newExerciseCategoryFourValue = 1;
-                        newExerciseCategoryFiveValue = 0;
-                        newExerciseCategorySixValue = 0;
-                        newExerciseCategoryOneButton.setBackgroundColor( getResources().getColor(R.color.colorHomeButton));
-                        newExerciseCategoryOneButton.setTextColor( getResources().getColor(R.color.textColor));
-                        newExerciseCategoryTwoButton.setBackgroundColor( getResources().getColor(R.color.colorHomeButton ));
-                        newExerciseCategoryTwoButton.setTextColor( getResources().getColor(R.color.textColor));
-                        newExerciseCategoryThreeButton.setBackgroundColor( getResources().getColor(R.color.colorHomeButton));
-                        newExerciseCategoryThreeButton.setTextColor( getResources().getColor(R.color.textColor));
                         newExerciseCategoryFourButton.setBackgroundColor( getResources().getColor(R.color.colorAccent));
                         newExerciseCategoryFourButton.setTextColor( getResources().getColor(R.color.spinnerWhite));
-                        newExerciseCategoryFiveButton.setBackgroundColor( getResources().getColor(R.color.colorHomeButton));
-                        newExerciseCategoryFiveButton.setTextColor( getResources().getColor(R.color.textColor));
-                        newExerciseCategorySixButton.setBackgroundColor( getResources().getColor(R.color.colorHomeButton));
-                        newExerciseCategorySixButton.setTextColor( getResources().getColor(R.color.textColor));
-                    }
+                        }
                     else {
                         newExerciseCategoryFourValue = 0;
                         newExerciseCategoryFourButton.setBackgroundColor( getResources().getColor(R.color.colorHomeButton ));
@@ -211,25 +208,10 @@ public class NewExerciseFragment extends android.support.v4.app.Fragment{
                 }
                 else if (v == newExerciseCategoryFiveButton) {
                     if (newExerciseCategoryFiveValue==0){
-                        newExerciseCategoryOneValue = 0;
-                        newExerciseCategoryTwoValue = 0;
-                        newExerciseCategoryThreeValue = 0;
-                        newExerciseCategoryFourValue = 0;
                         newExerciseCategoryFiveValue = 1;
-                        newExerciseCategorySixValue = 0;
-                        newExerciseCategoryOneButton.setBackgroundColor( getResources().getColor(R.color.colorHomeButton ));
-                        newExerciseCategoryOneButton.setTextColor( getResources().getColor(R.color.textColor));
-                        newExerciseCategoryTwoButton.setBackgroundColor( getResources().getColor(R.color.colorHomeButton ));
-                        newExerciseCategoryTwoButton.setTextColor( getResources().getColor(R.color.textColor));
-                        newExerciseCategoryThreeButton.setBackgroundColor( getResources().getColor(R.color.colorHomeButton));
-                        newExerciseCategoryThreeButton.setTextColor( getResources().getColor(R.color.textColor));
-                        newExerciseCategoryFourButton.setBackgroundColor( getResources().getColor(R.color.colorHomeButton ));
-                        newExerciseCategoryFourButton.setTextColor( getResources().getColor(R.color.textColor));
                         newExerciseCategoryFiveButton.setBackgroundColor( getResources().getColor(R.color.colorAccent));
                         newExerciseCategoryFiveButton.setTextColor( getResources().getColor(R.color.spinnerWhite));
-                        newExerciseCategorySixButton.setBackgroundColor( getResources().getColor(R.color.colorHomeButton));
-                        newExerciseCategorySixButton.setTextColor( getResources().getColor(R.color.textColor));
-                    }
+                        }
                     else {
                         newExerciseCategoryFiveValue = 0;
                         newExerciseCategoryFiveButton.setBackgroundColor( getResources().getColor(R.color.colorHomeButton ));
@@ -238,22 +220,7 @@ public class NewExerciseFragment extends android.support.v4.app.Fragment{
                 }
                 else if (v == newExerciseCategorySixButton) {
                     if (newExerciseCategorySixValue==0){
-                        newExerciseCategoryOneValue = 0;
-                        newExerciseCategoryTwoValue = 0;
-                        newExerciseCategoryThreeValue = 0;
-                        newExerciseCategoryFourValue = 0;
-                        newExerciseCategoryFiveValue = 0;
                         newExerciseCategorySixValue = 1;
-                        newExerciseCategoryOneButton.setBackgroundColor( getResources().getColor(R.color.colorHomeButton ));
-                        newExerciseCategoryOneButton.setTextColor( getResources().getColor(R.color.textColor));
-                        newExerciseCategoryTwoButton.setBackgroundColor( getResources().getColor(R.color.colorHomeButton ));
-                        newExerciseCategoryTwoButton.setTextColor( getResources().getColor(R.color.textColor));
-                        newExerciseCategoryThreeButton.setBackgroundColor( getResources().getColor(R.color.colorHomeButton));
-                        newExerciseCategoryThreeButton.setTextColor( getResources().getColor(R.color.textColor));
-                        newExerciseCategoryFourButton.setBackgroundColor( getResources().getColor(R.color.colorHomeButton ));
-                        newExerciseCategoryFourButton.setTextColor( getResources().getColor(R.color.textColor));
-                        newExerciseCategoryFiveButton.setBackgroundColor( getResources().getColor(R.color.colorHomeButton));
-                        newExerciseCategoryFiveButton.setTextColor( getResources().getColor(R.color.textColor));
                         newExerciseCategorySixButton.setBackgroundColor( getResources().getColor(R.color.colorAccent));
                         newExerciseCategorySixButton.setTextColor( getResources().getColor(R.color.spinnerWhite));
                     }
@@ -281,13 +248,15 @@ public class NewExerciseFragment extends android.support.v4.app.Fragment{
         categoriesFab.setOnClickListener( categoryButtonListener );
 
 
-        ArrayList<String> options = new ArrayList<>();
-        options.add("1");
-        options.add("2");
-        options.add("3");
-        options.add("A");
-        options.add("B");
-        options.add("C");
+        options = new ArrayList<>();
+        Cursor cursor = getActivity().getContentResolver().query( WORKOUT_CONTENT_URI, null, null, null, null );
+        cursor.moveToFirst();
+        for (int i=0; i<cursor.getCount(); i++){
+            cursor.moveToPosition( i );
+            String newWorkout = cursor.getString( cursor.getColumnIndex( WORKOUT_NAME) );
+            options.add(newWorkout);
+        }
+        cursor.close();
         MultiSelectSpinner multiSelectSpinner = (MultiSelectSpinner) rootView.findViewById(R.id.new_exercise_workout_list_spinner);
         ArrayAdapter<String> adapter = new ArrayAdapter <String>(getActivity(), android.R.layout.simple_list_item_multiple_choice, options);
 
@@ -321,6 +290,7 @@ public class NewExerciseFragment extends android.support.v4.app.Fragment{
     }
 
     public Exercise addExercise (){
+
         EditText exerciseNameEditText = rootView.findViewById( R.id.exercise_name_edit_text );
         String exerciseName = exerciseNameEditText.getText().toString();
 
@@ -354,12 +324,40 @@ public class NewExerciseFragment extends android.support.v4.app.Fragment{
         }
         int startingWeight = Integer.parseInt(startingWeightAsString);
 
-        String addToWorkout = rootView.findViewById( R.id.new_exercise_workout_list_spinner ).toString();
-        String notes = rootView.findViewById( R.id.exercise_notes_edit_text).toString();
+        MultiSelectSpinner addToWorkoutSpinner = rootView.findViewById( R.id.new_exercise_workout_list_spinner );
+        boolean[] checked = addToWorkoutSpinner.getSelected();
+        ArrayList<String>  addToWorkoutRawValues =  new ArrayList<String>();
+        ArrayList<Integer> workoutsExerciseIsOn = new ArrayList<>( );
+        Cursor cursor = getActivity().getContentResolver().query( WORKOUT_CONTENT_URI, null, null, null, null );
+        cursor.moveToFirst();
+        int hasValue = 0;
+        for (int i = 0; i < (checked.length); i++){
+            cursor.moveToPosition( i );
+            if (checked[i]==true){
+                if (hasValue == 1){
+                    String toAdd = options.get( i );
+                    addToWorkoutRawValues.add( toAdd );
+                }
+                else {
+                    String starterString = options.get( i );
+                    addToWorkoutRawValues.clear();
+                    addToWorkoutRawValues.add( starterString );
+                    hasValue = 1;
+                }
+                workoutsExerciseIsOn.add( cursor.getInt( cursor.getColumnIndex( _ID ) ) );
+            }
+        }
+
+        while (workoutsExerciseIsOn.size()<20){
+            workoutsExerciseIsOn.add( 0 );
+        }
+
+        EditText notesView = rootView.findViewById( R.id.exercise_notes_edit_text );
+        String notes = notesView.getText().toString();
 
         Exercise exerciseToAdd = new Exercise( exerciseName, categoryOneValue, categoryTwoValue, categoryThreeValue,
                 categoryFourValue, categoryFiveValue, categorySixValue, mediaSource, numberofSets, maxWeight,
-                startingWeight, addToWorkout, notes);
+                startingWeight, addToWorkoutRawValues, notes, context, workoutsExerciseIsOn);
 
         return exerciseToAdd;
     }
@@ -367,6 +365,7 @@ public class NewExerciseFragment extends android.support.v4.app.Fragment{
     public void insertNewData (Exercise exerciseToAdd){
         ContentValues contentValues = newContentValues(exerciseToAdd);
         mContext.getContentResolver().insert( CONTENT_URI, contentValues);
+        exerciseToAdd.mID = newID;
     }
 
     public static ContentValues newContentValues (Exercise exerciseToAdd) {
@@ -384,6 +383,46 @@ public class NewExerciseFragment extends android.support.v4.app.Fragment{
         contentValues.put( STARTING_WEIGHT, exerciseToAdd.getStartingWeight() );
         contentValues.put( ADD_TO_WORKOUT, exerciseToAdd.getAddToWorkout() );
         contentValues.put( NOTES, exerciseToAdd.getNotes() );
+        int i = 0;
+        contentValues.put( WORKOUT_ONE, exerciseToAdd.getWorkoutIds().get(i) );
+        i++;
+        contentValues.put( WORKOUT_TWO, exerciseToAdd.getWorkoutIds().get(i) );
+        i++;
+        contentValues.put( WORKOUT_THREE, exerciseToAdd.getWorkoutIds().get(i) );
+        i++;
+        contentValues.put( WORKOUT_FOUR, exerciseToAdd.getWorkoutIds().get(i) );
+        i++;
+        contentValues.put( WORKOUT_FIVE, exerciseToAdd.getWorkoutIds().get(i) );
+        i++;
+        contentValues.put( WORKOUT_SIX, exerciseToAdd.getWorkoutIds().get(i) );
+        i++;
+        contentValues.put( WORKOUT_SEVEN, exerciseToAdd.getWorkoutIds().get(i) );
+        i++;
+        contentValues.put( WORKOUT_EIGHT, exerciseToAdd.getWorkoutIds().get(i) );
+        i++;
+        contentValues.put( WORKOUT_NINE, exerciseToAdd.getWorkoutIds().get(i) );
+        i++;
+        contentValues.put( WORKOUT_TEN, exerciseToAdd.getWorkoutIds().get(i) );
+        i++;
+        contentValues.put( WORKOUT_ELEVEN, exerciseToAdd.getWorkoutIds().get(i) );
+        i++;
+        contentValues.put( WORKOUT_TWELVE, exerciseToAdd.getWorkoutIds().get(i) );
+        i++;
+        contentValues.put( WORKOUT_THIRTEEN, exerciseToAdd.getWorkoutIds().get(i) );
+        i++;
+        contentValues.put( WORKOUT_FOURTEEN, exerciseToAdd.getWorkoutIds().get(i) );
+        i++;
+        contentValues.put( WORKOUT_FIFTEEN, exerciseToAdd.getWorkoutIds().get(i) );
+        i++;
+        contentValues.put( WORKOUT_SIXTEEN, exerciseToAdd.getWorkoutIds().get(i) );
+        i++;
+        contentValues.put( WORKOUT_SEVENTEEN, exerciseToAdd.getWorkoutIds().get(i) );
+        i++;
+        contentValues.put( WORKOUT_EIGHTEEN, exerciseToAdd.getWorkoutIds().get(i) );
+        i++;
+        contentValues.put( WORKOUT_NINETEEN, exerciseToAdd.getWorkoutIds().get(i) );
+        i++;
+        contentValues.put( WORKOUT_TWENTY, exerciseToAdd.getWorkoutIds().get(i) );
         return contentValues;
     }
 

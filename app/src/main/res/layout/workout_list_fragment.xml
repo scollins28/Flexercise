@@ -15,7 +15,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorAccent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:elevation="24dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -81,10 +82,27 @@
         </LinearLayout>
 
     </LinearLayout>
+
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#fff">
+        android:background="#fff"
+        >
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/workouts_list_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            >
+
+
+        </android.support.v7.widget.RecyclerView>
+
 
         <com.github.clans.fab.FloatingActionMenu
             android:id="@+id/workout_fab_menu"
@@ -105,7 +123,7 @@
             fab:menu_colorRipple="@color/colorPrimaryDoubleDark"
             fab:menu_fab_label=""
             fab:menu_fab_size="normal"
-            fab:menu_icon="@drawable/dumbell_fab_icon_50x50"
+            fab:menu_icon="@drawable/fab_dumbell_icon_50x50"
             fab:menu_labels_colorNormal="#333333"
             fab:menu_labels_colorPressed="#444444"
             fab:menu_labels_colorRipple="#66FFFFFF"
@@ -136,7 +154,7 @@
                 android:id="@+id/workout_fab_menu_item_one"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/dumbell_fab_icon_40x40"
+                android:src="@drawable/fab_dumbell_icon_40x40"
                 app:fab_colorNormal="@color/colorAccent"
                 app:fab_colorPressed="@color/colorPrimaryDoubleDark"
                 app:fab_colorRipple="@color/colorPrimaryDoubleDark"

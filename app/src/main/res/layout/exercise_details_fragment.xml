@@ -15,7 +15,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorAccent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:elevation="24dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -56,6 +57,7 @@
                     android:layout_weight="5"
                     android:text="@string/exercise_name_placeholder"
                     android:textColor="@color/spinnerWhite"
+                    android:id="@+id/exercise_details_subheading"
                     android:textSize="24sp" />
 
                 <Button
@@ -67,8 +69,8 @@
                     android:background="@color/colorAccent"
                     android:textColor="@color/spinnerWhite"
                     android:contentDescription="@string/editButton"
-                    android:text="@string/doneButton"
-                    android:id="@+id/new_exercise_done_button"/>
+                    android:text="@string/editButton"
+                    android:id="@+id/exercise_edit_button"/>
 
             </LinearLayout>
 
@@ -151,7 +153,7 @@
                 <Button
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/play"
+                    android:text="@string/open"
                     android:layout_marginBottom="8dp"
                     android:layout_marginLeft="8dp"
                     android:layout_marginStart="8dp"
@@ -362,7 +364,7 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
-                    android:id="@+id/workouts_list_details_view_tv"
+                    android:id="@+id/workouts_list_exercise_details_view_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp"

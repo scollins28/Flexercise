@@ -4,9 +4,10 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/flexercise_launcher"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@drawable/flexercise_launcher_round"
+        android:logo="@drawable/flexercise_launcher"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".HomeScreen">
@@ -20,6 +21,10 @@
         <provider
             android:name=".Database.ExerciseContentProvider"
             android:authorities="com.example.android.flexercise"
+            android:exported="false" />
+        <provider
+            android:name=".Database.WorkoutsDatabase.WorkoutContentProvider"
+            android:authorities="com.example.android.flexercise.Database.WorkoutsDatabase.WorkoutContentProvider"
             android:exported="false" />
 
     </application>

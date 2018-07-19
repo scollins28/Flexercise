@@ -12,6 +12,8 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 
+import com.example.android.flexercise.NewExerciseFragment;
+
 import static android.content.UriMatcher.NO_MATCH;
 import static com.example.android.flexercise.Database.ExerciseContract.AUTHORITY;
 import static com.example.android.flexercise.Database.ExerciseContract.ExerciseTable.TABLE_NAME;
@@ -60,7 +62,7 @@ public class ExerciseContentProvider extends ContentProvider{
                 break;
             case EXERCISE_WITH_NAME:
                 String altID = uri.getPathSegments().get( 1 );
-                String mAltSelection = "RECIPE_NAME=?";
+                String mAltSelection = "EXERCISE_NAME=?";
                 String [] mAltSelectionArgs = new String[]{altID};
                 cursor = db.query( TABLE_NAME, projection, mAltSelection, mAltSelectionArgs , null, null, sortOrder );
                 break;
@@ -98,6 +100,8 @@ public class ExerciseContentProvider extends ContentProvider{
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
+        int idInt = (int) id;
+        NewExerciseFragment.newID = idInt;
         return returnUri;
 
     }
@@ -108,23 +112,41 @@ public class ExerciseContentProvider extends ContentProvider{
 
         int match = sUriMatcher.match(uri);
 
-        int recipesDeleted;
+        int exercisesDeleted;
 
         switch (match) {
             case EXERCISE_WITH_ID:
                 String id = uri.getPathSegments().get(1);
                 String newSelection = "_ID=?";
                 String [] newSelectionArgs = new String[]{id};
-                recipesDeleted = db.delete( TABLE_NAME, newSelection, newSelectionArgs);
+                exercisesDeleted = db.delete( TABLE_NAME, newSelection, newSelectionArgs);
                 break;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
-        return recipesDeleted;
+        return exercisesDeleted;
     }
 
     @Override
     public int update(@NonNull Uri uri, @Nullable ContentValues values, @Nullable String selection, @Nullable String[] selectionArgs) {
-        return 0;
+        final SQLiteDatabase db = mExerciseDbHelper.getWritableDatabase();
+
+        int match = sUriMatcher.match(uri);
+
+        int exercisesUpdated;
+
+        switch (match) {
+            case EXERCISE_WITH_ID:
+                String id = uri.getPathSegments().get(1);
+                String newSelection = "_ID=?";
+                String [] newSelectionArgs = new String[]{id};
+                exercisesUpdated = db.update( TABLE_NAME, values, newSelection, newSelectionArgs);
+                break;
+            default:
+                throw new UnsupportedOperationException("Unknown uri: " + uri);
+        }
+        return exercisesUpdated;
     }
+
 }
+

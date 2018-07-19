@@ -34,7 +34,7 @@
     <string name="notes_hint">Add notes</string>
     <string name="exercise_name_hint">Exercise name</string>
     <string name="details_exercise_name">Exercise name</string>
-    <string name="play">Play</string>
+    <string name="open">Open</string>
     <string name="three">3</string>
     <string name="forty">40</string>
     <string name="twenty">20</string>
@@ -47,6 +47,42 @@
     <string name="media_details_view">Media:</string>
     <string name="exercise_name_placeholder">Placeholder</string>
     <string name="editButton">Edit</string>
+    <string name="flexercise_logo">Flexercise logo</string>
+    <string name="no_workouts_selected">No workouts selected</string>
+    <string name="edit_exercise">Edit exercise</string>
+    <string name="exercises_to_include_tv">Exercises:</string>
+    <string name="workout_name">Workout Name:</string>
+    <string name="workout_name_hint">Enter workout name</string>
+    <string name="sets">Sets:</string>
+    <string name="max_weight">Max weight:</string>
+    <string name="starting_weight">Min weight:</string>
+    <string name="nextButton">Next</string>
+    <string name="previousButton">Previous</string>
+    <string name="categories">Categories</string>
+    <string name="edit_workout">Edit Workout</string>
+    <string name="preferred_weight">Weight units:</string>
+    <string name="LBS">lbs</string>
+    <string name="preferred_distance">Distance units:</string>
+    <string name="KM">KM</string>
+    <string name="miles">Miles</string>
+    <string name="erase_all">Erase All Data:</string>
+    <string name="erase_all_button">Erase</string>
+    <string name="remove_adverts">Remove adverts:</string>
+    <string name="remove_ads_button">Remove</string>
+    <string name="show_timer">Show timer:</string>
+    <string name="only_available_to_premium">Upgrade to enable</string>
+    <string name="KG_STATIC">KG</string>
+    <string name="LBS_STATIC">lbs</string>
+    <string name="KM_STATIC">KM</string>
+    <string name="miles_STATIC">Miles</string>
+    <string name="exercise_max_weight_LBS">Max weight (lbs):</string>
+    <string name="exercise_max_weight_hint_LBS">Enter max weight (lbs)</string>
+    <string name="exercise_starting_weight_LBS">Starting weight (lbs):</string>
+    <string name="exercise_starting_weight_hint_LBS">Enter starting weight (lbs)</string>
+    <string name="delete_all_title">Delete all confirmation</string>
+    <string name="delete_all_message">If you confirm, you will erase all exercises and workouts from the application. This action is irreversible so please be certain before you confirm.</string>
+    <string name="confirm">Confirm</string>
+    <string name="cancel">Cancel</string>
     <string-array name="spinner">
         <item>Alphabetical</item>
         <item>Category</item>
@@ -56,6 +92,22 @@
         <item>Add Youtube link</item>
         <item>Add custom video</item>
         <item>Add picture</item>
+    </string-array>
+    <string-array name="workouts_spinner">
+        <item>Test One</item>
+        <item>Test Two</item>
+        <item>Test Three</item>
+        <item>Test Four</item>
+        <item>Test Five</item>
+        <item>Test Six</item>
+    </string-array>
+    <string-array name="exercises_spinner">
+        <item>Test One</item>
+        <item>Test Two</item>
+        <item>Test Three</item>
+        <item>Test Four</item>
+        <item>Test Five</item>
+        <item>Test Six</item>
     </string-array>
 
 </resources>

@@ -32,5 +32,26 @@ public class ExerciseContract {
 
             public static final String NOTES = "notes";
 
+            public static final String WORKOUT_ONE = "workoutOneId";
+            public static final String WORKOUT_TWO = "workoutTwoId";
+            public static final String WORKOUT_THREE = "workoutThreeId";
+            public static final String WORKOUT_FOUR = "workoutFourId";
+            public static final String WORKOUT_FIVE = "workoutFiveId";
+            public static final String WORKOUT_SIX = "workoutSixId";
+            public static final String WORKOUT_SEVEN = "workoutSevenId";
+            public static final String WORKOUT_EIGHT = "workoutEightId";
+            public static final String WORKOUT_NINE = "workoutNineId";
+            public static final String WORKOUT_TEN = "workoutTenId";
+            public static final String WORKOUT_ELEVEN = "workoutElevenId";
+            public static final String WORKOUT_TWELVE = "workoutTwelveId";
+            public static final String WORKOUT_THIRTEEN = "workoutThirteenId";
+            public static final String WORKOUT_FOURTEEN = "workoutFourteenId";
+            public static final String WORKOUT_FIFTEEN = "workoutFifteenId";
+            public static final String WORKOUT_SIXTEEN = "workoutSixteenId";
+            public static final String WORKOUT_SEVENTEEN = "workoutSeventeenId";
+            public static final String WORKOUT_EIGHTEEN = "workoutEighteenId";
+            public static final String WORKOUT_NINETEEN = "workoutNineteenId";
+            public static final String WORKOUT_TWENTY = "workoutTwentyId";
+
         }
 }

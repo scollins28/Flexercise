@@ -15,7 +15,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorAccent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:elevation="24dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -167,7 +168,7 @@
                     fab:menu_colorRipple="@color/colorPrimaryDoubleDark"
                     fab:menu_fab_label="@string/choose_categories"
                     fab:menu_fab_size="normal"
-                    fab:menu_icon="@drawable/dumbell_fab_icon_50x50"
+                    fab:menu_icon="@drawable/fab_dumbell_icon_50x50"
                     fab:menu_labels_colorNormal="#333333"
                     fab:menu_labels_colorPressed="#444444"
                     fab:menu_labels_colorRipple="#66FFFFFF"
@@ -501,6 +502,7 @@
                 android:layout_marginTop="8dp"
                 android:textSize="20sp"
                 android:prompt="@string/select_all_that_apply"
+                android:entries="@array/workouts_spinner"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/add_to_workout_tv"
                 app:layout_constraintTop_toTopOf="parent" />

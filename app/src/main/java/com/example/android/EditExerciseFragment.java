@@ -483,6 +483,9 @@ public class EditExerciseFragment extends android.support.v4.app.Fragment{
                     multiSelectSpinner.setSelection( x, checkStatus[x] );
                 }}
         };
+
+        HomeScreen.checkDisplayBanner(rootView, HomeScreen.removeAdvertsValue);
+
         return rootView;
     }
 

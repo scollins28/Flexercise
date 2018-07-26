@@ -6,10 +6,20 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.annotation.Nullable;
+import android.support.constraint.ConstraintLayout;
+import android.view.View;
+import android.widget.Chronometer;
+import android.widget.LinearLayout;
+
+import com.example.android.Workout;
+import com.example.android.free.R;
 
 import static com.example.android.Widget.WorkoutWidget.currentExercise;
 import static com.example.android.Widget.WorkoutWidget.exerciseToInflate;
+import static com.example.android.Widget.WorkoutWidget.intentrecieved;
+import static com.example.android.Widget.WorkoutWidget.mContext;
 import static com.example.android.Widget.WorkoutWidget.widgetExercises;
 import static com.example.android.Widget.WorkoutWidget.workoutId;
 
@@ -18,7 +28,8 @@ public class WorkoutWidgetIntents extends IntentService {
     public static final String ACTION_PREVIOUS = "ActionRecieverPrevious";
     public static final String ACTION_EXERCISE = "ActionRecieverExercise";
     public static final String ACTION_WORKOUT = "ActionRecieverWorkout";
-    public static int toLoadCode;
+    public static final String ACTION_START = "ActionRecieverStart";
+    public static final String ACTION_RESTART = "ActionRecieverRestart";
 
     public WorkoutWidgetIntents() {
         super("WorkoutWidgetIntents");
@@ -43,6 +54,10 @@ public class WorkoutWidgetIntents extends IntentService {
                 handleWorkout();
             }else if (action.equals( ACTION_EXERCISE)) {
                 handleExercise();
+            }else if (action.equals( ACTION_START)) {
+                startTimer();
+            }else if (action.equals( ACTION_RESTART)) {
+                restartTimer();
             }
         }
     }
@@ -71,6 +86,32 @@ public class WorkoutWidgetIntents extends IntentService {
         AppWidgetManager appWidgetManager = AppWidgetManager.getInstance( this );
         int [] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName( this, WorkoutWidget.class ));
         WorkoutWidget.updateAppWidget( this, appWidgetManager, appWidgetIds );
+    }
+
+    private void startTimer() {
+        WorkoutWidget.playing = true;
+        WorkoutWidget.baseposition = SystemClock.elapsedRealtime();
+        if (intentrecieved==1){
+            WorkoutWidget.intentrecieved = 2;
+        }else {
+            WorkoutWidget.intentrecieved = 1;
+        }
+        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance( this );
+        int [] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName( this, WorkoutWidget.class ));
+        WorkoutWidget.updateAppWidget( this, appWidgetManager, appWidgetIds );
+    }
+
+    public static void restartTimer() {
+        WorkoutWidget.playing = false;
+        WorkoutWidget.baseposition = SystemClock.elapsedRealtime();
+        if (intentrecieved==1){
+            WorkoutWidget.intentrecieved = 2;
+        }else {
+            WorkoutWidget.intentrecieved = 1;
+        }
+        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance( mContext);
+        int [] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName( mContext, WorkoutWidget.class ));
+        WorkoutWidget.updateAppWidget( mContext, appWidgetManager, appWidgetIds );
     }
 
     private void handleWorkout() {

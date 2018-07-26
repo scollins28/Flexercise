@@ -8,16 +8,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
 import com.example.android.free.R;
-import com.example.android.Workout;
-
 import java.util.ArrayList;
 import java.util.Collections;
-
 import github.nisrulz.recyclerviewhelper.RVHAdapter;
 import github.nisrulz.recyclerviewhelper.RVHViewHolder;
-
 import static com.example.android.Database.WorkoutsDatabase.WorkoutContract.WorkoutsTable.WORKOUT_CONTENT_URI;
 
 
@@ -44,7 +39,6 @@ public class WorkoutListAdapter extends RecyclerView.Adapter<WorkoutListAdapter.
 
     public class WorkoutsHolder extends RecyclerView.ViewHolder implements RVHViewHolder{
         public TextView workoutName;
-
         private Context mContext;
 
         public WorkoutsHolder(View view){
@@ -66,10 +60,9 @@ public class WorkoutListAdapter extends RecyclerView.Adapter<WorkoutListAdapter.
         @Override
         public void onItemClear() {
             System.out.println("Item is unselected");
-
         }
 
-        }
+    }
 
 
     @Override
@@ -94,12 +87,10 @@ public class WorkoutListAdapter extends RecyclerView.Adapter<WorkoutListAdapter.
         long id = workouts.get( position ).getID();
         Uri deleteUri =  WORKOUT_CONTENT_URI.buildUpon().appendPath(Long.toString(id)).build();
         mContext.getContentResolver().delete(deleteUri,null,null);
-
         workouts.remove(position);
         notifyItemRemoved(position);
         notifyDataSetChanged();
         notifyItemRangeChanged(0, workouts.size());
-
     }
 
     private void swap(int firstPosition, int secondPosition) {

@@ -115,6 +115,8 @@ public class ExerciseListFragment extends android.support.v4.app.Fragment{
         exerciseBackButton.setOnClickListener( listener );
         newExerciseFabButton.setOnClickListener( listener );
 
+        HomeScreen.checkDisplayBanner(rootView, HomeScreen.removeAdvertsValue);
+
        return rootView;
     }
 

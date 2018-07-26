@@ -18,12 +18,14 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.Switch;
+import android.widget.TextView;
 
 import com.example.android.Widget.WorkoutWidget;
 import com.example.android.HomeScreen;
 import com.example.android.free.R;
 
 import static android.provider.BaseColumns._ID;
+import static android.view.View.GONE;
 import static com.example.android.Database.ExerciseContract.ExerciseTable.CONTENT_URI;
 import static com.example.android.Database.ExerciseContract.ExerciseTable.DISTANCE;
 import static com.example.android.Database.ExerciseContract.ExerciseTable.MAX_WEIGHT;
@@ -38,11 +40,11 @@ public class SettingsFragment extends android.support.v4.app.Fragment {
     CheckBox lbsCheckbox;
     CheckBox kmCheckbox;
     CheckBox milesCheckbox;
+    TextView premiumText;
     int kgValue;
     int lbsValue;
     int kmValue;
     int milesValue;
-
     Button eraseAllDataButton;
     Button removeAdvertsButton;
     int removeAdvertsValue;
@@ -67,7 +69,18 @@ public class SettingsFragment extends android.support.v4.app.Fragment {
         eraseAllDataButton = rootView.findViewById( R.id.erase_all_button );
         removeAdvertsButton = rootView.findViewById( R.id.remove_ads_button );
         timerSwitch = rootView.findViewById( R.id.enable_timer_switch );
-
+        premiumText = rootView.findViewById( R.id.updrade_text );
+        if (removeAdvertsValue==1) {
+            premiumText.setVisibility( GONE );
+            timerSwitch.setVisibility( View.VISIBLE );
+            removeAdvertsButton.setClickable( false );
+            removeAdvertsButton.setBackgroundColor( getResources().getColor( R.color.colorHomeButton ) );
+            if (timerSwitchValue == 1) {
+                timerSwitch.setChecked( true );
+            } else {
+                timerSwitch.setChecked( false );
+            }
+        }
         checkWeightAndDistanceCheckboxs();
 
 
@@ -141,6 +154,28 @@ public class SettingsFragment extends android.support.v4.app.Fragment {
                     AlertDialog dialog = builder.create();
                     dialog.show();
                 }
+                else if (v == removeAdvertsButton){
+                    HomeScreen.removeAdvertsValue = 1;
+                    removeAdvertsValue = 1;
+                    timerSwitch.setChecked( true );
+                    timerSwitchValue=1;
+                    HomeScreen.timerSwitchValue = 1;
+                    timerSwitch.setVisibility( View.VISIBLE );
+                    premiumText.setVisibility( GONE );
+                    removeAdvertsButton.setClickable( false );
+                    removeAdvertsButton.setBackgroundColor( getResources().getColor(R.color.colorHomeButton));
+                    HomeScreen.checkDisplayBanner(rootView, HomeScreen.removeAdvertsValue);
+                }
+                else if (v == timerSwitch){
+                    if (timerSwitchValue == 0) {
+                        HomeScreen.timerSwitchValue = 1;
+                        timerSwitchValue =1;
+                    } else {
+                        HomeScreen.timerSwitchValue = 0;
+                        timerSwitchValue = 0;
+                    }
+
+                }
             }
         };
 
@@ -152,6 +187,10 @@ public class SettingsFragment extends android.support.v4.app.Fragment {
         kmCheckbox.setOnClickListener( listener );
         milesCheckbox.setOnClickListener( listener );
         eraseAllDataButton.setOnClickListener( listener );
+        removeAdvertsButton.setOnClickListener( listener );
+        timerSwitch.setOnClickListener( listener );
+
+        HomeScreen.checkDisplayBanner(rootView, HomeScreen.removeAdvertsValue);
 
         return rootView;
     }

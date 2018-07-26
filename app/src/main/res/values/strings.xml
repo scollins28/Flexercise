@@ -120,6 +120,11 @@
     <string name="exercise_distance_hint_miles">Distance in Miles</string>
     <string name="time_minutes">Time in Minutes</string>
     <string name="minutes"> minutes</string>
+    <string name="on">On</string>
+    <string name="off">Off</string>
+    <string name="restart">Restart</string>
+    <string name="start">Start</string>
+    <string name="no_time">00:00</string>
     <string-array name="spinner">
         <item>Alphabetical</item>
         <item>Category</item>

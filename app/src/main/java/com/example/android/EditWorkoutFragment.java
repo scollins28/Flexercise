@@ -289,6 +289,7 @@ public class EditWorkoutFragment extends android.support.v4.app.Fragment{
             }}
         };
 
+        HomeScreen.checkDisplayBanner(rootView, HomeScreen.removeAdvertsValue);
 
         return rootView;
     }

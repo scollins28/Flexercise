@@ -2,6 +2,7 @@ package com.example.android;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -13,15 +14,12 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
-
 import com.example.android.Database.WorkoutsDatabase.WorkoutContract;
-import com.example.android.Exercise;
-import com.example.android.HomeScreen;
-import com.example.android.Workout;
 import com.example.android.free.R;
 
-import java.util.ArrayList;
+import junit.runner.BaseTestRunner;
 
+import java.util.ArrayList;
 import static android.provider.BaseColumns._ID;
 import static com.example.android.Database.WorkoutsDatabase.WorkoutContract.WorkoutsTable.CATEGORY_FIVE_STATE;
 import static com.example.android.Database.WorkoutsDatabase.WorkoutContract.WorkoutsTable.CATEGORY_FOUR_STATE;
@@ -52,23 +50,26 @@ public class WorkoutExerciseDetailsFragment extends android.support.v4.app.Fragm
     TextView unitTwo;
     TextView notes;
     Button mediaButton;
+    Button startButton;
+    Button restartButton;
     String media;
     Boolean allowed;
     int mediaType = 0;
+    int removeAdvertsValue = 0;
     String youTubeString;
 
     public WorkoutExerciseDetailsFragment() {
-
     }
 
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         createWorkout();
         rootView = inflater.inflate( R.layout.workout_exercise_details_fragment, container, false );
-
         exerciseDetailsBackButton = rootView.findViewById( R.id.workout_exercise_details_back_button );
         exerciseDoneButton = rootView.findViewById( R.id.workout_exercise_done_button );
         nextButton = rootView.findViewById( R.id.exercise_next_button );
         previousButton = rootView.findViewById( R.id.exercise_previous_button );
+        startButton = rootView.findViewById( R.id.start );
+        restartButton = rootView.findViewById( R.id.restart );
         mediaButton = rootView.findViewById( R.id.media_button );
         unitOne = rootView.findViewById( R.id.kg_tv );
         unitTwo = rootView.findViewById( R.id.kg_tv2 );
@@ -112,10 +113,14 @@ public class WorkoutExerciseDetailsFragment extends android.support.v4.app.Fragm
                     HomeScreen.calledPosition -= 1;
                     position = 2;
                     mCallback.onWorkoutExerciseDetailsButtonSelected( position );
-                } else if (v == nextButton){
-                   HomeScreen.calledPosition +=1;
-                   position = 2;
+                } else if (v == nextButton) {
+                    HomeScreen.calledPosition += 1;
+                    position = 2;
                     mCallback.onWorkoutExerciseDetailsButtonSelected( position );
+                }else if (v == startButton) {
+                    HomeScreen.startChronometer(HomeScreen.chronometer);
+                }else if (v == restartButton){
+                    HomeScreen.restartChronometer(HomeScreen.chronometer);
                 } else if (v == mediaButton) {
                     if (mediaType == 1) {
                         youTubeString = exercise.getMediaSource();
@@ -153,6 +158,8 @@ public class WorkoutExerciseDetailsFragment extends android.support.v4.app.Fragm
         nextButton.setOnClickListener( listener );
         previousButton.setOnClickListener( listener );
         mediaButton.setOnClickListener( listener );
+        startButton.setOnClickListener( listener );
+        restartButton.setOnClickListener( listener );
 
         subheading = rootView.findViewById(R.id.exercise_details_subheading);
         exerciseName = rootView.findViewById( R.id.exercise_name_details_view_tv );
@@ -176,6 +183,10 @@ public class WorkoutExerciseDetailsFragment extends android.support.v4.app.Fragm
             startingWeight.setText( String.valueOf( exercise.getTime()) );
         }
         notes.setText( exercise.getNotes() );
+
+        HomeScreen.checkDisplayBanner(rootView, HomeScreen.removeAdvertsValue);
+
+        HomeScreen.getChronometer(rootView, HomeScreen.timerSwitchValue, 1);
 
         return rootView;
     }
@@ -273,5 +284,4 @@ public class WorkoutExerciseDetailsFragment extends android.support.v4.app.Fragm
                 }
             }}
     }
-
 }

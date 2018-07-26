@@ -6,6 +6,8 @@ import android.appwidget.AppWidgetProvider;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.os.SystemClock;
+import android.widget.Chronometer;
 import android.widget.RemoteViews;
 
 import com.example.android.HomeScreen;
@@ -15,9 +17,14 @@ import java.util.ArrayList;
 
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
+import static com.example.android.Widget.WorkoutWidgetIntents.ACTION_RESTART;
+import static com.example.android.Widget.WorkoutWidgetIntents.ACTION_START;
+import static com.example.android.Widget.WorkoutWidgetIntents.restartTimer;
 import static com.example.android.free.R.id.exercise_previous_button;
 import static com.example.android.free.R.id.load_exercise;
 import static com.example.android.free.R.id.load_workouts;
+import static com.example.android.free.R.id.restart;
+import static com.example.android.free.R.id.start;
 import static com.example.android.free.R.id.widget_next;
 import static com.example.android.Widget.WorkoutWidgetIntents.ACTION_EXERCISE;
 import static com.example.android.Widget.WorkoutWidgetIntents.ACTION_NEXT;
@@ -38,11 +45,16 @@ public class WorkoutWidget extends AppWidgetProvider {
     static String unit;
     static String altUnit;
     static String timeUnit;
+    static long baseposition = SystemClock.elapsedRealtime();
+    static boolean playing = false;
+    static int intentrecieved = 0;
+    static int timerEnabled;
 
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
                                 int[] appWidgetIds) {
         widgetExercises = HomeScreen.widgetWorkoutDetails;
         mContext = context;
+        timerEnabled = HomeScreen.timerSwitchValue;
         RemoteViews views = new RemoteViews( context.getPackageName(), R.layout.workout_widget );
         if (HomeScreen.widgetCreated==1){
         widgetUnits();}
@@ -65,6 +77,7 @@ public class WorkoutWidget extends AppWidgetProvider {
             views.setViewVisibility( R.id.exercise_previous_button, GONE);
             views.setViewVisibility( R.id.load_exercise, GONE);
             views.setViewVisibility( R.id.widget_next, GONE);
+            views.setViewVisibility( R.id.timer_layout, GONE );
             Intent intent = new Intent( context, HomeScreen.class );
             int code = 999999;
             intent.putExtra( "code", code);
@@ -94,7 +107,7 @@ public class WorkoutWidget extends AppWidgetProvider {
 
             views.setTextViewText( R.id.appwidget_text, exerciseToInflate.getCurrentExerciseName());
             views.setTextViewText( R.id.appwidget_exercise_number, String.valueOf(currentExercise+1));
-            views.setTextViewText( R.id.appwidget_exercise_number_of_x, String.valueOf( widgetExercises.size() ));
+            views.setTextViewText( R.id.appwidget_exercise_number_of_x, String.valueOf( widgetExercises.size()));
             views.setTextViewText( R.id.number_of_Sets, String.valueOf( exerciseToInflate.getNumberOfSets()));
             if (exerciseType==0) {
                 views.setTextViewText( R.id.max_weight, String.valueOf( exerciseToInflate.getMaxWeight() ) );
@@ -110,6 +123,27 @@ public class WorkoutWidget extends AppWidgetProvider {
                 views.setTextViewText( R.id.starting_weight_text, mContext.getString( R.string.time ));
                 views.setTextViewText( R.id.unit_one, altUnit );
                 views.setTextViewText( R.id.unit_two, timeUnit );
+            }
+
+            if (timerEnabled==1) {
+                Intent startIntent = new Intent( context, WorkoutWidgetIntents.class );
+                startIntent.setAction( ACTION_START );
+                PendingIntent startPendingIntent = PendingIntent.getService( context, 0, startIntent, PendingIntent.FLAG_UPDATE_CURRENT );
+                views.setOnClickPendingIntent( start, startPendingIntent );
+
+                Intent restartIntent = new Intent( context, WorkoutWidgetIntents.class );
+                restartIntent.setAction( ACTION_RESTART );
+                PendingIntent restartPendingIntent = PendingIntent.getService( context, 0, restartIntent, PendingIntent.FLAG_UPDATE_CURRENT );
+                views.setOnClickPendingIntent( restart, restartPendingIntent );
+
+                views.setViewVisibility( R.id.timer_layout, VISIBLE );
+                if (intentrecieved==0){
+                    restartTimer();
+                    views.setChronometer( R.id.chronometerWidget, baseposition, null, playing );
+                } else if (intentrecieved==2){
+                    views.setChronometer( R.id.chronometerWidget, baseposition, null, playing );
+                    intentrecieved = 1;
+                }
             }
 
             Intent intent = new Intent( context, HomeScreen.class );

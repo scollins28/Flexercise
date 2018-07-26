@@ -14,15 +14,10 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-
 import com.example.android.Database.WorkoutsDatabase.WorkoutUpdateExerciseLists;
-import com.example.android.Workout;
 import com.example.android.free.R;
-
 import java.util.ArrayList;
-
 import io.apptik.widget.multiselectspinner.MultiSelectSpinner;
-
 import static android.provider.BaseColumns._ID;
 import static com.example.android.Database.ExerciseContract.ExerciseTable.CONTENT_URI;
 import static com.example.android.Database.ExerciseContract.ExerciseTable.EXERCISE_NAME;
@@ -241,7 +236,7 @@ public class NewWorkoutFragment extends android.support.v4.app.Fragment{
             }
         };
 
-
+        HomeScreen.checkDisplayBanner(rootView, HomeScreen.removeAdvertsValue);
 
         return rootView;
     }

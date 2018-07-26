@@ -399,6 +399,8 @@ public class NewExerciseFragment extends android.support.v4.app.Fragment{
                     }
                 };
 
+        HomeScreen.checkDisplayBanner(rootView, HomeScreen.removeAdvertsValue);
+
         return rootView;
     }
 
@@ -597,22 +599,6 @@ public class NewExerciseFragment extends android.support.v4.app.Fragment{
         youtubeConstraintLayout.setVisibility( View.GONE);
     }
 
-  /*  public void makeLocalVisible(){
-        localVideoConstraintLayout.setVisibility( View.VISIBLE);
-    }
-
-    public void makeLocalInvisible(){
-        localVideoConstraintLayout.setVisibility( View.GONE);
-    }
-
-    public void onActivityResult(int requestCode, int resultCode, Intent data){
-
-        if (requestCode == IMAGE_PICKER_SELECT && resultCode == Activity.RESULT_OK) {
-            mediaSourceHolder = String.valueOf(data.getData());
-            videoSelected = 1;
-            }
-    }
-*/
     public String stripDownYouTubeUrl (String youTubeString){
         String condensedString;
         String toCondense = youTubeString;
@@ -621,19 +607,6 @@ public class NewExerciseFragment extends android.support.v4.app.Fragment{
         condensedString = subStrings[subStrings.length-1];
         return condensedString;
     }
-
- /*   public void selectVideoFromGallery() {
-        Intent intent;
-        if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
-            intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Video.Media.EXTERNAL_CONTENT_URI);
-        } else {
-            intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Video.Media.INTERNAL_CONTENT_URI);
-        }
-        intent.setType("video/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult( intent, IMAGE_PICKER_SELECT );
-    }
-    */
 }
 
 

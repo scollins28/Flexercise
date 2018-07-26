@@ -7,4 +7,5 @@
     <color name="colorPrimaryDoubleDark">#4c211e</color>
     <color name="colorHomeButton">#D7CCC8</color>
     <color name="spinnerWhite">#ffffff</color>
+    <color name="warningRed">#ff0800</color>
 </resources>

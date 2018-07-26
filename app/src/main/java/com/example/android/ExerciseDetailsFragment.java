@@ -160,6 +160,8 @@ public class ExerciseDetailsFragment extends android.support.v4.app.Fragment {
             categorySix.setTextColor( getResources().getColor(R.color.spinnerWhite));
         }
 
+        HomeScreen.checkDisplayBanner(rootView, HomeScreen.removeAdvertsValue);
+
         return rootView;
     }
 

@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:layout_width="match_parent"
     android:gravity="center"
-    android:background="@drawable/flex_home_background_alt"
+    android:background="@drawable/flex_home_background"
     android:theme="@style/AppTheme"
     >
 

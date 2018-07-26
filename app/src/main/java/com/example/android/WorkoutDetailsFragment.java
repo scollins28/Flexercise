@@ -17,21 +17,13 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ScrollView;
 import android.widget.TextView;
-
 import com.example.android.Database.ExerciseContract;
 import com.example.android.Widget.WidgetWorkoutDetails;
-import com.example.android.Exercise;
-import com.example.android.HomeScreen;
-import com.example.android.Workout;
-import com.example.android.WorkoutDetailsAdapter;
 import com.example.android.free.R;
-
 import java.util.ArrayList;
-
 import github.nisrulz.recyclerviewhelper.RVHItemClickListener;
 import github.nisrulz.recyclerviewhelper.RVHItemDividerDecoration;
 import github.nisrulz.recyclerviewhelper.RVHItemTouchHelperCallback;
-
 import static android.provider.BaseColumns._ID;
 import static com.example.android.Database.ExerciseContract.ExerciseTable.CONTENT_URI;
 import static com.example.android.Database.ExerciseContract.ExerciseTable.DISTANCE;
@@ -70,6 +62,8 @@ public class WorkoutDetailsFragment extends android.support.v4.app.Fragment impl
     ImageButton workoutDetailsBackButton;
     Button workoutEditButton;
     public Workout workout;
+    Button startButton;
+    Button restartButton;
     ArrayList <Exercise> exercises = new ArrayList<>(  );
     TextView subheading;
     private RecyclerView recyclerView;
@@ -80,10 +74,7 @@ public class WorkoutDetailsFragment extends android.support.v4.app.Fragment impl
     Cursor widgetExerciseCursor;
 
     public WorkoutDetailsFragment() {
-
     }
-
-
 
 
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -93,7 +84,6 @@ public class WorkoutDetailsFragment extends android.support.v4.app.Fragment impl
         rootView = inflater.inflate( R.layout.workout_details_fragment, container, false );
         widgetCursor = getActivity().getContentResolver().query( WORKOUT_CONTENT_URI, null, null, null, null );
         widgetExerciseCursor = getActivity().getContentResolver().query( CONTENT_URI, null, null, null, null );
-
         workoutDetailsBackButton = rootView.findViewById( R.id.workout_details_back_button );
         workoutEditButton = rootView.findViewById( R.id.workout_edit_button );
         recyclerView = (RecyclerView) rootView.findViewById( R.id.workouts_details_view );
@@ -124,19 +114,27 @@ public class WorkoutDetailsFragment extends android.support.v4.app.Fragment impl
             }
         }));
 
+        startButton = rootView.findViewById( R.id.start );
+        restartButton = rootView.findViewById( R.id.restart );
 
-                View.OnClickListener listener = new View.OnClickListener() {
+        View.OnClickListener listener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 int position = 0;
                 if (v == workoutDetailsBackButton) {
                     position = 0;
                     HomeScreen.listStateTwo =0;
+                    mCallback.onWorkoutDetailsButtonSelected( position );
                 } else if (v == workoutEditButton) {
                     position = 1;
                     ScrollView scrollView = rootView.findViewById( R.id.workout_details_sv );
                     HomeScreen.listStateTwo = scrollView.getScrollY();
-                } else if (v == newExerciseFabButton){
+                    mCallback.onWorkoutDetailsButtonSelected( position );
+                } else if (v == startButton) {
+                    HomeScreen.startChronometer(HomeScreen.chronometer);
+                }else if (v == restartButton) {
+                    HomeScreen.restartChronometer( HomeScreen.chronometer );
+                }else if (v == newExerciseFabButton){
                     HomeScreen.widgetWorkoutId = workout.mID;
                     ArrayList <WidgetWorkoutDetails> widgetExercises = new ArrayList<>(  );
                     ArrayList<String> exerciseIds = getExerciseTableNames();
@@ -170,8 +168,9 @@ public class WorkoutDetailsFragment extends android.support.v4.app.Fragment impl
                     }
                     HomeScreen.widgetWorkoutDetails = widgetExercises;
                     position = 4;
+                    mCallback.onWorkoutDetailsButtonSelected( position );
                 }
-                mCallback.onWorkoutDetailsButtonSelected( position );
+
             }
         };
 
@@ -180,6 +179,8 @@ public class WorkoutDetailsFragment extends android.support.v4.app.Fragment impl
         workoutDetailsBackButton.setOnClickListener( listener );
         workoutEditButton.setOnClickListener( listener );
         newExerciseFabButton.setOnClickListener( listener );
+        startButton.setOnClickListener( listener );
+        restartButton.setOnClickListener( listener );
 
         subheading = rootView.findViewById( R.id.workout_details_subheading );
 
@@ -189,6 +190,9 @@ public class WorkoutDetailsFragment extends android.support.v4.app.Fragment impl
 
         subheading.setText( workout.getWorkoutName() );
 
+        HomeScreen.checkDisplayBanner(rootView, HomeScreen.removeAdvertsValue);
+
+        HomeScreen.getChronometer(rootView, HomeScreen.timerSwitchValue, 1);
 
         return rootView;
 
@@ -279,10 +283,7 @@ public class WorkoutDetailsFragment extends android.support.v4.app.Fragment impl
                             exerciseToAdd.mDistance = cursor.getColumnIndex( ExerciseContract.ExerciseTable.DISTANCE );
                             exerciseToAdd.mTime = cursor.getColumnIndex( ExerciseContract.ExerciseTable.MINUTES);
                         }
-
-
                         exercisesToFeature.add( exerciseToAdd );
-
                             }
                         }
                     }

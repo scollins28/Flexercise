@@ -7,7 +7,8 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-public class CheckInternetConnection {
+public class
+CheckInternetConnection {
     static int status = 0;
 
     public CheckInternetConnection (){

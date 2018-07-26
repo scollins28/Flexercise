@@ -62,7 +62,6 @@ public class WorkoutDetailsAdapter extends RecyclerView.Adapter<WorkoutDetailsAd
             maxWeightUnit =view.findViewById( R.id.workout_details_item_max_weight_unit );
             startingWeightTv = view.findViewById( R.id.workout_details_item_starting_weight_name );
             startingWeightUnit =view.findViewById( R.id.workout_details_item_starting_weight_unit );
-
         }
 
         public void bindWorkout (Exercise exercise) {
@@ -97,10 +96,8 @@ public class WorkoutDetailsAdapter extends RecyclerView.Adapter<WorkoutDetailsAd
         @Override
         public void onItemClear() {
             System.out.println("Item is unselected");
-
         }
-
-        }
+    }
 
 
     @Override
@@ -128,6 +125,5 @@ public class WorkoutDetailsAdapter extends RecyclerView.Adapter<WorkoutDetailsAd
     public int getItemCount() {
         return exercises.size();
     }
-
 }
 

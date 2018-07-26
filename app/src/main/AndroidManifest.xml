@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.android.flexercise">
+    package="com.example.android.free">
+
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -9,23 +13,41 @@
         android:roundIcon="@drawable/flexercise_launcher_round"
         android:logo="@drawable/flexercise_launcher"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
-        <activity android:name=".HomeScreen">
+        android:theme="@style/AppTheme"
+
+        android:name="com.example.android.InternetBasedActivity.Analytics">
+        <activity android:name="com.example.android.HomeScreen"
+                android:screenOrientation="portrait"
+            android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
 
         <provider
-            android:name=".Database.ExerciseContentProvider"
-            android:authorities="com.example.android.flexercise"
+            android:name="com.example.android.Database.ExerciseContentProvider"
+            android:authorities="com.example.android"
             android:exported="false" />
         <provider
-            android:name=".Database.WorkoutsDatabase.WorkoutContentProvider"
-            android:authorities="com.example.android.flexercise.Database.WorkoutsDatabase.WorkoutContentProvider"
+            android:name="com.example.android.Database.WorkoutsDatabase.WorkoutContentProvider"
+            android:authorities="com.example.android.Database.WorkoutsDatabase.WorkoutContentProvider"
             android:exported="false" />
+
+        <receiver android:name="com.example.android.Widget.WorkoutWidget">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="ActionReceiverNext"/>
+                <action android:name="ActionReceiverPrevious"/>
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/workout_widget_info"/>
+        </receiver>
+        <service android:name="com.example.android.Widget.WorkoutWidgetIntents"/>
 
     </application>
 

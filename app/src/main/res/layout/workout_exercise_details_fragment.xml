@@ -159,6 +159,7 @@
                         android:layout_marginStart="8dp"
                         android:layout_marginTop="8dp"
                         android:background="@color/colorAccent"
+                        android:id="@+id/media_button"
                         android:text="@string/open"
                         android:textColor="@color/spinnerWhite"
                         app:layout_constraintLeft_toRightOf="@id/exercise_media_tv"
@@ -382,7 +383,6 @@
 
                 </android.support.constraint.ConstraintLayout>
             </android.support.constraint.ConstraintLayout>
-
 
         </ScrollView>
 

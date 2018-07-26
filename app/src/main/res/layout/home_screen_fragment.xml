@@ -7,76 +7,79 @@
     android:layout_height="match_parent"
     android:layout_width="match_parent"
     android:gravity="center"
-    android:background="@drawable/flexercise_homescreen_background"
+    android:background="@drawable/flex_home_background_alt"
     android:theme="@style/AppTheme"
     >
 
 
     <ImageView
         android:id="@+id/flexercise_homescreen_logo"
-        android:contentDescription="@string/flexercise_logo"
         android:layout_width="match_parent"
-        android:layout_height="280dp"
+        android:layout_height="150dp"
+        android:contentDescription="@string/flexercise_logo"
+        android:cropToPadding="false"
+        android:elevation="64dp"
         android:src="@drawable/flexercise_homescreen_logo"
-        app:layout_constraintBottom_toTopOf="@+id/exercises_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:elevation="64dp"
-        android:cropToPadding="false"
         tools:ignore="UnusedAttribute"
-        />
+        android:background="@color/colorAccent"/>
 
     <Button
         android:id="@+id/exercises_button"
-        android:layout_width="200dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
+        android:background="@color/colorHomeButton"
         android:text="@string/Exercises_Button"
-        app:layout_constraintBottom_toTopOf="@+id/workouts_button"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/flexercise_homescreen_logo"
-        android:background="@color/colorHomeButton"/>
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/workouts_button"
+        app:layout_constraintStart_toStartOf="parent" />
 
 
     <Button
         android:id="@+id/workouts_button"
-        android:layout_width="200dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:background="@color/colorHomeButton"
         android:text="@string/Workouts_Button"
-        app:layout_constraintBottom_toTopOf="@+id/setttings_button"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/exercises_button"
-        android:background="@color/colorHomeButton"/>
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/setttings_button"
+        app:layout_constraintStart_toEndOf="@+id/exercises_button" />
 
 
     <Button
         android:id="@+id/setttings_button"
-        android:layout_width="200dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:background="@color/colorHomeButton"
         android:text="@string/Settings_Button"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/workouts_button"
-        android:background="@color/colorHomeButton"/>
+        app:layout_constraintStart_toEndOf="@+id/workouts_button" />
 
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/GoneFragmentContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:visibility="gone" />
 
 
 

@@ -34,10 +34,11 @@
                 android:layout_height="wrap_content"
                 android:background="@color/colorPrimary"
                 android:orientation="horizontal"
-                android:paddingTop="8dp"
-                android:paddingBottom="8dp">
+                android:paddingBottom="8dp"
+                android:paddingTop="8dp">
 
                 <ImageButton
+                    android:id="@+id/exercise_details_back_button"
                     android:layout_width="0dp"
                     android:layout_height="40dp"
                     android:layout_gravity="left"
@@ -45,10 +46,10 @@
                     android:background="@android:color/transparent"
                     android:contentDescription="@string/backButton"
                     android:scaleType="fitCenter"
-                    android:src="@drawable/back_arrow"
-                    android:id="@+id/exercise_details_back_button"/>
+                    android:src="@drawable/back_arrow" />
 
                 <TextView
+                    android:id="@+id/exercise_details_subheading"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -57,20 +58,19 @@
                     android:layout_weight="5"
                     android:text="@string/exercise_name_placeholder"
                     android:textColor="@color/spinnerWhite"
-                    android:id="@+id/exercise_details_subheading"
                     android:textSize="24sp" />
 
                 <Button
+                    android:id="@+id/exercise_edit_button"
                     android:layout_width="0dp"
                     android:layout_height="40dp"
                     android:layout_gravity="right"
-                    android:layout_weight="2"
                     android:layout_marginRight="8dp"
+                    android:layout_weight="2"
                     android:background="@color/colorAccent"
-                    android:textColor="@color/spinnerWhite"
                     android:contentDescription="@string/editButton"
                     android:text="@string/editButton"
-                    android:id="@+id/exercise_edit_button"/>
+                    android:textColor="@color/spinnerWhite" />
 
             </LinearLayout>
 
@@ -151,17 +151,18 @@
 
 
                 <Button
+                    android:id="@+id/media_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/open"
-                    android:layout_marginBottom="8dp"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginRight="8dp"
                     android:layout_marginTop="8dp"
                     android:background="@color/colorAccent"
+                    android:text="@string/open"
                     android:textColor="@color/spinnerWhite"
-                    app:layout_constraintLeft_toRightOf="@id/exercise_media_tv"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
+
 
             </android.support.constraint.ConstraintLayout>
 

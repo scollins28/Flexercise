@@ -39,7 +39,7 @@
     <string name="forty">40</string>
     <string name="twenty">20</string>
     <string name="exercise_max_weight">Max weight:</string>
-    <string name="KG">KG</string>
+    <string name="KG"> KG</string>
     <string name="exercise_starting_weight">Starting weight:</string>
     <string name="part_of_x_workouts">Added to workouts:</string>
     <string name="workouts_added_to_list">Examples workout One, Examples workout Two, Examples workout Three</string>
@@ -61,10 +61,10 @@
     <string name="categories">Categories</string>
     <string name="edit_workout">Edit Workout</string>
     <string name="preferred_weight">Weight units:</string>
-    <string name="LBS">lbs</string>
+    <string name="LBS"> lbs</string>
     <string name="preferred_distance">Distance units:</string>
-    <string name="KM">KM</string>
-    <string name="miles">Miles</string>
+    <string name="KM"> KM</string>
+    <string name="miles"> Miles</string>
     <string name="erase_all">Erase All Data:</string>
     <string name="erase_all_button">Erase</string>
     <string name="remove_adverts">Remove adverts:</string>
@@ -83,6 +83,43 @@
     <string name="delete_all_message">If you confirm, you will erase all exercises and workouts from the application. This action is irreversible so please be certain before you confirm.</string>
     <string name="confirm">Confirm</string>
     <string name="cancel">Cancel</string>
+    <string name="YouTube_link">YouTube link:</string>
+    <string name="enter_youtube_id">Enter a Youtube URL</string>
+    <string name="of">of</string>
+    <string name="zero_placeholder">0</string>
+    <string name="next">Next</string>
+    <string name="set_widget">Set workout to widget</string>
+    <string name="number_of_set_text">Sets:</string>
+    <string name="max_weight_text">// Max Weight:</string>
+    <string name="starting_weight_text">// Starting Weight:</string>
+    <string name="load_exercise">Load exercise</string>
+    <string name="please_select_a_workout">You haven\'t selected a workout yet. Add one now?</string>
+    <string name="load_workouts">Load workouts</string>
+    <string name="add_a_youtube_url">Enter a YouTube URL:</string>
+    <string name="youtube_url_hint">YouTube URL</string>
+    <string name="media_none">No media selected</string>
+    <string name="media_one">Add Youtube link</string>
+    <string name="media_two">Add custom video</string>
+    <string name="add_a_local_file">Select video from camera roll:</string>
+    <string name="choose_file">Choose file</string>
+    <string name="add_a_local_file_button">Add a local file button</string>
+    <string name="no_media">No Media Alert</string>
+    <string name="no_media_message">Sorry, but you haven\'t added a media file for this exercise yet. Edit the exercise to add one.</string>
+    <string name="invalid_youtube">Invalid YouTube Link</string>
+    <string name="invalid_youtube_message">Your YouTube link is invalid. Please ensure that it contains \"youtube.com/watch?v=\" and then the code that follows.</string>
+    <string name="no_video_selected">No video selected</string>
+    <string name="no_video_selected_message">You haven\'t selected a video, please either select no media or choose a video to associate with this workout.</string>
+    <string name="youtube_url_start">http://www.youtube.com/watch?v=</string>
+    <string name="exercise_type">Type of exercise:</string>
+    <string name="weight">Weight</string>
+    <string name="distance">Distance:</string>
+    <string name="time">Time:</string>
+    <string name="distance_km">Distance (KM):</string>
+    <string name="distance_miles">Distance (Miles):</string>
+    <string name="exercise_distance_hint_KM">Distance in KM</string>
+    <string name="exercise_distance_hint_miles">Distance in Miles</string>
+    <string name="time_minutes">Time in Minutes</string>
+    <string name="minutes"> minutes</string>
     <string-array name="spinner">
         <item>Alphabetical</item>
         <item>Category</item>
@@ -91,7 +128,6 @@
         <item>No media selected</item>
         <item>Add Youtube link</item>
         <item>Add custom video</item>
-        <item>Add picture</item>
     </string-array>
     <string-array name="workouts_spinner">
         <item>Test One</item>

@@ -19,6 +19,7 @@ public class MasterListFragment extends Fragment {
     Context mContext;
     Button exerciseButton;
     Button workoutButton;
+    Button newsButton;
     Button settingsButton;
     ConstraintLayout constraintLayout;
 
@@ -39,6 +40,7 @@ public class MasterListFragment extends Fragment {
         exerciseButton = (Button) rootView.findViewById(R.id.exercises_button);
         workoutButton = (Button) rootView.findViewById(R.id.workouts_button);
         settingsButton = (Button) rootView.findViewById(R.id.setttings_button);
+        newsButton = (Button) rootView.findViewById(R.id.news_button);
 
         // Setting on click listener for the three buttons
 
@@ -52,6 +54,8 @@ public class MasterListFragment extends Fragment {
                     position = 1;
                 } else if (v == settingsButton) {
                     position = 2;
+                } else if (v == newsButton){
+                    position = 3;
                 }
                 mCallback.onButtonSelected( position );
             }
@@ -62,6 +66,7 @@ public class MasterListFragment extends Fragment {
         exerciseButton.setOnClickListener( listener );
         workoutButton.setOnClickListener( listener );
         settingsButton.setOnClickListener( listener );
+        newsButton.setOnClickListener( listener );
 
         return rootView;
     }

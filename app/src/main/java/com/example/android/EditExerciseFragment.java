@@ -1,6 +1,5 @@
 package com.example.android;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.database.Cursor;
@@ -26,8 +25,6 @@ import android.widget.TextView;
 import com.example.android.Database.ExerciseTableCleaner;
 import com.example.android.Database.ExerciseUpdateWorkoutLists;
 import com.example.android.Database.WorkoutsDatabase.WorkoutContract;
-import com.example.android.Exercise;
-import com.example.android.HomeScreen;
 import com.example.android.free.R;
 
 import java.util.ArrayList;
@@ -35,43 +32,6 @@ import java.util.ArrayList;
 import io.apptik.widget.multiselectspinner.MultiSelectSpinner;
 
 import static android.provider.BaseColumns._ID;
-import static com.example.android.Database.ExerciseContract.ExerciseTable.ADD_TO_WORKOUT;
-import static com.example.android.Database.ExerciseContract.ExerciseTable.CATEGORY_FIVE_STATE;
-import static com.example.android.Database.ExerciseContract.ExerciseTable.CATEGORY_FOUR_STATE;
-import static com.example.android.Database.ExerciseContract.ExerciseTable.CATEGORY_ONE_STATE;
-import static com.example.android.Database.ExerciseContract.ExerciseTable.CATEGORY_SIX_STATE;
-import static com.example.android.Database.ExerciseContract.ExerciseTable.CATEGORY_THREE_STATE;
-import static com.example.android.Database.ExerciseContract.ExerciseTable.CATEGORY_TWO_STATE;
-import static com.example.android.Database.ExerciseContract.ExerciseTable.DISTANCE;
-import static com.example.android.Database.ExerciseContract.ExerciseTable.EXERCISE_NAME;
-import static com.example.android.Database.ExerciseContract.ExerciseTable.EXERCISE_TYPE;
-import static com.example.android.Database.ExerciseContract.ExerciseTable.MAX_WEIGHT;
-import static com.example.android.Database.ExerciseContract.ExerciseTable.MEDIA_SOURCE;
-import static com.example.android.Database.ExerciseContract.ExerciseTable.MEDIA_TYPE;
-import static com.example.android.Database.ExerciseContract.ExerciseTable.MINUTES;
-import static com.example.android.Database.ExerciseContract.ExerciseTable.NOTES;
-import static com.example.android.Database.ExerciseContract.ExerciseTable.NUMBER_OF_SETS;
-import static com.example.android.Database.ExerciseContract.ExerciseTable.STARTING_WEIGHT;
-import static com.example.android.Database.ExerciseContract.ExerciseTable.WORKOUT_EIGHT;
-import static com.example.android.Database.ExerciseContract.ExerciseTable.WORKOUT_EIGHTEEN;
-import static com.example.android.Database.ExerciseContract.ExerciseTable.WORKOUT_ELEVEN;
-import static com.example.android.Database.ExerciseContract.ExerciseTable.WORKOUT_FIFTEEN;
-import static com.example.android.Database.ExerciseContract.ExerciseTable.WORKOUT_FIVE;
-import static com.example.android.Database.ExerciseContract.ExerciseTable.WORKOUT_FOUR;
-import static com.example.android.Database.ExerciseContract.ExerciseTable.WORKOUT_FOURTEEN;
-import static com.example.android.Database.ExerciseContract.ExerciseTable.WORKOUT_NINE;
-import static com.example.android.Database.ExerciseContract.ExerciseTable.WORKOUT_NINETEEN;
-import static com.example.android.Database.ExerciseContract.ExerciseTable.WORKOUT_ONE;
-import static com.example.android.Database.ExerciseContract.ExerciseTable.WORKOUT_SEVEN;
-import static com.example.android.Database.ExerciseContract.ExerciseTable.WORKOUT_SEVENTEEN;
-import static com.example.android.Database.ExerciseContract.ExerciseTable.WORKOUT_SIX;
-import static com.example.android.Database.ExerciseContract.ExerciseTable.WORKOUT_SIXTEEN;
-import static com.example.android.Database.ExerciseContract.ExerciseTable.WORKOUT_TEN;
-import static com.example.android.Database.ExerciseContract.ExerciseTable.WORKOUT_THIRTEEN;
-import static com.example.android.Database.ExerciseContract.ExerciseTable.WORKOUT_THREE;
-import static com.example.android.Database.ExerciseContract.ExerciseTable.WORKOUT_TWELVE;
-import static com.example.android.Database.ExerciseContract.ExerciseTable.WORKOUT_TWENTY;
-import static com.example.android.Database.ExerciseContract.ExerciseTable.WORKOUT_TWO;
 import static com.example.android.Database.WorkoutsDatabase.WorkoutContract.WorkoutsTable.WORKOUT_CONTENT_URI;
 import static com.example.android.Database.WorkoutsDatabase.WorkoutContract.WorkoutsTable.WORKOUT_NAME;
 
@@ -285,8 +245,7 @@ public class EditExerciseFragment extends android.support.v4.app.Fragment{
                             new ExerciseUpdateWorkoutLists( newExercise, mContext );
                             position = 1;
                             mCallback.onEditExerciseButtonSelected( position );
-                        }
-                        else {
+                        } else {
                             android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder( getContext() );
                             builder.setCancelable( true );
                             builder.setTitle( R.string.invalid_youtube );
@@ -305,7 +264,30 @@ public class EditExerciseFragment extends android.support.v4.app.Fragment{
 
                             android.support.v7.app.AlertDialog dialog = builder.create();
                             dialog.show();
-                        }}
+                        }
+                        if (editExerciseCategoryOneValue == 0 && editExerciseCategoryTwoValue == 0 &&
+                                editExerciseCategoryThreeValue == 0 && editExerciseCategoryFourValue == 0
+                                && editExerciseCategoryFiveValue == 0 && editExerciseCategorySixValue == 0){
+                            android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder( getContext() );
+                            builder.setCancelable( true );
+                            builder.setTitle( R.string.no_category );
+                            builder.setMessage( R.string.please_select_a_category );
+                            builder.setPositiveButton( R.string.confirm,
+                                    new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                        }
+                                    } );
+                            builder.setNegativeButton( R.string.cancel, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                }
+                            } );
+
+                            android.support.v7.app.AlertDialog dialog = builder.create();
+                            dialog.show();
+                        }
+                    }
                     else {
                         Exercise newExercise = updateExercise();
                         updateData( newExercise );
@@ -519,14 +501,18 @@ public class EditExerciseFragment extends android.support.v4.app.Fragment{
         int categoryFiveValue = editExerciseCategoryFiveValue;
         int categorySixValue = editExerciseCategorySixValue;
 
-        String mediaSource = rootView.findViewById( R.id.exercise_media_spinner ).toString();
+        Log.e( "Media Source Origin", "not yet");
+        String mediaSource = "";
+        Log.e( "Media Source Origin", String.valueOf( mediaSource ) );
         EditText youTubeStringEditText = rootView.findViewById( R.id.add_youtube_string_edit_text );
+        Log.e( "Media Source Origin", String.valueOf( mediaSource ) );
         String youTubeString = youTubeStringEditText.getText().toString();
+        Log.e( "Media Source Origin", String.valueOf( mediaSource ) );
         if (mediaType ==1){
             mediaSource = stripDownYouTubeUrl(youTubeString);
             Log.e( "Media Source Origin", String.valueOf( mediaSource ) );
         }
-
+        Log.e( "Media Source Origin", String.valueOf( mediaSource ) );
 
         EditText numberofSetsView = rootView.findViewById( R.id.exercise_number_of_sets_edit_text );
         String numberofSetsAsString = numberofSetsView.getText().toString();
@@ -624,73 +610,9 @@ public class EditExerciseFragment extends android.support.v4.app.Fragment{
 
     public void updateData (Exercise exerciseToAdd){
         HomeScreen.exercise = ExerciseTableCleaner.cleanSingleExercise (context, exerciseToAdd);
-    //    ContentValues contentValues = newContentValues(exerciseToAdd);
-    //    long id = exerciseToEdit.getID();
-    //    Uri updateUri =  CONTENT_URI.buildUpon().appendPath(Long.toString(id)).build();
-     //   mContext.getContentResolver().update( updateUri, contentValues, null, null);
+        Log.e( "CLEANED", String.valueOf( HomeScreen.exercise.getMediaSource() ) );
     }
 
-    public static ContentValues newContentValues (Exercise exerciseToAdd) {
-        ContentValues contentValues = new ContentValues(  );
-        contentValues.put( EXERCISE_NAME, exerciseToAdd.getExerciseName());
-        contentValues.put( EXERCISE_TYPE, exerciseToAdd.getExerciseType() );
-        contentValues.put( CATEGORY_ONE_STATE, exerciseToAdd.getCategoryOneValue() );
-        contentValues.put( CATEGORY_TWO_STATE, exerciseToAdd.getCategoryTwoValue() );
-        contentValues.put( CATEGORY_THREE_STATE, exerciseToAdd.getCategoryThreeValue() );
-        contentValues.put( CATEGORY_FOUR_STATE, exerciseToAdd.getCategoryFourValue() );
-        contentValues.put( CATEGORY_FIVE_STATE, exerciseToAdd.getCategoryFiveValue() );
-        contentValues.put( CATEGORY_SIX_STATE, exerciseToAdd.getCategorySixValue() );
-        contentValues.put (MEDIA_TYPE, exerciseToAdd.getMediaType());
-        contentValues.put( MEDIA_SOURCE, exerciseToAdd.getMediaSource() );
-        contentValues.put( NUMBER_OF_SETS, exerciseToAdd.getNumberofSets() );
-        contentValues.put( MAX_WEIGHT, exerciseToAdd.getMaxWeight() );
-        contentValues.put( STARTING_WEIGHT, exerciseToAdd.getStartingWeight() );
-        contentValues.put( DISTANCE, exerciseToAdd.getDistance() );
-        contentValues.put( MINUTES, exerciseToAdd.getTime() );
-        contentValues.put( ADD_TO_WORKOUT, exerciseToAdd.getAddToWorkout() );
-        contentValues.put( NOTES, exerciseToAdd.getNotes() );
-        int i = 0;
-        contentValues.put( WORKOUT_ONE, exerciseToAdd.getWorkoutIds().get(i) );
-        i++;
-        contentValues.put( WORKOUT_TWO, exerciseToAdd.getWorkoutIds().get(i) );
-        i++;
-        contentValues.put( WORKOUT_THREE, exerciseToAdd.getWorkoutIds().get(i) );
-        i++;
-        contentValues.put( WORKOUT_FOUR, exerciseToAdd.getWorkoutIds().get(i) );
-        i++;
-        contentValues.put( WORKOUT_FIVE, exerciseToAdd.getWorkoutIds().get(i) );
-        i++;
-        contentValues.put( WORKOUT_SIX, exerciseToAdd.getWorkoutIds().get(i) );
-        i++;
-        contentValues.put( WORKOUT_SEVEN, exerciseToAdd.getWorkoutIds().get(i) );
-        i++;
-        contentValues.put( WORKOUT_EIGHT, exerciseToAdd.getWorkoutIds().get(i) );
-        i++;
-        contentValues.put( WORKOUT_NINE, exerciseToAdd.getWorkoutIds().get(i) );
-        i++;
-        contentValues.put( WORKOUT_TEN, exerciseToAdd.getWorkoutIds().get(i) );
-        i++;
-        contentValues.put( WORKOUT_ELEVEN, exerciseToAdd.getWorkoutIds().get(i) );
-        i++;
-        contentValues.put( WORKOUT_TWELVE, exerciseToAdd.getWorkoutIds().get(i) );
-        i++;
-        contentValues.put( WORKOUT_THIRTEEN, exerciseToAdd.getWorkoutIds().get(i) );
-        i++;
-        contentValues.put( WORKOUT_FOURTEEN, exerciseToAdd.getWorkoutIds().get(i) );
-        i++;
-        contentValues.put( WORKOUT_FIFTEEN, exerciseToAdd.getWorkoutIds().get(i) );
-        i++;
-        contentValues.put( WORKOUT_SIXTEEN, exerciseToAdd.getWorkoutIds().get(i) );
-        i++;
-        contentValues.put( WORKOUT_SEVENTEEN, exerciseToAdd.getWorkoutIds().get(i) );
-        i++;
-        contentValues.put( WORKOUT_EIGHTEEN, exerciseToAdd.getWorkoutIds().get(i) );
-        i++;
-        contentValues.put( WORKOUT_NINETEEN, exerciseToAdd.getWorkoutIds().get(i) );
-        i++;
-        contentValues.put( WORKOUT_TWENTY, exerciseToAdd.getWorkoutIds().get(i) );
-        return contentValues;
-    }
 
     public boolean [] checkState(){
         boolean[] checkList = addToWorkoutSpinner.getSelected();

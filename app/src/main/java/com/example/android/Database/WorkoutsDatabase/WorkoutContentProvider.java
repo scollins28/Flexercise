@@ -17,13 +17,18 @@ import static com.example.android.Database.WorkoutsDatabase.WorkoutContract.Work
 
 public class WorkoutContentProvider extends ContentProvider{
 
+    //Call dbHelper.
     private WorkoutDbHelper mWorkoutDbHelper;
+
+    //Final ints for the uriMatcher
     public static final int WORKOUTS = 100;
     public static final int WORKOUT_WITH_ID = 101;
     public static final int WORKOUT_WITH_NAME = 102;
     private static final UriMatcher sUriMatcher = buildUriMatcher();
     public SQLiteDatabase db;
 
+
+    //Urimatcher, for Quid matchers to determine how to process uri.
     public static UriMatcher buildUriMatcher(){
         UriMatcher uriMatcher = new UriMatcher( NO_MATCH );
         uriMatcher.addURI( WorkoutContract.AUTHORITY, WorkoutContract.PATH_WORKOUTS, WORKOUTS);
@@ -32,6 +37,7 @@ public class WorkoutContentProvider extends ContentProvider{
         return uriMatcher;
     }
 
+    //On create set the base values required.
     @Override
     public boolean onCreate() {
         Context context = getContext();
@@ -40,6 +46,7 @@ public class WorkoutContentProvider extends ContentProvider{
         return true;
     }
 
+    //Query method for the Workouts table, can return all workouts or workouts refined by name or id.
     @Nullable
     @Override
     public Cursor query(@NonNull Uri uri, @Nullable String[] projection, @Nullable String selection, @Nullable String[] selectionArgs, @Nullable String sortOrder) {
@@ -70,16 +77,18 @@ public class WorkoutContentProvider extends ContentProvider{
         return cursor;
     }
 
+    //Unused override method required for implementation.
     @Nullable
     @Override
     public String getType(@NonNull Uri uri) {
         return null;
     }
 
+
+    //Insert method for the Workouts table, can insert only a singular entry at a time.
     @Nullable
     @Override
     public Uri insert(@NonNull Uri uri, @Nullable ContentValues values) {
-
 
         int match = sUriMatcher.match(uri);
         long id = 0;
@@ -98,9 +107,10 @@ public class WorkoutContentProvider extends ContentProvider{
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
         return returnUri;
-
     }
 
+
+    //Delete method for the Workouts table, can delete workouts refined by id.
     @Override
     public int delete(@NonNull Uri uri, @Nullable String selection, @Nullable String[] selectionArgs) {
         final SQLiteDatabase db = mWorkoutDbHelper.getWritableDatabase();
@@ -125,6 +135,7 @@ public class WorkoutContentProvider extends ContentProvider{
 
     }
 
+    //Update method for the Workouts table, can update a singular workout or several by id.
     @Override
     public int update(@NonNull Uri uri, @Nullable ContentValues values, @Nullable String selection, @Nullable String[] selectionArgs) {
         final SQLiteDatabase db = mWorkoutDbHelper.getWritableDatabase();

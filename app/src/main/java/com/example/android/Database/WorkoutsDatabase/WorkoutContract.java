@@ -5,12 +5,15 @@ import android.provider.BaseColumns;
 
 public class WorkoutContract {
 
+    //Basic required final values requirede for the dbhelper and content provider.
         public static final String AUTHORITY = "com.example.android.Database.WorkoutsDatabase.WorkoutContentProvider";
         public static final Uri BASE_CONTENT_URI = Uri.parse( "content://"+AUTHORITY );
         public static final String PATH_WORKOUTS = "workouts";
 
+
         public static final class WorkoutsTable implements BaseColumns {
 
+            //Final values for the workout table, broken up into categories.
             public static final Uri WORKOUT_CONTENT_URI = BASE_CONTENT_URI.buildUpon().appendPath(PATH_WORKOUTS).build();
 
             public static final String WORKOUT_TABLE_NAME = "workouts";
@@ -22,7 +25,6 @@ public class WorkoutContract {
             public static final String CATEGORY_FOUR_STATE = "categoryFourState";
             public static final String CATEGORY_FIVE_STATE = "categoryFiveState";
             public static final String CATEGORY_SIX_STATE = "categorySixState";
-
 
             public static final String EXERCISE_ONE_ID = "exerciseOneID";
             public static final String EXERCISE_TWO_ID = "exerciseTwoID";

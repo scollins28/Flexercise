@@ -13,9 +13,13 @@ import java.util.Collections;
 import static android.provider.BaseColumns._ID;
 import static com.example.android.Database.ExerciseContract.ExerciseTable.ADD_TO_WORKOUT;
 import static com.example.android.Database.ExerciseContract.ExerciseTable.CONTENT_URI;
+import static com.example.android.Database.ExerciseContract.ExerciseTable.DISTANCE;
 import static com.example.android.Database.ExerciseContract.ExerciseTable.EXERCISE_NAME;
+import static com.example.android.Database.ExerciseContract.ExerciseTable.EXERCISE_TYPE;
 import static com.example.android.Database.ExerciseContract.ExerciseTable.MAX_WEIGHT;
 import static com.example.android.Database.ExerciseContract.ExerciseTable.MEDIA_SOURCE;
+import static com.example.android.Database.ExerciseContract.ExerciseTable.MEDIA_TYPE;
+import static com.example.android.Database.ExerciseContract.ExerciseTable.MINUTES;
 import static com.example.android.Database.ExerciseContract.ExerciseTable.NOTES;
 import static com.example.android.Database.ExerciseContract.ExerciseTable.NUMBER_OF_SETS;
 import static com.example.android.Database.ExerciseContract.ExerciseTable.STARTING_WEIGHT;
@@ -123,6 +127,7 @@ public class ExerciseTableCleaner {
                         startingWeight, addToWorkoutRawValues, notes, context);
                 exerciseToAdd.mWorkoutIds = idOfWorkouts;
                 exerciseToAdd.mID = cursor.getInt( cursor.getColumnIndex( _ID ) );
+                exerciseToAdd.mMediaType = cursor.getInt( cursor.getColumnIndex( MEDIA_TYPE ) );
 
                 exercisesList.add( exerciseToAdd);
             }
@@ -143,16 +148,20 @@ public class ExerciseTableCleaner {
     public static ContentValues workoutContentValues (Exercise exerciseToAdd){
         ContentValues contentValues = new ContentValues(  );
         contentValues.put( EXERCISE_NAME, exerciseToAdd.getExerciseName());
+        contentValues.put( EXERCISE_TYPE, exerciseToAdd.getExerciseType());
         contentValues.put( ExerciseContract.ExerciseTable.CATEGORY_ONE_STATE, exerciseToAdd.getCategoryOneValue() );
         contentValues.put( ExerciseContract.ExerciseTable.CATEGORY_TWO_STATE, exerciseToAdd.getCategoryTwoValue() );
         contentValues.put( ExerciseContract.ExerciseTable.CATEGORY_THREE_STATE, exerciseToAdd.getCategoryThreeValue() );
         contentValues.put( ExerciseContract.ExerciseTable.CATEGORY_FOUR_STATE, exerciseToAdd.getCategoryFourValue() );
         contentValues.put( ExerciseContract.ExerciseTable.CATEGORY_FIVE_STATE, exerciseToAdd.getCategoryFiveValue() );
         contentValues.put( ExerciseContract.ExerciseTable.CATEGORY_SIX_STATE, exerciseToAdd.getCategorySixValue() );
+        contentValues.put( MEDIA_TYPE, exerciseToAdd.getMediaType() );
         contentValues.put( MEDIA_SOURCE, exerciseToAdd.getMediaSource() );
         contentValues.put( NUMBER_OF_SETS, exerciseToAdd.getNumberofSets() );
         contentValues.put( MAX_WEIGHT, exerciseToAdd.getMaxWeight() );
         contentValues.put( STARTING_WEIGHT, exerciseToAdd.getStartingWeight() );
+        contentValues.put( DISTANCE, exerciseToAdd.getDistance() );
+        contentValues.put( MINUTES, exerciseToAdd.getTime() );
         contentValues.put( ADD_TO_WORKOUT, exerciseToAdd.getAddToWorkout() );
         contentValues.put( NOTES, exerciseToAdd.getNotes() );
         int i = 0;
@@ -199,7 +208,8 @@ public class ExerciseTableCleaner {
         return contentValues;
     }
 
-    public static Exercise cleanExercise (Exercise exercise){
+    public static Exercise cleanExercise (Exercise toCleanExercise){
+            Exercise exercise = toCleanExercise;
                 ArrayList <Integer> idOfWorkouts = new ArrayList<>(  );
                 int z = 0;
                 idOfWorkouts.add(exercise.getWorkoutIds().get(z));

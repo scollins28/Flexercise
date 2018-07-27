@@ -202,33 +202,55 @@ public class NewExerciseFragment extends android.support.v4.app.Fragment{
                     if (mediaType==1){
                     EditText youtubeEditText = rootView.findViewById( R.id.add_youtube_string_edit_text );
                     String editTextText = youtubeEditText.getText().toString();
-                    if (editTextText.contains( "youtube.com/watch?v=" )) {
-                        Exercise newExercise = addExercise();
-                        insertNewData( newExercise );
-                        new ExerciseUpdateWorkoutLists( newExercise, mContext );
-                        position = 1;
-                        mCallback.onNewExerciseButtonSelected( position );
-                    }
-                    else {
-                        android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder( getContext() );
-                        builder.setCancelable( true );
-                        builder.setTitle( R.string.invalid_youtube );
-                        builder.setMessage( R.string.invalid_youtube_message );
-                        builder.setPositiveButton( R.string.confirm,
-                                new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                    }
-                                } );
-                        builder.setNegativeButton( R.string.cancel, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                            }
-                        } );
+                        if (editTextText.contains( "youtube.com/watch?v=" )) {
+                            Exercise newExercise = addExercise();
+                            insertNewData( newExercise );
+                            new ExerciseUpdateWorkoutLists( newExercise, mContext );
+                            position = 1;
+                            mCallback.onNewExerciseButtonSelected( position );
+                        } else {
+                            android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder( getContext() );
+                            builder.setCancelable( true );
+                            builder.setTitle( R.string.invalid_youtube );
+                            builder.setMessage( R.string.invalid_youtube_message );
+                            builder.setPositiveButton( R.string.confirm,
+                                    new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                        }
+                                    } );
+                            builder.setNegativeButton( R.string.cancel, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                }
+                            } );
 
-                        android.support.v7.app.AlertDialog dialog = builder.create();
-                        dialog.show();
-                    }}
+                            android.support.v7.app.AlertDialog dialog = builder.create();
+                            dialog.show();
+                    }
+                        if (newExerciseCategoryOneValue == 0 && newExerciseCategoryTwoValue == 0 &&
+                                newExerciseCategoryThreeValue == 0 && newExerciseCategoryFourValue == 0
+                                && newExerciseCategoryFiveValue == 0 && newExerciseCategorySixValue == 0){
+                            android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder( getContext() );
+                            builder.setCancelable( true );
+                            builder.setTitle( R.string.no_category );
+                            builder.setMessage( R.string.please_select_a_category );
+                            builder.setPositiveButton( R.string.confirm,
+                                    new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                        }
+                                    } );
+                            builder.setNegativeButton( R.string.cancel, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                }
+                            } );
+
+                            android.support.v7.app.AlertDialog dialog = builder.create();
+                            dialog.show();
+                        }
+                    }
                     else {
                         Exercise newExercise = addExercise();
                         insertNewData( newExercise );
@@ -336,6 +358,7 @@ public class NewExerciseFragment extends android.support.v4.app.Fragment{
         newExerciseBackButton.setOnClickListener( listener );
         newExerciseDoneButton.setOnClickListener( listener );
         selectLocalVideoButton.setOnClickListener( listener );
+        categoriesFab.setOnClickListener( listener );
         ArrayList<String> mSpinnerItems = new ArrayList<>(  );
         mSpinnerItems.add( getResources().getString( R.string.media_none ));
         mSpinnerItems.add( getResources().getString( R.string.media_one ));
@@ -434,9 +457,10 @@ public class NewExerciseFragment extends android.support.v4.app.Fragment{
         int categoryFiveValue = newExerciseCategoryFiveValue;
         int categorySixValue = newExerciseCategorySixValue;
 
-        String mediaSource = rootView.findViewById( R.id.exercise_media_spinner ).toString();
+        String mediaSource;
         EditText youTubeStringEditText = rootView.findViewById( R.id.add_youtube_string_edit_text );
         String youTubeString = youTubeStringEditText.getText().toString();
+        Log.e( "Media Source Origin", String.valueOf( mediaType ) );
         if (mediaType ==1){
             mediaSource = stripDownYouTubeUrl(youTubeString);
             Log.e( "Media Source Origin", String.valueOf( mediaSource ) );

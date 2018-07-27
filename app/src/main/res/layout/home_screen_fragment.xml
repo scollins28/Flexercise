@@ -7,6 +7,7 @@
     android:layout_height="match_parent"
     android:layout_width="match_parent"
     android:gravity="center"
+    android:contentDescription="@string/home_screen_background"
     android:background="@drawable/flex_home_background"
     android:theme="@style/AppTheme"
     >
@@ -32,14 +33,12 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
         android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
         android:background="@color/colorHomeButton"
         android:text="@string/Exercises_Button"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/workouts_button"
+        android:contentDescription="@string/exercises"
+        app:layout_constraintBottom_toTopOf="@+id/workouts_button"
         app:layout_constraintStart_toStartOf="parent" />
 
 
@@ -48,15 +47,13 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
         android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
         android:background="@color/colorHomeButton"
         android:text="@string/Workouts_Button"
+        android:contentDescription="@string/workouts"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/setttings_button"
-        app:layout_constraintStart_toEndOf="@+id/exercises_button" />
+        app:layout_constraintStart_toStartOf="parent" />
 
 
     <Button
@@ -65,14 +62,25 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
-        android:layout_marginStart="8dp"
         android:background="@color/colorHomeButton"
         android:text="@string/Settings_Button"
+        android:contentDescription="@string/settings"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/workouts_button" />
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <Button
+        android:id="@+id/news_button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:background="@color/colorHomeButton"
+        android:text="@string/news_button"
+        android:contentDescription="@string/news"
+        app:layout_constraintBottom_toTopOf="@+id/setttings_button"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/GoneFragmentContainer"

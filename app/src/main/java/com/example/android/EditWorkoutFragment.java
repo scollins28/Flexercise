@@ -2,6 +2,7 @@ package com.example.android;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -151,11 +152,34 @@ public class EditWorkoutFragment extends android.support.v4.app.Fragment{
                 if (v == editWorkoutBackButton) {
                     position = 0;
                 }
-                else if (v == editWorkoutDoneButton){
-                    Workout workoutToUpdate = updateWorkout();
-                    insertNewData (workoutToUpdate);
-                    new WorkoutUpdateExerciseLists(workoutToUpdate, mContext);
-                    position = 1;
+                else if (v == editWorkoutDoneButton) {
+                    if (editWorkoutCategoryOneValue == 0 && editWorkoutCategoryTwoValue == 0 &&
+                            editWorkoutCategoryThreeValue == 0 && editWorkoutCategoryFourValue == 0
+                            && editWorkoutCategoryFiveValue == 0 && editWorkoutCategorySixValue == 0) {
+                        android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder( getContext() );
+                        builder.setCancelable( true );
+                        builder.setTitle( R.string.no_category );
+                        builder.setMessage( R.string.please_select_a_category_workout_version );
+                        builder.setPositiveButton( R.string.confirm,
+                                new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                    }
+                                } );
+                        builder.setNegativeButton( R.string.cancel, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                            }
+                        } );
+
+                        android.support.v7.app.AlertDialog dialog = builder.create();
+                        dialog.show();
+                    } else {
+                        Workout workoutToUpdate = updateWorkout();
+                        insertNewData( workoutToUpdate );
+                        new WorkoutUpdateExerciseLists( workoutToUpdate, mContext );
+                        position = 1;
+                    }
                 }
                 mCallback.onEditWorkoutButtonSelected( position );
             }

@@ -125,6 +125,34 @@
     <string name="restart">Restart</string>
     <string name="start">Start</string>
     <string name="no_time">00:00</string>
+    <string name="only_available_with_adverts_off">Only available with adverts disabled</string>
+    <string name="news">News</string>
+    <string name="newsJson">https://newsapi.org/v2/everything?q=fitness%20techniques&amp;apiKey=</string>
+    <string name="no_description_available">No description available</string>
+    <string name="news_button">News</string>
+    <string name="no_news">Sorry, but something is wrong with the connection between you and the news source. Please try again later.</string>
+    <string name="no_category">No Category Selected</string>
+    <string name="please_select_a_category">In order to save your exercise, please assign at least one category.</string>
+    <string name="please_select_a_category_workout_version">In order to save your workout, please assign at least one category.</string>
+    <string name="small_flexercise_logo">Small flexercise logo</string>
+    <string name="floating_action_button">Floating action button</string>
+    <string name="select_media_type_spinner">Select media type spinner</string>
+    <string name="workout_list_spinner">Workout list spinner</string>
+    <string name="advert">Advert</string>
+    <string name="open_media">Open media</string>
+    <string name="home_screen_background">Home screen background, man lifting weight</string>
+    <string name="weight_checkbox">Checkbox for weight type exercise</string>
+    <string name="cardio_checkbox">Checkbox for cardio type exercise</string>
+    <string name="exercise_media_spinner">Spinner for exercise media</string>
+    <string name="funny_image">Image with a 404 style visual joke.</string>
+    <string name="KG_checkbox">Checkbox for KG</string>
+    <string name="lbs_checkbox">Checkbox for lbs</string>
+    <string name="KM_checkbox">Checkbox for KM</string>
+    <string name="miles_checkbox">Checkbox for miles</string>
+    <string name="switch_for_timer">Switch to turn timer on or off</string>
+    <string name="restart_timer">Restart the timer</string>
+    <string name="timer">Timer</string>
+    <string name="start_timer">Start timer</string>
     <string-array name="spinner">
         <item>Alphabetical</item>
         <item>Category</item>

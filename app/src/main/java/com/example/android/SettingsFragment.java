@@ -51,6 +51,7 @@ public class SettingsFragment extends android.support.v4.app.Fragment {
     Switch timerSwitch;
     int timerSwitchValue;
 
+
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         SharedPreferences sharedPref = getActivity().getPreferences( Context.MODE_PRIVATE );

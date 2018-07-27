@@ -26,7 +26,8 @@
                 android:id="@+id/imageView"
                 android:layout_width="200dp"
                 android:layout_height="80dp"
-                android:src="@drawable/flexercise_logo_small" />
+                android:src="@drawable/flexercise_logo_small"
+                android:contentDescription="@string/small_flexercise_logo"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -83,6 +84,7 @@
             android:elevation="24dp"
             android:scaleType="fitXY"
             android:src="@drawable/chest_circle"
+            android:contentDescription="@string/chest"
             app:layout_constraintBottom_toTopOf="@+id/category_abs_pic"
             app:layout_constraintEnd_toStartOf="@id/category_arms_pic"
             app:layout_constraintStart_toStartOf="parent"
@@ -99,6 +101,7 @@
             android:elevation="24dp"
             android:scaleType="fitXY"
             android:src="@drawable/arms_circle"
+            android:contentDescription="@string/arms"
             app:layout_constraintBottom_toTopOf="@id/category_legs_pic"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/category_chest_pic"
@@ -117,6 +120,7 @@
             android:elevation="24dp"
             android:scaleType="fitCenter"
             android:src="@drawable/abs_circular"
+            android:contentDescription="@string/abs"
             app:layout_constraintBottom_toTopOf="@id/category_cardio_pic"
             app:layout_constraintEnd_toStartOf="@id/category_legs_pic"
             app:layout_constraintStart_toStartOf="parent"
@@ -133,7 +137,7 @@
             android:background="@drawable/circle"
             android:elevation="24dp"
             android:scaleType="fitCenter"
-            android:src="@drawable/circle_leg"
+            android:src="@drawable/leg"
             app:layout_constraintBottom_toTopOf="@+id/category_back_pic"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/category_abs_pic"
@@ -150,6 +154,7 @@
             android:elevation="24dp"
             android:scaleType="centerInside"
             android:src="@drawable/cardio_heart"
+            android:contentDescription="@string/cardio"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/category_back_pic"
             app:layout_constraintStart_toStartOf="parent"
@@ -166,6 +171,7 @@
             android:elevation="24dp"
             android:scaleType="fitXY"
             android:src="@drawable/circle_back"
+            android:contentDescription="@string/back"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/category_cardio_pic"

@@ -1,14 +1,18 @@
 apply plugin: 'com.android.application'
+def keystorePropertiesFile = rootProject.file("keystore.properties")
+def keystoreProperties = new Properties ()
+keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 
 android {
     signingConfigs {
         config {
-            keyAlias 'flexercise'
-            keyPassword 'Pacabell2802!'
-            storeFile file('C:/Users/scoll/Desktop/flexercise.jks')
-            storePassword 'Pacabell2802!'
+            keyAlias keystoreProperties['keyAlias']
+            keyPassword keystoreProperties['keyPassword']
+            storeFile file(keystoreProperties['storeFile'])
+            storePassword keystoreProperties['storePassword']
         }
     }
+
     sourceSets {
         main { java.srcDirs = ['src/main/java', 'src/free/java'] }
     }
@@ -22,6 +26,7 @@ android {
         versionName "1.0"
         testInstrumentationRunner "android.support.com.example.android.flexercise.test.runner.AndroidJUnitRunner"
         signingConfig signingConfigs.config
+        buildConfigField "String", "API_KEY", '"1dccb9e6b15f48bb8acba117832869f8"'
     }
     buildTypes {
         release {

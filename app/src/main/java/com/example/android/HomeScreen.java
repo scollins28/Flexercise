@@ -1,13 +1,17 @@
 package com.example.android;
 
 import android.app.FragmentTransaction;
+import android.app.LoaderManager;
 import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.Loader;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Color;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
@@ -22,6 +26,7 @@ import android.widget.LinearLayout;
 import com.example.android.Database.ExerciseContract;
 import com.example.android.Database.WorkoutsDatabase.WorkoutContract;
 import com.example.android.InternetBasedActivity.Analytics;
+import com.example.android.InternetBasedActivity.NewsLoader;
 import com.example.android.InternetBasedActivity.YouTubeFragment;
 import com.example.android.Widget.WidgetWorkoutDetails;
 import com.example.android.Widget.WorkoutWidget;
@@ -45,8 +50,10 @@ public class HomeScreen extends FragmentActivity implements MasterListFragment.O
         NewWorkoutFragment.onNewWorkoutButtonSelected, ExerciseDetailsFragment.onExerciseDetailsButtonSelected,
         EditExerciseFragment.onEditExerciseButtonSelected, EditWorkoutFragment.onEditWorkoutButtonSelected,
         WorkoutDetailsFragment.onWorkoutDetailsButtonSelected, WorkoutExerciseDetailsFragment.onWorkoutExerciseDetailsButtonSelected,
-        Categories.OnCategorySelected, WorkoutsCategories.OnWorkoutCategorySelected {
+        Categories.OnCategorySelected, WorkoutsCategories.OnWorkoutCategorySelected, NewsFeed.onNewsListButtonSelected,
+        LoaderManager.LoaderCallbacks<ArrayList<News>> {
 
+    private static final int NEWS_LOADER_ID = 0;
     android.support.v4.app.FragmentTransaction fragmentTransaction;
     MasterListFragment masterListFragment = new MasterListFragment();
     ExerciseListFragment exerciseListFragment = new ExerciseListFragment();
@@ -61,7 +68,10 @@ public class HomeScreen extends FragmentActivity implements MasterListFragment.O
     EditWorkoutFragment editWorkoutFragment = new EditWorkoutFragment();
     WorkoutsCategories workoutCategories = new WorkoutsCategories();
     WorkoutExerciseDetailsFragment workoutExerciseDetailsFragment = new WorkoutExerciseDetailsFragment();
+    NewsFeed newsFeedFragment = new NewsFeed();
     Categories categories = new Categories();
+    private NetworkInfo isNetworkActive;
+    int loaderChecker = 0;
     public static String currentMediaSource;
     public static int widgetWorkoutId = 777777;
     static int widgetExerciseId;
@@ -77,6 +87,7 @@ public class HomeScreen extends FragmentActivity implements MasterListFragment.O
     public static int normalcolor;
     public static long mTime;
     public static ArrayList<WidgetWorkoutDetails> widgetWorkoutDetails;
+    public static ArrayList<News> news = new ArrayList<>(  );
 
 
     FragmentManager fragmentManager;
@@ -93,6 +104,7 @@ public class HomeScreen extends FragmentActivity implements MasterListFragment.O
     public static int timerSwitchValue = 0;
     static int removeAdvertsValue = 0;
     public static FragmentTransaction widgetTransaction;
+
 
     private static GoogleAnalytics sAnalytics;
     private static Tracker mTracker;
@@ -214,7 +226,7 @@ public class HomeScreen extends FragmentActivity implements MasterListFragment.O
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState( savedInstanceState );
-        if (savedInstanceState != null) {
+        if (savedInstanceState.size()>0) {
             Log.e( "SAVED NOT NULL", "YAY" );
             widgetWorkoutDetails = savedInstanceState.getParcelableArrayList( "widgetWorkout" );
             Bundle extras = getIntent().getExtras();
@@ -254,6 +266,7 @@ public class HomeScreen extends FragmentActivity implements MasterListFragment.O
             milesValue = extras.getInt( "milesValue" );
             timerSwitchValue = extras.getInt( "timerSwitchValue" );
             removeAdvertsValue = extras.getInt( "removeAdvertsValue" );
+            newConnection();
         }
     }
 
@@ -274,6 +287,12 @@ public class HomeScreen extends FragmentActivity implements MasterListFragment.O
             case 2:
                 homeScreenButtonFragmentTransaction.replace( R.id.master_list_fragment, settingsFragment );
                 mTracker.setScreenName( "Page: settings" );
+                mTracker.send( new HitBuilders.ScreenViewBuilder().build() );
+                break;
+            case 3:
+                homeScreenButtonFragmentTransaction.replace( R.id.master_list_fragment, newsFeedFragment );
+                newConnection();
+                mTracker.setScreenName( "Page: news feed" );
                 mTracker.send( new HitBuilders.ScreenViewBuilder().build() );
                 break;
         }
@@ -580,6 +599,20 @@ public class HomeScreen extends FragmentActivity implements MasterListFragment.O
         workoutCategoriesFragmentTransaction.addToBackStack( null ).commit();
     }
 
+    @Override
+    public void onNewsListButtonSelected(int position) {
+        android.support.v4.app.FragmentTransaction newsListFragmentTransaction = getSupportFragmentManager().beginTransaction();
+        switch (position) {
+            case 0:
+                masterListFragment = new MasterListFragment();
+                newsListFragmentTransaction.replace( R.id.master_list_fragment, masterListFragment );
+                mTracker.setScreenName( "Page: home screen" );
+                mTracker.send( new HitBuilders.ScreenViewBuilder().build() );
+                break;
+        }
+        newsListFragmentTransaction.addToBackStack( null ).commit();
+    }
+
     public void widgetSharedPrefs() {
         SharedPreferences widgetPrefs = getPreferences( Context.MODE_PRIVATE );
         SharedPreferences.Editor editor = widgetPrefs.edit();
@@ -752,8 +785,52 @@ public class HomeScreen extends FragmentActivity implements MasterListFragment.O
             timerSwitchValue = sharedPref.getInt( "timerSwitchValue", timerSwitchValue );
             removeAdvertsValue = sharedPref.getInt( "removeAdvertsValue", removeAdvertsValue );
 
-        }
+        } }
 
+    public void newConnection() {
+        //Connectivity Manager, determines if there is internet connectivity
+        Log.e( "New connection", "has started" );
+        ConnectivityManager cm = (ConnectivityManager) this.getSystemService( Context.CONNECTIVITY_SERVICE );
+        isNetworkActive = cm.getActiveNetworkInfo();
+        if (isNetworkActive != null && isNetworkActive.isConnectedOrConnecting()) {
+            if (loaderChecker >= 1) {
+                getLoaderManager().destroyLoader( NEWS_LOADER_ID );
+                loaderChecker--;
+            }
+            LoaderManager loaderManager = getLoaderManager();
+            loaderManager.initLoader( NEWS_LOADER_ID, null, this );
+            Log.e( "Init loader", "has started" );
+            loaderChecker++;
+        } else if (isNetworkActive == null) {
+            if (loaderChecker >= 1) {
+                getLoaderManager().destroyLoader( NEWS_LOADER_ID );
+                loaderChecker--;
+            }
+            LoaderManager loaderManager = getLoaderManager();
+            loaderManager.initLoader( NEWS_LOADER_ID, null, this );
+            loaderChecker++;
+        }
+    }
+
+    @Override
+    public Loader<ArrayList<News>> onCreateLoader(int id, Bundle args) {
+        return new NewsLoader(this, getString( R.string.newsJson ));
+    }
+
+    @Override
+    public void onLoadFinished(Loader<ArrayList<News>> loader, ArrayList<News> newNews) {
+        Log.e( "Loader", "has finished" );
+        news = newNews;
+        newsFeedFragment = new NewsFeed();
+        android.support.v4.app.FragmentTransaction loaderTransaction = getSupportFragmentManager().beginTransaction();
+        loaderTransaction.replace( R.id.master_list_fragment, newsFeedFragment );
+        loaderTransaction.addToBackStack( null ).commit();
 
     }
+
+    @Override
+    public void onLoaderReset(Loader<ArrayList<News>> loader) {
+
+    }
+
 }

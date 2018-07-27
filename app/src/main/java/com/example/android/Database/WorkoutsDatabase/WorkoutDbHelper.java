@@ -11,13 +11,16 @@ import static com.example.android.Database.WorkoutsDatabase.WorkoutContract.Work
 
 public class WorkoutDbHelper extends SQLiteOpenHelper {
 
+    //Final values for database name and current version.
     public static final String DATABASE_NAME = "workouts.db";
     public static final int VERSION_NUMBER = 2;
 
+    //Constructor.
     public WorkoutDbHelper(Context context){
         super (context, DATABASE_NAME, null, VERSION_NUMBER);
     }
 
+    //OnCreate, takes in a DB and creates the Column names (setting any defaults or requirements
     @Override
     public void onCreate(SQLiteDatabase db) {
 
@@ -56,6 +59,7 @@ public class WorkoutDbHelper extends SQLiteOpenHelper {
         db.execSQL(SQL_CREATE_WORKOUT_TABLE);
     }
 
+    //On upgrade deletes the previous table and puts a new one in its place when version number increases.
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL( "DROP TABLE IF EXISTS " + WORKOUT_TABLE_NAME );

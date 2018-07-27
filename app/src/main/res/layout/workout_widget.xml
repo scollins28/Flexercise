@@ -59,6 +59,7 @@
                 android:layout_centerInParent="true"
                 android:paddingTop="8dp"
                 android:text="@string/load_workouts"
+                android:contentDescription="@string/load_workouts"
                 android:textSize="12sp"
                 android:visibility="gone"/>
         </LinearLayout>
@@ -275,6 +276,7 @@
                     android:layout_marginEnd="8dp"
                     android:layout_marginRight="8dp"
                     android:paddingTop="8dp"
+                    android:contentDescription="@string/previousButton"
                     android:text="@string/previousButton"
                     android:textSize="12sp" />
             </LinearLayout>
@@ -295,6 +297,7 @@
                     android:layout_centerInParent="true"
                     android:paddingTop="8dp"
                     android:text="@string/load_exercise"
+                    android:contentDescription="@string/load_exercise"
                     android:textSize="12sp" />
             </RelativeLayout>
 
@@ -313,6 +316,7 @@
                     android:layout_alignParentRight="true"
                     android:paddingTop="8dp"
                     android:text="@string/next"
+                    android:contentDescription="@string/nextButton"
                     android:textSize="12sp" />
             </RelativeLayout>
         </LinearLayout>
@@ -333,6 +337,7 @@
                 android:layout_gravity="center_horizontal"
                 android:background="@color/colorHomeButton"
                 android:text="@string/restart"
+                android:contentDescription="@string/restart_timer"
                 android:textColor="@color/textColor"
                 android:textSize="12sp"
                 />
@@ -345,6 +350,7 @@
                 android:layout_weight="4"
                 android:text="@string/no_time"
                 android:textAlignment="center"
+                android:contentDescription="@string/timer"
                 android:textColor="@color/spinnerWhite"
                 android:textSize="20sp" />
 
@@ -356,6 +362,7 @@
                 android:layout_gravity="center_horizontal"
                 android:background="@color/colorHomeButton"
                 android:text="@string/start"
+                android:contentDescription="@string/start_timer"
                 android:textColor="@color/textColor"
                 android:textSize="12sp"
                 />

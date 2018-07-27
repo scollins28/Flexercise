@@ -26,7 +26,8 @@
                 android:id="@+id/imageView"
                 android:layout_width="200dp"
                 android:layout_height="80dp"
-                android:src="@drawable/flexercise_logo_small" />
+                android:src="@drawable/flexercise_logo_small"
+                android:contentDescription="@string/small_flexercise_logo"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -53,28 +54,10 @@
                     android:layout_gravity="center"
                     android:layout_marginLeft="8dp"
                     android:layout_marginRight="8dp"
-                    android:layout_weight="3"
+                    android:layout_weight="7"
                     android:text="@string/exercises"
                     android:textColor="@color/spinnerWhite"
                     android:textSize="24sp" />
-
-                <Spinner
-                    android:id="@+id/exercise_spinner"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="right"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginRight="8dp"
-                    android:layout_weight="4"
-                    android:addStatesFromChildren="false"
-                    android:background="@color/colorPrimaryDoubleDark"
-                    android:dropDownSelector="@color/spinnerWhite"
-                    android:dropDownWidth="match_parent"
-                    android:entries="@array/spinner"
-                    android:gravity="center"
-                    android:popupBackground="@color/colorPrimaryDoubleDark"
-                    android:prompt="@string/spinnerPrompt"
-                    android:theme="@style/mySpinnerItemStyle" />
 
             </LinearLayout>
 
@@ -129,6 +112,7 @@
             android:layout_marginBottom="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
+            android:contentDescription="@string/floating_action_button"
             app:layout_constraintBottom_toTopOf="@+id/adView"
             app:layout_constraintEnd_toEndOf="parent"
             fab:menu_animationDelayPerItem="50"
@@ -193,6 +177,7 @@
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
         ads:adSize="BANNER"
+        android:contentDescription="@string/advert"
         ads:adUnitId="ca-app-pub-3940256099942544/6300978111"
         ads:layout_constraintBottom_toBottomOf="@+id/constraintLayout2"
         ads:layout_constraintEnd_toEndOf="parent"

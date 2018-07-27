@@ -42,22 +42,27 @@ import static com.example.android.Database.WorkoutsDatabase.WorkoutContract.Work
 
 public class WorkoutsTableCleaner {
 
+    //Constructor.
     public WorkoutsTableCleaner(Context context){
     }
 
+    // Cleans a single workout, takes in the workout and moves the exercises up in the table column position
+    // to ensure no empty spaces e.g. 1 , 0, 3, 0, 5 becomes 1, 3, 5, 0, 0.
     public static Workout cleanSingleWorkout(Context context, Workout workout){
         Workout toClean = cleanWorkout (workout);
         updateWorkoutsTableSingleWorkout (toClean , context );
         return toClean;
     }
-
+    // Cleans an ArrayList of workouts, takes in the arraylist and moves the exercises of each workout
+    // up in the table column position to ensure no empty spaces e.g. 1 , 0, 3, 0, 5 becomes 1, 3, 5, 0, 0.
     public static ArrayList<Workout> cleanWorkoutList (Context context){
         ArrayList<Workout> cleanedWorkouts = getWorkoutsAndClean( context );
         updateWorkoutsTable( cleanedWorkouts, context );
         return cleanedWorkouts;
     }
 
-
+    //Method uses a cursor to retrieve the latest data in the workouts table. Then moves the sorts the columns
+    // to ensure that the exercises are stored in the first available columns.
     public static ArrayList<Workout> getWorkoutsAndClean (Context context){
         Cursor cursor = context.getContentResolver().query( WORKOUT_CONTENT_URI, null, null, null, null );
         ArrayList<Workout> workoutsList = new ArrayList<>();
@@ -120,6 +125,7 @@ public class WorkoutsTableCleaner {
         return workoutsList;
     }
 
+    //Using the QUID update method, updates each entry in the workouts table with the sorted exercises.
     public static void updateWorkoutsTable (ArrayList<Workout>cleanedWorkouts, Context context){
         for (int i=0; i<cleanedWorkouts.size();i++){
             ContentValues contentValues = workoutContentValues( cleanedWorkouts.get( i ) );
@@ -129,6 +135,7 @@ public class WorkoutsTableCleaner {
         }
     }
 
+    //Generates the content values for the QUID update methods.
     public static ContentValues workoutContentValues (Workout workoutToAdd){
             ContentValues contentValues = new ContentValues(  );
             contentValues.put( WORKOUT_NAME, workoutToAdd.getWorkoutName());
@@ -161,6 +168,8 @@ public class WorkoutsTableCleaner {
             return contentValues;
     }
 
+    //The singular method is passed a specific workout and so doesn't use a QUID method to obtain the data.
+    // This function therefore just sorts and returns the workout.
     public static Workout cleanWorkout (Workout workout){
                 ArrayList <Integer> idOfExercises = new ArrayList<>(  );
                 idOfExercises.add( workout.getExerciseOneId());
@@ -220,6 +229,7 @@ public class WorkoutsTableCleaner {
         return workout;
     }
 
+    //Using the QUID update method, updates the specific entry in the workouts table with the sorted exercises.
     public static void updateWorkoutsTableSingleWorkout (Workout cleanedWorkout, Context context){
             ContentValues contentValues = workoutContentValues( cleanedWorkout );
             String id = String.valueOf(cleanedWorkout.getID());

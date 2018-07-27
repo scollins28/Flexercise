@@ -65,7 +65,8 @@ import static com.example.android.Database.WorkoutsDatabase.WorkoutContract.Work
 
 public class WorkoutUpdateExerciseLists {
 
-
+    //This method takes in a newly updated workout and checks to see if any of the exercises referenced by it
+    // have changed. It then adds or removes itself from the exercises (or skips over if unchanged).
     public WorkoutUpdateExerciseLists(Workout workout, Context context) {
         Workout updatedWorkout = workout;
         int updatedWorkoutId = workout.mID;
@@ -308,55 +309,8 @@ public class WorkoutUpdateExerciseLists {
         }
     }
 
-    public ArrayList<Workout> getWorkouts(Context context) {
 
-        Cursor cursor = context.getContentResolver().query( WORKOUT_CONTENT_URI, null, null, null, null );
-        ArrayList<Workout> workoutsList = new ArrayList<>();
-        if (cursor != null && cursor.moveToFirst()) {
-            for (int i = 0; i < cursor.getCount(); i++) {
-                cursor.moveToPosition( i );
-                String workoutName = cursor.getString( cursor.getColumnIndex( WORKOUT_NAME ) );
-                int categoryOneValue = cursor.getInt( cursor.getColumnIndex( CATEGORY_ONE_STATE) );
-                int categoryTwoValue = cursor.getInt( cursor.getColumnIndex( CATEGORY_TWO_STATE ) );
-                int categoryThreeValue = cursor.getInt( cursor.getColumnIndex(CATEGORY_THREE_STATE ) );
-                int categoryFourValue = cursor.getInt( cursor.getColumnIndex( CATEGORY_FOUR_STATE ) );
-                int categoryFiveValue = cursor.getInt( cursor.getColumnIndex( CATEGORY_FIVE_STATE ) );
-                int categorySixValue = cursor.getInt( cursor.getColumnIndex( CATEGORY_SIX_STATE ) );
-                ArrayList<Integer> exercisesWorkoutFeaturesOn = new ArrayList<>();
-                exercisesWorkoutFeaturesOn.add( cursor.getInt( cursor.getColumnIndex( EXERCISE_ONE_ID ) ) );
-                exercisesWorkoutFeaturesOn.add( cursor.getInt( cursor.getColumnIndex( EXERCISE_TWO_ID ) ) );
-                exercisesWorkoutFeaturesOn.add( cursor.getInt( cursor.getColumnIndex( EXERCISE_THREE_ID ) ) );
-                exercisesWorkoutFeaturesOn.add( cursor.getInt( cursor.getColumnIndex( EXERCISE_FOUR_ID ) ) );
-                exercisesWorkoutFeaturesOn.add( cursor.getInt( cursor.getColumnIndex( EXERCISE_FIVE_ID ) ) );
-                exercisesWorkoutFeaturesOn.add( cursor.getInt( cursor.getColumnIndex( EXERCISE_SIX_ID ) ) );
-                exercisesWorkoutFeaturesOn.add( cursor.getInt( cursor.getColumnIndex( EXERCISE_SEVEN_ID ) ) );
-                exercisesWorkoutFeaturesOn.add( cursor.getInt( cursor.getColumnIndex( EXERCISE_EIGHT_ID ) ) );
-                exercisesWorkoutFeaturesOn.add( cursor.getInt( cursor.getColumnIndex( EXERCISE_NINE_ID ) ) );
-                exercisesWorkoutFeaturesOn.add( cursor.getInt( cursor.getColumnIndex( EXERCISE_TEN_ID ) ) );
-                exercisesWorkoutFeaturesOn.add( cursor.getInt( cursor.getColumnIndex( EXERCISE_ELEVEN_ID ) ) );
-                exercisesWorkoutFeaturesOn.add( cursor.getInt( cursor.getColumnIndex( EXERCISE_TWELVE_ID ) ) );
-                exercisesWorkoutFeaturesOn.add( cursor.getInt( cursor.getColumnIndex( EXERCISE_THIRTEEN_ID ) ) );
-                exercisesWorkoutFeaturesOn.add( cursor.getInt( cursor.getColumnIndex( EXERCISE_FOURTEEN_ID ) ) );
-                exercisesWorkoutFeaturesOn.add( cursor.getInt( cursor.getColumnIndex( EXERCISE_FIFTEEN_ID ) ) );
-                exercisesWorkoutFeaturesOn.add( cursor.getInt( cursor.getColumnIndex( EXERCISE_SIXTEEN_ID ) ) );
-                exercisesWorkoutFeaturesOn.add( cursor.getInt( cursor.getColumnIndex( EXERCISE_SEVENTEEN_ID ) ) );
-                exercisesWorkoutFeaturesOn.add( cursor.getInt( cursor.getColumnIndex( EXERCISE_EIGHTEEN_ID ) ) );
-                exercisesWorkoutFeaturesOn.add( cursor.getInt( cursor.getColumnIndex( EXERCISE_NINETEEN_ID ) ) );
-                exercisesWorkoutFeaturesOn.add( cursor.getInt( cursor.getColumnIndex( EXERCISE_TWENTY_ID ) ) );
-                Workout workoutToAdd = new Workout( workoutName, categoryOneValue, categoryTwoValue, categoryThreeValue,
-                        categoryFourValue, categoryFiveValue, categorySixValue, exercisesWorkoutFeaturesOn.get( 0 ), exercisesWorkoutFeaturesOn.get( 1 ),
-                        exercisesWorkoutFeaturesOn.get( 2 ), exercisesWorkoutFeaturesOn.get( 3 ), exercisesWorkoutFeaturesOn.get( 4 ), exercisesWorkoutFeaturesOn.get( 5 ),
-                        exercisesWorkoutFeaturesOn.get( 6 ), exercisesWorkoutFeaturesOn.get( 7 ), exercisesWorkoutFeaturesOn.get( 8 ), exercisesWorkoutFeaturesOn.get( 9 ),
-                        exercisesWorkoutFeaturesOn.get( 10 ), exercisesWorkoutFeaturesOn.get( 11 ), exercisesWorkoutFeaturesOn.get( 12 ), exercisesWorkoutFeaturesOn.get( 13 ),
-                        exercisesWorkoutFeaturesOn.get( 14 ), exercisesWorkoutFeaturesOn.get( 15 ), exercisesWorkoutFeaturesOn.get( 16 ), exercisesWorkoutFeaturesOn.get( 17 ),
-                        exercisesWorkoutFeaturesOn.get( 18 ), exercisesWorkoutFeaturesOn.get( 19 ));
-                workoutToAdd.mID = cursor.getInt( cursor.getColumnIndex( ExerciseTable._ID ) );
-                workoutsList.add( workoutToAdd );
-            }
-        }
-        return workoutsList;
-       }
-
+        // This method does the actual updating of exercises but is referred to only in the above method.
        public void updateWithNewWorkout (Context context, Exercise exercise, ContentValues contentValues) {
            String id = String.valueOf(exercise.getID());
            Log.e ("CONTENT", String.valueOf(contentValues));

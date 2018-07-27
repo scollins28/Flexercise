@@ -27,7 +27,8 @@
                 android:id="@+id/imageView"
                 android:layout_width="200dp"
                 android:layout_height="80dp"
-                android:src="@drawable/flexercise_logo_small" />
+                android:src="@drawable/flexercise_logo_small"
+                android:contentDescription="@string/small_flexercise_logo"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -158,6 +159,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="8dp"
+                    android:contentDescription="@string/floating_action_button"
                     android:layout_marginRight="8dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -217,6 +219,7 @@
                     android:layout_marginStart="8dp"
                     android:background="@color/colorHomeButton"
                     android:text="@string/chest"
+                    android:contentDescription="@string/chest"
                     android:textColor="@color/textColor"
                     app:layout_constraintEnd_toStartOf="@+id/button_two"
                     app:layout_constraintStart_toStartOf="parent" />
@@ -232,6 +235,7 @@
                     android:layout_marginStart="8dp"
                     android:background="@color/colorHomeButton"
                     android:text="@string/legs"
+                    android:contentDescription="@string/legs"
                     android:textColor="@color/textColor"
                     app:layout_constraintEnd_toStartOf="@+id/button_three"
                     app:layout_constraintStart_toEndOf="@id/button_one" />
@@ -247,6 +251,7 @@
                     android:layout_marginStart="8dp"
                     android:background="@color/colorHomeButton"
                     android:text="@string/arms"
+                    android:contentDescription="@string/arms"
                     android:textColor="@color/textColor"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@id/button_two" />
@@ -262,6 +267,7 @@
                     android:layout_marginTop="8dp"
                     android:background="@color/colorHomeButton"
                     android:text="@string/abs"
+                    android:contentDescription="@string/abs"
                     android:textColor="@color/textColor"
                     app:layout_constraintEnd_toStartOf="@+id/button_five"
                     app:layout_constraintStart_toStartOf="parent"
@@ -279,6 +285,7 @@
                     android:layout_marginTop="8dp"
                     android:background="@color/colorHomeButton"
                     android:text="@string/back"
+                    android:contentDescription="@string/back"
                     android:textColor="@color/textColor"
                     app:layout_constraintEnd_toStartOf="@+id/button_six"
                     app:layout_constraintStart_toEndOf="@id/button_four"
@@ -296,6 +303,7 @@
                     android:layout_marginTop="8dp"
                     android:background="@color/colorHomeButton"
                     android:text="@string/cardio"
+                    android:contentDescription="@string/cardio"
                     android:textColor="@color/textColor"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@id/button_five"
@@ -337,6 +345,7 @@
                     android:layout_marginTop="8dp"
                     android:entries="@array/media_spinner"
                     android:prompt="@string/media_spinner_prompt"
+                    android:contentDescription="@string/select_media_type_spinner"
                     android:textSize="20sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/exercise_media_tv"
@@ -542,6 +551,7 @@
                         android:layout_marginStart="8dp"
                         android:layout_marginTop="8dp"
                         android:entries="@array/workouts_spinner"
+                        android:contentDescription="@string/workout_list_spinner"
                         android:prompt="@string/select_all_that_apply"
                         android:textSize="20sp"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -599,6 +609,7 @@
         android:layout_centerHorizontal="true"
         android:layout_margin="8dp"
         ads:adSize="BANNER"
+        android:contentDescription="@string/advert"
         ads:adUnitId="ca-app-pub-3940256099942544/6300978111"></com.google.android.gms.ads.AdView>
 
 </RelativeLayout>

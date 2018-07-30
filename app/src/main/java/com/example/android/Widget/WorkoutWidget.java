@@ -239,7 +239,7 @@ public class WorkoutWidget extends AppWidgetProvider {
             if (HomeScreen.kgValue == 1) {
                 unit = mContext.getResources().getString( R.string.KG );
             } else {
-                unit = mContext.getResources().getString( R.string.LBS );
+                unit = mContext.getResources().getString( R.string.LBS_STATIC );
             }
             if (HomeScreen.kmValue==1){
                 altUnit = mContext.getString( R.string.KM );

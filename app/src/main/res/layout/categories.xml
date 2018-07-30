@@ -40,7 +40,7 @@
                 <ImageButton
                     android:layout_width="0dp"
                     android:layout_height="40dp"
-                    android:layout_gravity="left"
+                    android:layout_gravity="start"
                     android:layout_weight="1"
                     android:background="@android:color/transparent"
                     android:contentDescription="@string/backButton"
@@ -137,11 +137,12 @@
             android:background="@drawable/circle"
             android:elevation="24dp"
             android:scaleType="fitCenter"
-            android:src="@drawable/leg"
+            android:src="@drawable/leg_circle"
             app:layout_constraintBottom_toTopOf="@+id/category_back_pic"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/category_abs_pic"
-            app:layout_constraintTop_toBottomOf="@id/category_arms_pic" />
+            app:layout_constraintTop_toBottomOf="@id/category_arms_pic"
+            android:contentDescription="@string/legs" />
 
 
         <ImageButton
@@ -166,7 +167,6 @@
             android:layout_height="0dp"
             app:layout_constraintDimensionRatio="1:1"
             android:layout_margin="16dp"
-            android:adjustViewBounds="true"
             android:background="@drawable/circle"
             android:elevation="24dp"
             android:scaleType="fitXY"

@@ -335,7 +335,6 @@ public class ExerciseUpdateWorkoutLists {
 
        public void updateWithNewExercise (Context context, Workout workout, ContentValues contentValues) {
            String id = String.valueOf(workout.getID());
-           Log.e ("CONTENT", String.valueOf(contentValues));
            Uri updateUri =  WORKOUT_CONTENT_URI.buildUpon().appendPath(id).build();
            context.getContentResolver().update( updateUri, contentValues, null, null);
        }

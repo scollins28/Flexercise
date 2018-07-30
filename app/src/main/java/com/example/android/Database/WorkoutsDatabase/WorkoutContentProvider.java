@@ -125,12 +125,10 @@ public class WorkoutContentProvider extends ContentProvider{
                 String newSelection = "_ID=?";
                 String [] newSelectionArgs = new String[]{id};
                 workoutsDeleted = db.delete( WORKOUT_TABLE_NAME, newSelection, newSelectionArgs);
-                Log.e( "WHICH IS ", String.valueOf( id ) );
                 break;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
-        Log.e("DELETED", String.valueOf(workoutsDeleted));
         return workoutsDeleted;
 
     }

@@ -1,8 +1,7 @@
 apply plugin: 'com.android.application'
 def keystorePropertiesFile = rootProject.file("keystore.properties")
-def keystoreProperties = new Properties ()
+def keystoreProperties = new Properties()
 keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
-
 android {
     signingConfigs {
         config {
@@ -12,21 +11,20 @@ android {
             storePassword keystoreProperties['storePassword']
         }
     }
-
     sourceSets {
         main { java.srcDirs = ['src/main/java', 'src/free/java'] }
     }
-
     compileSdkVersion 27
     defaultConfig {
         applicationId "com.example.android.flexercise"
-        minSdkVersion 15
+        minSdkVersion 22
         targetSdkVersion 27
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.com.example.android.flexercise.test.runner.AndroidJUnitRunner"
         signingConfig signingConfigs.config
         buildConfigField "String", "API_KEY", '"1dccb9e6b15f48bb8acba117832869f8"'
+        buildConfigField "String", "YOUTUBE_API_KEY", '"AIzaSyC8pfqbJu_rWhBcn5nEAORpczMJkpavah4"'
     }
     buildTypes {
         release {
@@ -34,7 +32,6 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-
     dependencies {
         implementation fileTree(include: ['*.jar'], dir: 'libs')
         implementation 'com.android.support:appcompat-v7:27.1.1'
@@ -53,4 +50,8 @@ android {
         implementation 'com.google.android.gms:play-services-ads:15.0.1'
         implementation 'com.android.billingclient:billing:1.1'
     }
+    productFlavors {
+    }
+}
+dependencies {
 }

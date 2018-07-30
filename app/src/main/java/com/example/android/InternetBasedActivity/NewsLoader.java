@@ -37,7 +37,6 @@ public class NewsLoader extends AsyncTaskLoader<ArrayList<News>> {
         }
         else if (mURL!= null && webOrLocal == 1) {
             Log.e( LOG_TAG, mURL );
-            Log.e( "About to start", "fetch news" );
             news = NewsData.fetchNews( mURL, getContext() );
             return news;
         }

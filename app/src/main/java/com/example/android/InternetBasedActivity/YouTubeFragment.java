@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.example.android.HomeScreen;
+import com.example.android.free.BuildConfig;
 import com.example.android.free.R;
 import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
@@ -31,7 +32,7 @@ public class YouTubeFragment extends Fragment {
         FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
         transaction.replace(R.id.youtubeFragmentAltd, youTubePlayerFragment).addToBackStack( null ).commit();
 
-        youTubePlayerFragment.initialize(getString( R.string.apiKey ), new YouTubePlayer.OnInitializedListener() {
+        youTubePlayerFragment.initialize( (BuildConfig.YOUTUBE_API_KEY), new YouTubePlayer.OnInitializedListener() {
 
             @Override
             public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer player, boolean wasRestored) {

@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.DividerItemDecoration;
@@ -33,6 +35,9 @@ public class NewsFeed extends android.support.v4.app.Fragment {
     ArrayList<News> news;
     public Context mContext;
     Toolbar mToolbar;
+    ScrollView scrollView;
+    RecyclerView recyclerView;
+    LinearLayoutManager linearLayoutManager;
 
 
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -41,16 +46,19 @@ public class NewsFeed extends android.support.v4.app.Fragment {
 
         news = HomeScreen.news;
 
+        linearLayoutManager = new LinearLayoutManager( mContext, LinearLayoutManager.VERTICAL, false );
+
         if (news != null) {
             Log.e( "News is not null", String.valueOf( news ) );
             if (news.size() != 0) {
                 Log.e( "News is not 0", String.valueOf( news ) );
                 rootView = inflater.inflate( R.layout.news_feed_fragment, container, false );
+                scrollView = rootView.findViewById( R.id.news_list_sv);
 
-                RecyclerView recyclerView = rootView.findViewById( R.id.news_list_view );
+                recyclerView = rootView.findViewById( R.id.news_list_view );
                 NewsListAdapter newsListAdapter = new NewsListAdapter( news, mContext );
                 recyclerView.setAdapter( newsListAdapter );
-                LinearLayoutManager linearLayoutManager = new LinearLayoutManager( mContext, LinearLayoutManager.VERTICAL, false );
+
                 recyclerView.setLayoutManager( linearLayoutManager );
                 recyclerView.setHasFixedSize( false );
 
@@ -99,10 +107,8 @@ public class NewsFeed extends android.support.v4.app.Fragment {
                 HomeScreen.checkDisplayBanner( rootView, HomeScreen.removeAdvertsValue );
 
             } else {
-                Log.e( "News is dead", String.valueOf( news ) );
                 rootView = inflater.inflate( R.layout.news_feed_fragment_no_internet, container, false );
                 newsListBackButton = rootView.findViewById( R.id.news_list_back_button );
-
                 View.OnClickListener listener = new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -147,6 +153,24 @@ public class NewsFeed extends android.support.v4.app.Fragment {
         } catch (ClassCastException e) {
             throw new ClassCastException( context.toString() + "must implement click listener" );
         }
+    }
+
+    @Override
+    public void onViewStateRestored(@Nullable final Bundle savedInstanceState) {
+        super.onViewStateRestored( savedInstanceState );
+        if (savedInstanceState != null) {
+            if (savedInstanceState.containsKey( "scrollViewNews" )) {
+                int sv = savedInstanceState.getInt( "scrollViewNews" );
+                scrollView.scrollTo( 0, sv );
+            }
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState( outState );
+        int sv = scrollView.getScrollY();
+        outState.putInt( "scrollViewNews" , sv);
     }
 
 }

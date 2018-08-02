@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.Loader;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
@@ -70,6 +71,7 @@ public class HomeScreen extends FragmentActivity implements MasterListFragment.O
     WorkoutExerciseDetailsFragment workoutExerciseDetailsFragment = new WorkoutExerciseDetailsFragment();
     NewsFeed newsFeedFragment = new NewsFeed();
     Categories categories = new Categories();
+    int currentPage = 0;
     private NetworkInfo isNetworkActive;
     int loaderChecker = 0;
     public static String currentMediaSource;
@@ -116,6 +118,7 @@ public class HomeScreen extends FragmentActivity implements MasterListFragment.O
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState( outState );
+        outState.putInt( "currentPage", currentPage );
         outState.putParcelableArrayList( "widgetWorkout", widgetWorkoutDetails );
         outState.putInt( "widgetWorkoutId", widgetWorkoutId );
         outState.putString( "currentMediaSource", currentMediaSource );
@@ -223,6 +226,7 @@ public class HomeScreen extends FragmentActivity implements MasterListFragment.O
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState( savedInstanceState );
+        currentPage = savedInstanceState.getInt( "currentPage" );
         if (savedInstanceState.size()>0) {
             widgetWorkoutDetails = savedInstanceState.getParcelableArrayList( "widgetWorkout" );
             Bundle extras = getIntent().getExtras();
@@ -238,30 +242,65 @@ public class HomeScreen extends FragmentActivity implements MasterListFragment.O
             int ids[] = AppWidgetManager.getInstance( getApplication() ).getAppWidgetIds( new ComponentName( getApplication(), WorkoutWidget.class ) );
             intent.putExtra( AppWidgetManager.EXTRA_APPWIDGET_IDS, ids );
             sendBroadcast( intent );
-            widgetWorkoutDetails = extras.getParcelableArrayList( "widgetWorkout" );
-            widgetWorkoutId = extras.getInt( "widgetWorkoutId" );
-            currentMediaSource = extras.getString( "currentMediaSource" );
-            listStateOne = extras.getInt( "listStateOne" );
-            listStateTwo = extras.getInt( "listStateTwo" );
-            listStateThree = extras.getInt( "listStateThree" );
-            exercisesInSetWorkout = extras.getParcelableArrayList( "exercisesInSetWorkout" );
-            calledPosition = extras.getInt( "calledPostion" );
-            exerciseCategory = extras.getInt( "exerciseCategory" );
-            workoutCategory = extras.getInt( "workoutCategory" );
-            ArrayList<Exercise> exerciseTempHolder = new ArrayList<>();
-            exerciseTempHolder = (extras.getParcelableArrayList( "exercise" ));
-            exercise = exerciseTempHolder.get( 0 );
-            ArrayList<Workout> workoutTempHolder = new ArrayList<>();
-            workoutTempHolder = (extras.getParcelableArrayList( "workout" ));
-            workout = workoutTempHolder.get( 0 );
-            kgValue = extras.getInt( "kgValue" );
-            lbsValue = extras.getInt( "lbsValue" );
-            kmValue = extras.getInt( "kmValue" );
-            milesValue = extras.getInt( "milesValue" );
-            timerSwitchValue = extras.getInt( "timerSwitchValue" );
-            removeAdvertsValue = extras.getInt( "removeAdvertsValue" );
-            newConnection();
+            if (extras!=null) {
+                widgetWorkoutDetails = extras.getParcelableArrayList( "widgetWorkout" );
+                widgetWorkoutId = extras.getInt( "widgetWorkoutId" );
+                currentMediaSource = extras.getString( "currentMediaSource" );
+                listStateOne = extras.getInt( "listStateOne" );
+                listStateTwo = extras.getInt( "listStateTwo" );
+                listStateThree = extras.getInt( "listStateThree" );
+                exercisesInSetWorkout = extras.getParcelableArrayList( "exercisesInSetWorkout" );
+                calledPosition = extras.getInt( "calledPostion" );
+                exerciseCategory = extras.getInt( "exerciseCategory" );
+                workoutCategory = extras.getInt( "workoutCategory" );
+                ArrayList<Exercise> exerciseTempHolder = new ArrayList<>();
+                exerciseTempHolder = (extras.getParcelableArrayList( "exercise" ));
+                exercise = exerciseTempHolder.get( 0 );
+                ArrayList<Workout> workoutTempHolder = new ArrayList<>();
+                workoutTempHolder = (extras.getParcelableArrayList( "workout" ));
+                workout = workoutTempHolder.get( 0 );
+                kgValue = extras.getInt( "kgValue" );
+                lbsValue = extras.getInt( "lbsValue" );
+                kmValue = extras.getInt( "kmValue" );
+                milesValue = extras.getInt( "milesValue" );
+                timerSwitchValue = extras.getInt( "timerSwitchValue" );
+                removeAdvertsValue = extras.getInt( "removeAdvertsValue" );
+            }
         }
+        android.support.v4.app.FragmentTransaction restoreFrag = getSupportFragmentManager().beginTransaction();
+        switch (currentPage){
+            case 0: restoreFrag.replace( R.id.master_list_fragment, new MasterListFragment() );
+                    break;
+            case 1: restoreFrag.replace( R.id.master_list_fragment, new Categories() );
+                break;
+            case 2: restoreFrag.replace( R.id.master_list_fragment, new WorkoutsCategories() );
+                break;
+            case 3: restoreFrag.replace( R.id.master_list_fragment, new SettingsFragment() );
+                break;
+            case 4: restoreFrag.replace( R.id.master_list_fragment, new NewsFeed() );
+                break;
+            case 5: restoreFrag.replace( R.id.master_list_fragment, new NewExerciseFragment() );
+                break;
+            case 6: restoreFrag.replace( R.id.master_list_fragment, new ExerciseDetailsFragment() );
+                break;
+            case 7: restoreFrag.replace( R.id.master_list_fragment, new NewWorkoutFragment());
+                break;
+            case 8: restoreFrag.replace( R.id.master_list_fragment, new WorkoutDetailsFragment() );
+                break;
+            case 9: restoreFrag.replace( R.id.master_list_fragment, new ExerciseListFragment() );
+                break;
+            case 10: restoreFrag.replace( R.id.master_list_fragment, new WorkoutListFragment() );
+                break;
+            case 11: restoreFrag.replace( R.id.master_list_fragment, new EditExerciseFragment() );
+                break;
+            case 12: restoreFrag.replace( R.id.master_list_fragment, new YouTubeFragment() );
+                break;
+            case 13: restoreFrag.replace( R.id.master_list_fragment, new WorkoutExerciseDetailsFragment() );
+                break;
+            case 14: restoreFrag.replace( R.id.master_list_fragment, new YouTubeFragment() );
+                break;
+        }
+        restoreFrag.addToBackStack( null ).commit();
     }
 
     @Override
@@ -271,21 +310,25 @@ public class HomeScreen extends FragmentActivity implements MasterListFragment.O
             case 0:
                 homeScreenButtonFragmentTransaction.replace( R.id.master_list_fragment, categories );
                 mTracker.setScreenName( "Page: categroies" );
+                currentPage = 1;
                 mTracker.send( new HitBuilders.ScreenViewBuilder().build() );
                 break;
             case 1:
                 homeScreenButtonFragmentTransaction.replace( R.id.master_list_fragment, workoutCategories );
                 mTracker.setScreenName( "Page: categroies" );
+                currentPage = 2;
                 mTracker.send( new HitBuilders.ScreenViewBuilder().build() );
                 break;
             case 2:
                 homeScreenButtonFragmentTransaction.replace( R.id.master_list_fragment, settingsFragment );
                 mTracker.setScreenName( "Page: settings" );
+                currentPage = 3;
                 mTracker.send( new HitBuilders.ScreenViewBuilder().build() );
                 break;
             case 3:
                 homeScreenButtonFragmentTransaction.replace( R.id.master_list_fragment, newsFeedFragment );
                 newConnection();
+                currentPage = 4;
                 mTracker.setScreenName( "Page: news feed" );
                 mTracker.send( new HitBuilders.ScreenViewBuilder().build() );
                 break;
@@ -300,11 +343,13 @@ public class HomeScreen extends FragmentActivity implements MasterListFragment.O
             case 0:
                 categories = new Categories();
                 exerciseScreenButtonFragmentTransaction.replace( R.id.master_list_fragment, categories );
+                currentPage = 1;
                 mTracker.setScreenName( "Page: categroies" );
                 mTracker.send( new HitBuilders.ScreenViewBuilder().build() );
                 break;
             case 1:
                 newExerciseFragment = new NewExerciseFragment();
+                currentPage = 5;
                 exerciseScreenButtonFragmentTransaction.replace( R.id.master_list_fragment, newExerciseFragment );
                 mTracker.setScreenName( "Page: new exercise" );
                 mTracker.send( new HitBuilders.ScreenViewBuilder().build() );
@@ -312,6 +357,7 @@ public class HomeScreen extends FragmentActivity implements MasterListFragment.O
             case 3:
                 exerciseDetailsFragment = new ExerciseDetailsFragment();
                 exerciseDetailsFragment.exercise = exercise;
+                currentPage = 6;
                 exerciseScreenButtonFragmentTransaction.replace( R.id.master_list_fragment, exerciseDetailsFragment );
                 mTracker.setScreenName( "Page: exercise details" );
                 mTracker.send( new HitBuilders.ScreenViewBuilder().build() );
@@ -327,11 +373,13 @@ public class HomeScreen extends FragmentActivity implements MasterListFragment.O
             case 0:
                 workoutCategories = new WorkoutsCategories();
                 workoutListScreenButtonFragmentTransaction.replace( R.id.master_list_fragment, workoutCategories );
+                currentPage = 2;
                 mTracker.setScreenName( "Page: categroies" );
                 mTracker.send( new HitBuilders.ScreenViewBuilder().build() );
                 break;
             case 1:
                 newWorkoutFragment = new NewWorkoutFragment();
+                currentPage = 7;
                 workoutListScreenButtonFragmentTransaction.replace( R.id.master_list_fragment, newWorkoutFragment );
                 mTracker.setScreenName( "Page: new workout" );
                 mTracker.send( new HitBuilders.ScreenViewBuilder().build() );
@@ -339,6 +387,7 @@ public class HomeScreen extends FragmentActivity implements MasterListFragment.O
             case 3:
                 workoutDetailsFragment = new WorkoutDetailsFragment();
                 workoutDetailsFragment.workout = workout;
+                currentPage = 8;
                 workoutListScreenButtonFragmentTransaction.replace( R.id.master_list_fragment, workoutDetailsFragment );
                 mTracker.setScreenName( "Page: workout details" );
                 mTracker.send( new HitBuilders.ScreenViewBuilder().build() );
@@ -353,6 +402,7 @@ public class HomeScreen extends FragmentActivity implements MasterListFragment.O
         switch (position) {
             case 0:
                 masterListFragment = new MasterListFragment();
+                currentPage = 0;
                 sharedPref = getPreferences( Context.MODE_PRIVATE );
                 kgValue = sharedPref.getInt( "kgValue", kgValue );
                 lbsValue = sharedPref.getInt( "lbsValue", lbsValue );
@@ -374,6 +424,7 @@ public class HomeScreen extends FragmentActivity implements MasterListFragment.O
         switch (position) {
             case 0:
                 exerciseListFragment = new ExerciseListFragment();
+                currentPage = 9;
                 if (exercisesFromLoader!=null){
                     exerciseListFragment.allExercises = exercisesFromLoader;
                 }
@@ -383,6 +434,7 @@ public class HomeScreen extends FragmentActivity implements MasterListFragment.O
                 break;
             case 1:
                 exerciseListFragment = new ExerciseListFragment();
+                currentPage = 9;
                 newExerciseScreenButtonFragmentTransaction.replace( R.id.master_list_fragment, exerciseListFragment );
                 mTracker.setScreenName( "Page: exercise list" );
                 mTracker.send( new HitBuilders.ScreenViewBuilder().build() );
@@ -397,12 +449,14 @@ public class HomeScreen extends FragmentActivity implements MasterListFragment.O
         switch (position) {
             case 0:
                 exerciseListFragment = new ExerciseListFragment();
+                currentPage = 9;
                 editExerciseScreenButtonFragmentTransaction.replace( R.id.master_list_fragment, exerciseListFragment );
                 mTracker.setScreenName( "Page: exercise list" );
                 mTracker.send( new HitBuilders.ScreenViewBuilder().build() );
                 break;
             case 1:
                 exerciseListFragment = new ExerciseListFragment();
+                currentPage = 9;
                 editExerciseScreenButtonFragmentTransaction.replace( R.id.master_list_fragment, exerciseListFragment );
                 mTracker.setScreenName( "Page: exercise list" );
                 mTracker.send( new HitBuilders.ScreenViewBuilder().build() );
@@ -418,11 +472,13 @@ public class HomeScreen extends FragmentActivity implements MasterListFragment.O
             case 0:
                 workoutListFragment = new WorkoutListFragment();
                 newWorkoutScreenButtonFragmentTransaction.replace( R.id.master_list_fragment, workoutListFragment );
+                currentPage = 10;
                 mTracker.setScreenName( "Page: workout list" );
                 mTracker.send( new HitBuilders.ScreenViewBuilder().build() );
                 break;
             case 1:
                 workoutListFragment = new WorkoutListFragment();
+                currentPage = 10;
                 newWorkoutScreenButtonFragmentTransaction.replace( R.id.master_list_fragment, workoutListFragment );
                 mTracker.setScreenName( "Page: categroies" );
                 mTracker.send( new HitBuilders.ScreenViewBuilder().build() );
@@ -438,20 +494,26 @@ public class HomeScreen extends FragmentActivity implements MasterListFragment.O
         switch (position) {
             case 0:
                 exerciseListFragment = new ExerciseListFragment();
+                currentPage = 9;
                 exerciseDetailsButtonFragmentTransaction.replace( R.id.master_list_fragment, exerciseListFragment );
                 mTracker.setScreenName( "Page: exercise list" );
                 mTracker.send( new HitBuilders.ScreenViewBuilder().build() );
+                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
                 break;
             case 1:
                 editExerciseFragment = new EditExerciseFragment();
+                currentPage = 11;
                 editExerciseFragment.exerciseToEdit = exercise;
                 exerciseDetailsButtonFragmentTransaction.replace( R.id.master_list_fragment, editExerciseFragment );
                 mTracker.setScreenName( "Page: edit exercise" );
                 mTracker.send( new HitBuilders.ScreenViewBuilder().build() );
+                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
                 break;
             case 2:
                 youTubeFragment = new YouTubeFragment();
+                currentPage = 12;
                 exerciseDetailsButtonFragmentTransaction.replace( R.id.master_list_fragment, youTubeFragment );
+                setRequestedOrientation( ActivityInfo.SCREEN_ORIENTATION_NOSENSOR);
                 mTracker.setScreenName( "Page: youtube video" );
                 mTracker.send( new HitBuilders.ScreenViewBuilder().build() );
                 break;
@@ -467,6 +529,7 @@ public class HomeScreen extends FragmentActivity implements MasterListFragment.O
             case 0:
                 workoutDetailsFragment = new WorkoutDetailsFragment();
                 workoutDetailsFragment.workout = workout;
+                currentPage = 8;
                 workoutDetailsButtonFragmentTransaction.replace( R.id.master_list_fragment, workoutDetailsFragment );
                 mTracker.setScreenName( "Page: workout details" );
                 mTracker.send( new HitBuilders.ScreenViewBuilder().build() );
@@ -474,6 +537,7 @@ public class HomeScreen extends FragmentActivity implements MasterListFragment.O
             case 1:
                 workoutDetailsFragment = new WorkoutDetailsFragment();
                 workoutDetailsFragment.workout = workout;
+                currentPage = 8;
                 workoutDetailsButtonFragmentTransaction.replace( R.id.master_list_fragment, workoutDetailsFragment );
                 mTracker.setScreenName( "Page: workout detials" );
                 mTracker.send( new HitBuilders.ScreenViewBuilder().build() );
@@ -490,6 +554,7 @@ public class HomeScreen extends FragmentActivity implements MasterListFragment.O
         switch (position) {
             case 0:
                 workoutListFragment = new WorkoutListFragment();
+                currentPage = 10;
                 workoutDetailsButtonFragmentTransaction.replace( R.id.master_list_fragment, workoutListFragment );
                 mTracker.setScreenName( "Page: workout list" );
                 mTracker.send( new HitBuilders.ScreenViewBuilder().build() );
@@ -497,6 +562,7 @@ public class HomeScreen extends FragmentActivity implements MasterListFragment.O
             case 1:
                 editWorkoutFragment = new EditWorkoutFragment();
                 editWorkoutFragment.workoutToEdit = workout;
+                currentPage = 12;
                 workoutDetailsButtonFragmentTransaction.replace( R.id.master_list_fragment, editWorkoutFragment );
                 mTracker.setScreenName( "Page: edit workout" );
                 mTracker.send( new HitBuilders.ScreenViewBuilder().build() );
@@ -504,6 +570,7 @@ public class HomeScreen extends FragmentActivity implements MasterListFragment.O
             case 3:
                 workoutExerciseDetailsFragment = new WorkoutExerciseDetailsFragment();
                 workoutExerciseDetailsFragment.exercise = exercise;
+                currentPage = 13;
                 workoutDetailsButtonFragmentTransaction.replace( R.id.master_list_fragment, workoutExerciseDetailsFragment );
                 mTracker.setScreenName( "Page: exercise details from workout" );
                 mTracker.send( new HitBuilders.ScreenViewBuilder().build() );
@@ -527,6 +594,7 @@ public class HomeScreen extends FragmentActivity implements MasterListFragment.O
             case 0:
                 workoutDetailsFragment = new WorkoutDetailsFragment();
                 workoutDetailsFragment.workout = workout;
+                currentPage = 8;
                 workoutExerciseDetailsButtonFragmentTransaction.replace( R.id.master_list_fragment, workoutDetailsFragment );
                 mTracker.setScreenName( "Page: workout details" );
                 mTracker.send( new HitBuilders.ScreenViewBuilder().build() );
@@ -534,12 +602,14 @@ public class HomeScreen extends FragmentActivity implements MasterListFragment.O
             case 1:
                 workoutDetailsFragment = new WorkoutDetailsFragment();
                 workoutDetailsFragment.workout = workout;
+                currentPage = 8;
                 workoutExerciseDetailsButtonFragmentTransaction.replace( R.id.master_list_fragment, workoutDetailsFragment );
                 mTracker.setScreenName( "Page: workout details" );
                 mTracker.send( new HitBuilders.ScreenViewBuilder().build() );
                 break;
             case 2:
                 workoutExerciseDetailsFragment = new WorkoutExerciseDetailsFragment();
+                currentPage = 13;
                 workoutExerciseDetailsFragment.exercise = exercisesInSetWorkout.get( calledPosition );
                 workoutExerciseDetailsButtonFragmentTransaction.replace( R.id.master_list_fragment, workoutExerciseDetailsFragment );
                 mTracker.setScreenName( "Page: workout details" );
@@ -547,6 +617,7 @@ public class HomeScreen extends FragmentActivity implements MasterListFragment.O
                 break;
             case 3:
                 YouTubeFragment youTubeFragment = new YouTubeFragment();
+                currentPage = 14;
                 workoutExerciseDetailsButtonFragmentTransaction.replace( R.id.master_list_fragment, youTubeFragment );
                 mTracker.setScreenName( "Page: youtube video" );
                 mTracker.send( new HitBuilders.ScreenViewBuilder().build() );
@@ -561,13 +632,16 @@ public class HomeScreen extends FragmentActivity implements MasterListFragment.O
         switch (position) {
             case 0:
                 masterListFragment = new MasterListFragment();
+                currentPage = 15;
                 categoriesFragmentTransaction.replace( R.id.master_list_fragment, masterListFragment );
                 mTracker.setScreenName( "Page: home screen" );
                 mTracker.send( new HitBuilders.ScreenViewBuilder().build() );
                 break;
             case 1:
                 exerciseListFragment = new ExerciseListFragment();
+                currentPage = 9;
                 categoriesFragmentTransaction.replace( R.id.master_list_fragment, exerciseListFragment );
+                categories = new Categories();
                 mTracker.setScreenName( "Page: exercise list" );
                 mTracker.send( new HitBuilders.ScreenViewBuilder().build() );
                 break;
@@ -581,12 +655,14 @@ public class HomeScreen extends FragmentActivity implements MasterListFragment.O
         switch (position) {
             case 0:
                 masterListFragment = new MasterListFragment();
+                currentPage = 0;
                 workoutCategoriesFragmentTransaction.replace( R.id.master_list_fragment, masterListFragment );
                 mTracker.setScreenName( "Page: home screen" );
                 mTracker.send( new HitBuilders.ScreenViewBuilder().build() );
                 break;
             case 1:
                 workoutListFragment = new WorkoutListFragment();
+                currentPage = 10;
                 workoutCategoriesFragmentTransaction.replace( R.id.master_list_fragment, workoutListFragment );
                 mTracker.setScreenName( "Page: workout list" );
                 mTracker.send( new HitBuilders.ScreenViewBuilder().build() );
@@ -601,6 +677,7 @@ public class HomeScreen extends FragmentActivity implements MasterListFragment.O
         switch (position) {
             case 0:
                 masterListFragment = new MasterListFragment();
+                currentPage = 0;
                 newsListFragmentTransaction.replace( R.id.master_list_fragment, masterListFragment );
                 mTracker.setScreenName( "Page: home screen" );
                 mTracker.send( new HitBuilders.ScreenViewBuilder().build() );

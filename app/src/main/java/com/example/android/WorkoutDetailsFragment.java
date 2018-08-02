@@ -52,6 +52,7 @@ public class WorkoutDetailsFragment extends android.support.v4.app.Fragment impl
                 }
             }
         }
+        workout = HomeScreen.workout;
         exercises = getExercises();
         mContext = getContext();
         rootView = inflater.inflate( R.layout.workout_details_fragment, container, false );

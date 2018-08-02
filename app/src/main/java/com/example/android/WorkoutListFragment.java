@@ -33,6 +33,7 @@ public class WorkoutListFragment extends android.support.v4.app.Fragment impleme
     RecyclerView recyclerView;
     WorkoutListAdapter workoutListAdapter;
     Toolbar mToolbar;
+    ScrollView scrollView;
 
 
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -45,6 +46,7 @@ public class WorkoutListFragment extends android.support.v4.app.Fragment impleme
         rootView = inflater.inflate( R.layout.workout_list_fragment, container, false );
 
         mToolbar = rootView.findViewById( R.id.toolbar );
+        scrollView = rootView.findViewById( R.id.workout_list_sv );
         recyclerView = rootView.findViewById( R.id.workouts_list_view );
         workoutListAdapter = new WorkoutListAdapter( workouts, mContext );
         recyclerView.setAdapter( workoutListAdapter );
@@ -207,8 +209,18 @@ public class WorkoutListFragment extends android.support.v4.app.Fragment impleme
     }
 
     @Override
-    public void onSaveInstanceState(@NonNull Bundle outState) {
+    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+        super.onViewStateRestored( savedInstanceState );
+        if (savedInstanceState!=null) {
+            if (savedInstanceState.containsKey( "scrollViewWorkoutList" )) {
+                scrollView.setScrollY( savedInstanceState.getInt( "scrollViewWorkoutList" ) );
+            }
+        }
+    }
 
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState( outState );
+        outState.putInt( "scrollViewWorkoutList", scrollView.getScrollY() );
     }
 }

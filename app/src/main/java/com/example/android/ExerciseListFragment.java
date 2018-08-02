@@ -2,6 +2,7 @@ package com.example.android;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.DividerItemDecoration;
@@ -23,7 +24,7 @@ import github.nisrulz.recyclerviewhelper.RVHItemTouchHelperCallback;
 
 public class ExerciseListFragment extends android.support.v4.app.Fragment implements android.support.v4.app.LoaderManager.LoaderCallbacks<ArrayList<Exercise>> {
 
-    public ExerciseListFragment () {
+    public ExerciseListFragment() {
     }
 
     View rootView;
@@ -35,14 +36,21 @@ public class ExerciseListFragment extends android.support.v4.app.Fragment implem
     Toolbar mToolbar;
     RecyclerView recyclerView;
     ExerciseListAdapter exerciseListAdapter;
+    ScrollView scrollView;
+    int yScroll = 0;
+    private static Bundle mRVState;
 
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        getLoaderManager().initLoader(10, null, this);
+        getLoaderManager().initLoader( 10, null, this );
 
         exercises = applyCategoryFilter( allExercises );
         mContext = getContext();
         rootView = inflater.inflate( R.layout.exercise_list_fragment, container, false );
+        scrollView = rootView.findViewById( R.id.exercise_list_sv );
+        if (yScroll != 0) {
+            scrollView.setScrollY( savedInstanceState.getInt( "scrollViewExerciseList" ) );
+        }
         mToolbar = rootView.findViewById( R.id.toolbar );
         recyclerView = rootView.findViewById( R.id.exercises_list_view );
         exerciseListAdapter = new ExerciseListAdapter( exercises, mContext );
@@ -50,29 +58,28 @@ public class ExerciseListFragment extends android.support.v4.app.Fragment implem
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager( mContext, LinearLayoutManager.VERTICAL, false );
 
         recyclerView.setLayoutManager( linearLayoutManager );
-        recyclerView.setHasFixedSize(false);
+        recyclerView.setHasFixedSize( false );
 
-        RecyclerView.ItemDecoration itemDecoration = new DividerItemDecoration(mContext, DividerItemDecoration.VERTICAL);
+        RecyclerView.ItemDecoration itemDecoration = new DividerItemDecoration( mContext, DividerItemDecoration.VERTICAL );
         ItemTouchHelper.Callback callback = new RVHItemTouchHelperCallback( exerciseListAdapter, true, true,
-                true);
-        ItemTouchHelper helper = new ItemTouchHelper(callback);
+                true );
+        ItemTouchHelper helper = new ItemTouchHelper( callback );
         helper.attachToRecyclerView( recyclerView );
 
         // Set the divider in the recyclerview
-        recyclerView.addItemDecoration(new RVHItemDividerDecoration(mContext, LinearLayoutManager.VERTICAL));
+        recyclerView.addItemDecoration( new RVHItemDividerDecoration( mContext, LinearLayoutManager.VERTICAL ) );
 
         // Set On Click Listener
-        recyclerView.addOnItemTouchListener(new RVHItemClickListener(mContext, new RVHItemClickListener.OnItemClickListener() {
+        recyclerView.addOnItemTouchListener( new RVHItemClickListener( mContext, new RVHItemClickListener.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
                 Exercise clickedExercise = exercises.get( position );
                 HomeScreen.exercise = clickedExercise;
-                mCallback.onExerciseButtonSelected(3);
-
+                mCallback.onExerciseButtonSelected( 3 );
 
 
             }
-        }));
+        } ) );
 
         exerciseListAdapter.notifyDataSetChanged();
 
@@ -87,14 +94,14 @@ public class ExerciseListFragment extends android.support.v4.app.Fragment implem
             @Override
             public void onClick(View v) {
                 int position = 0;
-                if (v == exerciseBackButton ) {
+                if (v == exerciseBackButton) {
                     position = 0;
                     HomeScreen.listStateTwo = 0;
                 }
                 if (v == newExerciseFabButton) {
                     position = 1;
                     ScrollView scrollView = rootView.findViewById( R.id.exercise_list_sv );
-                    HomeScreen.listStateThree =scrollView.getVerticalScrollbarPosition();
+                    HomeScreen.listStateThree = scrollView.getVerticalScrollbarPosition();
                 }
                 mCallback.onExerciseButtonSelected( position );
             }
@@ -105,9 +112,9 @@ public class ExerciseListFragment extends android.support.v4.app.Fragment implem
         exerciseBackButton.setOnClickListener( listener );
         newExerciseFabButton.setOnClickListener( listener );
 
-        HomeScreen.checkDisplayBanner(rootView, HomeScreen.removeAdvertsValue);
+        HomeScreen.checkDisplayBanner( rootView, HomeScreen.removeAdvertsValue );
 
-       return rootView;
+        return rootView;
     }
 
     ExerciseListFragment.OnExerciseButtonClickListener mCallback;
@@ -147,11 +154,11 @@ public class ExerciseListFragment extends android.support.v4.app.Fragment implem
         }
     }
 
-    public ArrayList<Exercise> applyCategoryFilter (ArrayList<Exercise>allExercises){
-        ArrayList <Exercise> exercisesInCategory = new ArrayList<>(  );
+    public ArrayList<Exercise> applyCategoryFilter(ArrayList<Exercise> allExercises) {
+        ArrayList<Exercise> exercisesInCategory = new ArrayList<>();
         int currentCategory = HomeScreen.exerciseCategory;
         String selection = "";
-        if (allExercises!=null) {
+        if (allExercises != null) {
             for (int i = 0; i < allExercises.size(); i++) {
                 Exercise exerciseToCheck = allExercises.get( i );
                 switch (currentCategory) {
@@ -196,4 +203,25 @@ public class ExerciseListFragment extends android.support.v4.app.Fragment implem
         }
         return exercisesInCategory;
     }
-}
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (mRVState != null) {
+            if (mRVState.containsKey( "rvState" )) {
+                Parcelable listState = mRVState.getParcelable( "rvState" );
+                recyclerView.getLayoutManager().onRestoreInstanceState( listState );
+            }
+        }
+    }
+
+        @Override
+        public void onPause () {
+            super.onPause();
+            mRVState = new Bundle();
+            Parcelable listState = recyclerView.getLayoutManager().onSaveInstanceState();
+            mRVState.putParcelable( "rvState", listState );
+        }
+    }
+

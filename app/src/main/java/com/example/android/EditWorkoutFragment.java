@@ -15,6 +15,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import com.example.android.Database.WorkoutsDatabase.WorkoutUpdateExerciseLists;
 import com.example.android.Database.WorkoutsDatabase.WorkoutsTableCleaner;
@@ -51,6 +52,7 @@ public class EditWorkoutFragment extends android.support.v4.app.Fragment{
     MultiSelectSpinner exerciseListMultiSpinner;
     MultiSelectSpinner addToWorkoutSpinner;
     Toolbar mToolbar;
+    ScrollView scrollView;
 
 
     public EditWorkoutFragment() {
@@ -74,6 +76,7 @@ public class EditWorkoutFragment extends android.support.v4.app.Fragment{
         subheading = rootView.findViewById( R.id.subheading_new_workout );
         categoriesFab = rootView.findViewById( R.id.category_name_cl );
         categoriesHiddenLayout = rootView.findViewById( R.id.categories_buttons );
+        scrollView = rootView.findViewById( R.id.scroll_view_new_work );
 
         workoutNameEditText = rootView.findViewById( R.id.workout_name_edit_text );
         workoutNameEditText.setText( workoutToEdit.getWorkoutName() );
@@ -383,6 +386,22 @@ public class EditWorkoutFragment extends android.support.v4.app.Fragment{
             Log.e (String.valueOf( i ), String.valueOf(checkList[i]));
         }
         return checkList;
+    }
+
+    @Override
+    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+        super.onViewStateRestored( savedInstanceState );
+        if (savedInstanceState!=null) {
+        if (savedInstanceState.containsKey( "scrollViewEditOrNewWorkout" )) {
+            scrollView.setScrollY( savedInstanceState.getInt( "scrollViewEditOrNewWorkout" ) );
+        }
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState( outState );
+        outState.putInt( "scrollViewEditOrNewWorkout", scrollView.getScrollY() );
     }
 
 }

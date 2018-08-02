@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/colorPrimaryDoubleDark">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorAccent"
+        android:elevation="24dp"
+        android:orientation="vertical"
+        app:contentInsetStart="0dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="200dp"
+                android:layout_height="80dp"
+                android:src="@drawable/flexercise_logo_small"
+                android:contentDescription="@string/small_flexercise_logo"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorPrimary"
+                android:orientation="horizontal"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp">
+
+                <ImageButton
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="start"
+                    android:layout_weight="1"
+                    android:background="@android:color/transparent"
+                    android:contentDescription="@string/backButton"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/back_arrow"
+                    android:id="@+id/categories_back_button"
+                    />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_weight="7"
+                    android:text="@string/categories"
+                    android:textColor="@color/spinnerWhite"
+                    android:textSize="24sp" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </android.support.v7.widget.Toolbar>
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/spinnerWhite"
+        android:orientation="vertical"
+        android:padding="8dp">
+
+
+        <ImageButton
+            android:id="@+id/category_chest_pic"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_margin="16dp"
+            android:layout_marginStart="32dp"
+            android:adjustViewBounds="true"
+            android:background="@drawable/circle"
+            android:contentDescription="@string/chest"
+            android:elevation="24dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/chest_circle"
+            app:layout_constraintBottom_toTopOf="@+id/category_abs_pic"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintEnd_toStartOf="@id/category_arms_pic"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageButton
+            android:id="@+id/category_arms_pic"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_margin="16dp"
+            android:layout_marginBottom="32dp"
+            android:adjustViewBounds="true"
+            android:background="@drawable/circle"
+            android:contentDescription="@string/arms"
+            android:elevation="24dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/arms_circle"
+            app:layout_constraintBottom_toTopOf="@id/category_legs_pic"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/category_chest_pic"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <ImageButton
+            android:id="@+id/category_abs_pic"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_margin="16dp"
+            android:layout_marginStart="32dp"
+            android:layout_weight="1"
+            android:adjustViewBounds="true"
+            android:background="@drawable/circle"
+            android:contentDescription="@string/abs"
+            android:elevation="24dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/abs_circular"
+            app:layout_constraintBottom_toTopOf="@id/category_cardio_pic"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintEnd_toStartOf="@id/category_legs_pic"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/category_chest_pic" />
+
+        <ImageButton
+            android:id="@+id/category_legs_pic"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintDimensionRatio="1:1"
+            android:layout_margin="16dp"
+            android:layout_weight="1"
+            android:adjustViewBounds="true"
+            android:background="@drawable/circle"
+            android:elevation="24dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/leg_circle"
+            app:layout_constraintBottom_toTopOf="@+id/category_back_pic"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/category_abs_pic"
+            app:layout_constraintTop_toBottomOf="@id/category_arms_pic"
+            android:contentDescription="@string/legs" />
+
+
+        <ImageButton
+            android:id="@+id/category_cardio_pic"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintDimensionRatio="1:1"
+            android:layout_margin="16dp"
+            android:background="@drawable/circle"
+            android:elevation="24dp"
+            android:scaleType="centerInside"
+            android:src="@drawable/cardio_heart"
+            android:contentDescription="@string/cardio"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/category_back_pic"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/category_abs_pic" />
+
+        <ImageButton
+            android:id="@+id/category_back_pic"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintDimensionRatio="1:1"
+            android:layout_margin="16dp"
+            android:background="@drawable/circle"
+            android:elevation="24dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/circle_back"
+            android:contentDescription="@string/back"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/category_cardio_pic"
+            app:layout_constraintTop_toBottomOf="@id/category_legs_pic" />
+
+
+
+    </android.support.constraint.ConstraintLayout>
+</LinearLayout>

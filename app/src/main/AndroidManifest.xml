@@ -17,7 +17,7 @@
 
         android:name="com.example.android.InternetBasedActivity.Analytics">
         <activity android:name="com.example.android.HomeScreen"
-                android:screenOrientation="portrait"
+            android:configChanges="screenSize|orientation"
             android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

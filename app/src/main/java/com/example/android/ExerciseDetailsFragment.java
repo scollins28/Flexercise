@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.example.android.Exercise;
@@ -43,6 +44,7 @@ public class ExerciseDetailsFragment extends android.support.v4.app.Fragment {
     String youTubeString;
     int exerciseType;
     Toolbar mToolbar;
+    ScrollView scrollView;
 
     public ExerciseDetailsFragment() {
     }
@@ -58,6 +60,7 @@ public class ExerciseDetailsFragment extends android.support.v4.app.Fragment {
         exercise = HomeScreen.exercise;
         mediaType = exercise.getMediaType();
         exerciseType = exercise.getExerciseType();
+        scrollView = rootView.findViewById( R.id.scrollView2 );
 
 
 
@@ -188,5 +191,20 @@ public class ExerciseDetailsFragment extends android.support.v4.app.Fragment {
         }
     }
 
+    @Override
+    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+        super.onViewStateRestored( savedInstanceState );
+        if (savedInstanceState!=null) {
+            if (savedInstanceState.containsKey( "scrollViewExerciseDetails" )) {
+                scrollView.setScrollY( savedInstanceState.getInt( "scrollViewExerciseDetails" ) );
+            }
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState( outState );
+        outState.putInt( "scrollViewExerciseDetails", scrollView.getScrollY() );
+    }
 
 }

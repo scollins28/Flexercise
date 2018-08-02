@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ScrollView;
 
 import com.example.android.free.R;
 
@@ -29,6 +30,7 @@ public class Categories extends Fragment implements android.support.v4.app.Loade
     ImageButton legsCategoryButton;
     ImageButton cardioCategoryButton;
     Toolbar mToolbar;
+    ScrollView scrollView;
 
 
     //Empty constructor

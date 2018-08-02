@@ -19,6 +19,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import com.example.android.Database.ExerciseUpdateWorkoutLists;
@@ -103,6 +104,7 @@ public class NewExerciseFragment extends android.support.v4.app.Fragment{
     CheckBox cardioCheckbox;
     Toolbar mToolbar;
     MultiSelectSpinner addToWorkoutSpinner;
+    ScrollView scrollView;
 
     public NewExerciseFragment(){}
 
@@ -133,6 +135,7 @@ public class NewExerciseFragment extends android.support.v4.app.Fragment{
         localVideoConstraintLayout = rootView.findViewById( R.id.local_video_entry_cl );
         selectLocalVideoButton = rootView.findViewById( R.id.local_video_button);
         addToWorkoutSpinner = rootView.findViewById( R.id.new_exercise_workout_list_spinner );
+        scrollView = rootView.findViewById( R.id.scrollView3 );
 
         if (HomeScreen.kgValue==1){
             maxWeightTv.setText( R.string.exercise_max_weight_KG );
@@ -645,6 +648,22 @@ public class NewExerciseFragment extends android.support.v4.app.Fragment{
         Log.e( "substring", subStrings[subStrings.length-1] );
         condensedString = subStrings[subStrings.length-1];
         return condensedString;
+    }
+
+    @Override
+    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+        super.onViewStateRestored( savedInstanceState );
+        if (savedInstanceState!=null) {
+            if (savedInstanceState.containsKey( "scrollViewEditOrNewExercise" )) {
+                scrollView.setScrollY( savedInstanceState.getInt( "scrollViewEditOrNewExercise" ) );
+            }
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState( outState );
+        outState.putInt( "scrollViewEditOrNewExercise", scrollView.getScrollY() );
     }
 }
 

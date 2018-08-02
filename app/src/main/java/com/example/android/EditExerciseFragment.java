@@ -19,6 +19,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import com.example.android.Database.ExerciseTableCleaner;
@@ -69,6 +70,7 @@ public class EditExerciseFragment extends android.support.v4.app.Fragment{
     int mediaType = 0;
     int exerciseType = 0;
     Toolbar mToolbar;
+    ScrollView scrollView;
 
     public EditExerciseFragment () {
 
@@ -157,6 +159,7 @@ public class EditExerciseFragment extends android.support.v4.app.Fragment{
         mediaSpinner = rootView.findViewById( R.id.exercise_media_spinner);
         exerciseListMultiSpinner= rootView.findViewById( R.id.new_exercise_workout_list_spinner);
         addToWorkoutSpinner = rootView.findViewById( R.id.new_exercise_workout_list_spinner);
+        scrollView = rootView.findViewById( R.id.scrollView3 );
 
         editExerciseCategoryOneValue = exerciseToEdit.mCategoryOneValue;
         editExerciseCategoryTwoValue = exerciseToEdit.mCategoryTwoValue;
@@ -653,6 +656,22 @@ public class EditExerciseFragment extends android.support.v4.app.Fragment{
         Log.e( "substring", subStrings[subStrings.length-1] );
         condensedString = subStrings[subStrings.length-1];
         return condensedString;
+    }
+
+    @Override
+    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+        super.onViewStateRestored( savedInstanceState );
+        if (savedInstanceState!=null) {
+            if (savedInstanceState.containsKey( "scrollViewEditOrNewExercise" )) {
+                scrollView.setScrollY( savedInstanceState.getInt( "scrollViewEditOrNewExercise" ) );
+            }
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState( outState );
+        outState.putInt( "scrollViewEditOrNewExercise", scrollView.getScrollY() );
     }
 
 }

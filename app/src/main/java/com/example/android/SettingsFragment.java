@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageButton;
+import android.widget.ScrollView;
 import android.widget.Switch;
 import android.widget.TextView;
 import com.example.android.Widget.WorkoutWidget;
@@ -47,6 +48,7 @@ public class SettingsFragment extends android.support.v4.app.Fragment {
     Switch timerSwitch;
     int timerSwitchValue;
     Toolbar mToolbar;
+    ScrollView scrollView;
 
 
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -69,6 +71,7 @@ public class SettingsFragment extends android.support.v4.app.Fragment {
         removeAdvertsButton = rootView.findViewById( R.id.remove_ads_button );
         timerSwitch = rootView.findViewById( R.id.enable_timer_switch );
         premiumText = rootView.findViewById( R.id.updrade_text );
+        scrollView = rootView.findViewById( R.id.settings_sv );
         if (removeAdvertsValue==1) {
             premiumText.setVisibility( GONE );
             timerSwitch.setVisibility( View.VISIBLE );
@@ -307,5 +310,21 @@ public class SettingsFragment extends android.support.v4.app.Fragment {
                 workoutsDeleted = getActivity().getContentResolver().delete( deleteWorkoutsUri, null, null );
             }
         }
+    }
+
+    @Override
+    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+        super.onViewStateRestored( savedInstanceState );
+        if (savedInstanceState!=null) {
+            if (savedInstanceState.containsKey( "scrollViewSettings" )) {
+                scrollView.setScrollY( savedInstanceState.getInt( "scrollViewSettings" ) );
+            }
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState( outState );
+        outState.putInt( "scrollViewSettings", scrollView.getScrollY() );
     }
 }

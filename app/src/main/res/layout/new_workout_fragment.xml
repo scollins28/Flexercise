@@ -82,7 +82,8 @@
         android:layout_height="match_parent"
         android:layout_below="@+id/toolbar"
         android:background="@color/spinnerWhite"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:id="@+id/scroll_view_new_work">
 
         <android.support.constraint.ConstraintLayout
             android:id="@+id/scroll_view_cl"

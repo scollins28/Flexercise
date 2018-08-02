@@ -15,6 +15,8 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ScrollView;
+
 import com.example.android.Database.WorkoutsDatabase.WorkoutUpdateExerciseLists;
 import com.example.android.free.R;
 import java.util.ArrayList;
@@ -72,6 +74,7 @@ public class NewWorkoutFragment extends android.support.v4.app.Fragment{
     static Context context;
     ArrayList<String> options;
     Toolbar mToolbar;
+    ScrollView scrollView;
 
     public NewWorkoutFragment(){
 
@@ -96,6 +99,7 @@ public class NewWorkoutFragment extends android.support.v4.app.Fragment{
         newWorkoutCategorySixButton = rootView.findViewById( R.id.button_six );
         categoriesFab = rootView.findViewById( R.id.category_name_cl );
         categoriesHiddenLayout = rootView.findViewById( R.id.categories_buttons );
+        scrollView = rootView.findViewById( R.id.scroll_view_new_work );
 
         View.OnClickListener listener = new View.OnClickListener() {
             @Override
@@ -365,4 +369,19 @@ public class NewWorkoutFragment extends android.support.v4.app.Fragment{
         return contentValues;
     }
 
+    @Override
+    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+        super.onViewStateRestored( savedInstanceState );
+        if (savedInstanceState!=null) {
+            if (savedInstanceState.containsKey( "scrollViewEditOrNewWorkout" )) {
+                scrollView.setScrollY( savedInstanceState.getInt( "scrollViewEditOrNewWorkout" ) );
+            }
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState( outState );
+        outState.putInt( "scrollViewEditOrNewWorkout", scrollView.getScrollY() );
+    }
 }

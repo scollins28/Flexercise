@@ -11,6 +11,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ScrollView;
+
 import com.example.android.free.R;
 
 import java.util.ArrayList;
@@ -131,6 +133,9 @@ public class WorkoutsCategories extends Fragment implements android.support.v4.a
             throw new ClassCastException( context.toString() + "must implement click listener" );
         }
     }
+
+
+
 
 
 }

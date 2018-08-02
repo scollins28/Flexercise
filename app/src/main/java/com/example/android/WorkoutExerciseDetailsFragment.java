@@ -47,7 +47,7 @@ public class WorkoutExerciseDetailsFragment extends android.support.v4.app.Fragm
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         createWorkout();
         rootView = inflater.inflate( R.layout.workout_exercise_details_fragment, container, false );
-
+        exercise = HomeScreen.exercise;
         mToolbar = rootView.findViewById( R.id.toolbar );
         exerciseDetailsBackButton = rootView.findViewById( R.id.workout_exercise_details_back_button );
         exerciseDoneButton = rootView.findViewById( R.id.workout_exercise_done_button );

@@ -2,15 +2,11 @@ package com.example.android.Database;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.database.Cursor;
 import android.net.Uri;
-
 import com.example.android.Exercise;
-
+import com.example.android.HomeScreen;
 import java.util.ArrayList;
 import java.util.Collections;
-
-import static android.provider.BaseColumns._ID;
 import static com.example.android.Database.ExerciseContract.ExerciseTable.ADD_TO_WORKOUT;
 import static com.example.android.Database.ExerciseContract.ExerciseTable.CONTENT_URI;
 import static com.example.android.Database.ExerciseContract.ExerciseTable.DISTANCE;
@@ -43,12 +39,6 @@ import static com.example.android.Database.ExerciseContract.ExerciseTable.WORKOU
 import static com.example.android.Database.ExerciseContract.ExerciseTable.WORKOUT_TWELVE;
 import static com.example.android.Database.ExerciseContract.ExerciseTable.WORKOUT_TWENTY;
 import static com.example.android.Database.ExerciseContract.ExerciseTable.WORKOUT_TWO;
-import static com.example.android.Database.WorkoutsDatabase.WorkoutContract.WorkoutsTable.CATEGORY_FIVE_STATE;
-import static com.example.android.Database.WorkoutsDatabase.WorkoutContract.WorkoutsTable.CATEGORY_FOUR_STATE;
-import static com.example.android.Database.WorkoutsDatabase.WorkoutContract.WorkoutsTable.CATEGORY_ONE_STATE;
-import static com.example.android.Database.WorkoutsDatabase.WorkoutContract.WorkoutsTable.CATEGORY_SIX_STATE;
-import static com.example.android.Database.WorkoutsDatabase.WorkoutContract.WorkoutsTable.CATEGORY_THREE_STATE;
-import static com.example.android.Database.WorkoutsDatabase.WorkoutContract.WorkoutsTable.CATEGORY_TWO_STATE;
 import static com.example.android.Database.WorkoutsDatabase.WorkoutContract.WorkoutsTable.WORKOUT_CONTENT_URI;
 
 public class ExerciseTableCleaner {
@@ -70,52 +60,70 @@ public class ExerciseTableCleaner {
 
 
     public static ArrayList<Exercise> getExercisesAndClean (Context context){
-        Cursor cursor = context.getContentResolver().query( CONTENT_URI, null, null, null, null );
         ArrayList<Exercise> exercisesList = new ArrayList<>();
-        if (cursor != null && cursor.moveToFirst()) {
-            for (int i = 0; i < cursor.getCount(); i++) {
-                cursor.moveToPosition( i );
-                String exerciseName = cursor.getString( cursor.getColumnIndex( EXERCISE_NAME) );
-                int categoryOneValue = cursor.getInt( cursor.getColumnIndex( CATEGORY_ONE_STATE) );
-                int categoryTwoValue = cursor.getInt( cursor.getColumnIndex( CATEGORY_TWO_STATE) );
-                int categoryThreeValue = cursor.getInt( cursor.getColumnIndex(CATEGORY_THREE_STATE) );
-                int categoryFourValue = cursor.getInt( cursor.getColumnIndex( CATEGORY_FOUR_STATE) );
-                int categoryFiveValue = cursor.getInt( cursor.getColumnIndex( CATEGORY_FIVE_STATE) );
-                int categorySixValue = cursor.getInt( cursor.getColumnIndex( CATEGORY_SIX_STATE) );
-                String mediaSource = cursor.getString( cursor.getColumnIndex( MEDIA_SOURCE) );
-                int numberOfSets = cursor.getInt( cursor.getColumnIndex( NUMBER_OF_SETS) );
-                int maxWeight = cursor.getInt( cursor.getColumnIndex( MAX_WEIGHT) );
-                int startingWeight = cursor.getInt( cursor.getColumnIndex( STARTING_WEIGHT) );
-                String addToWorkout = cursor.getString( cursor.getColumnIndex( ADD_TO_WORKOUT) );
-                String notes = cursor.getString( cursor.getColumnIndex( NOTES) );
-                ArrayList <Integer> idOfWorkouts = new ArrayList<>(  );
-                idOfWorkouts.add( cursor.getInt( cursor.getColumnIndex(WORKOUT_ONE )) );
-                idOfWorkouts.add( cursor.getInt( cursor.getColumnIndex(WORKOUT_TWO )) );
-                idOfWorkouts.add( cursor.getInt( cursor.getColumnIndex(WORKOUT_THREE )) );
-                idOfWorkouts.add( cursor.getInt( cursor.getColumnIndex(WORKOUT_FOUR )) );
-                idOfWorkouts.add( cursor.getInt( cursor.getColumnIndex(WORKOUT_FIVE )) );
-                idOfWorkouts.add( cursor.getInt( cursor.getColumnIndex(WORKOUT_SIX )) );
-                idOfWorkouts.add( cursor.getInt( cursor.getColumnIndex(WORKOUT_SEVEN )) );
-                idOfWorkouts.add( cursor.getInt( cursor.getColumnIndex(WORKOUT_EIGHT )) );
-                idOfWorkouts.add( cursor.getInt( cursor.getColumnIndex(WORKOUT_NINE )) );
-                idOfWorkouts.add( cursor.getInt( cursor.getColumnIndex(WORKOUT_TEN )) );
-                idOfWorkouts.add( cursor.getInt( cursor.getColumnIndex(WORKOUT_ELEVEN )) );
-                idOfWorkouts.add( cursor.getInt( cursor.getColumnIndex(WORKOUT_TWELVE )) );
-                idOfWorkouts.add( cursor.getInt( cursor.getColumnIndex(WORKOUT_THIRTEEN )) );
-                idOfWorkouts.add( cursor.getInt( cursor.getColumnIndex(WORKOUT_FOURTEEN )) );
-                idOfWorkouts.add( cursor.getInt( cursor.getColumnIndex(WORKOUT_FIFTEEN )) );
-                idOfWorkouts.add( cursor.getInt( cursor.getColumnIndex(WORKOUT_SIXTEEN )) );
-                idOfWorkouts.add( cursor.getInt( cursor.getColumnIndex(WORKOUT_SEVENTEEN )) );
-                idOfWorkouts.add( cursor.getInt( cursor.getColumnIndex(WORKOUT_EIGHTEEN )) );
-                idOfWorkouts.add( cursor.getInt( cursor.getColumnIndex(WORKOUT_NINETEEN )) );
-                idOfWorkouts.add( cursor.getInt( cursor.getColumnIndex(WORKOUT_TWENTY )) );
+        if (HomeScreen.exercisesFromLoader!=null){
+            for (int i = 0; i < HomeScreen.exercisesFromLoader.size(); i++) {
+                String exerciseName = HomeScreen.exercisesFromLoader.get( i ).getExerciseName();
+                int categoryOneValue = HomeScreen.exercisesFromLoader.get( i ).getCategoryOneValue();
+                int categoryTwoValue = HomeScreen.exercisesFromLoader.get( i ).getCategoryTwoValue();
+                int categoryThreeValue = HomeScreen.exercisesFromLoader.get( i ).getCategoryThreeValue();
+                int categoryFourValue = HomeScreen.exercisesFromLoader.get( i ).getCategoryFourValue();
+                int categoryFiveValue = HomeScreen.exercisesFromLoader.get( i ).getCategoryFiveValue();
+                int categorySixValue = HomeScreen.exercisesFromLoader.get( i ).getCategorySixValue();
+                String mediaSource = HomeScreen.exercisesFromLoader.get( i ).getMediaSource();
+                int numberOfSets = HomeScreen.exercisesFromLoader.get( i ).getNumberofSets();
+                int maxWeight = HomeScreen.exercisesFromLoader.get( i ).getMaxWeight();
+                int startingWeight = HomeScreen.exercisesFromLoader.get( i ).getStartingWeight();
+                String addToWorkout = HomeScreen.exercisesFromLoader.get( i ).getAddToWorkout();
+                String notes = HomeScreen.exercisesFromLoader.get( i ).getNotes();
+                ArrayList <Integer> workoutsExerciseFeaturesOn = new ArrayList<>(  );
+                int w = 0;
+                workoutsExerciseFeaturesOn.add( HomeScreen.exercisesFromLoader.get( i ).getWorkoutIds().get( w ));
+                w++;
+                workoutsExerciseFeaturesOn.add( HomeScreen.exercisesFromLoader.get( i ).getWorkoutIds().get( w ));
+                w++;
+                workoutsExerciseFeaturesOn.add( HomeScreen.exercisesFromLoader.get( i ).getWorkoutIds().get( w ));
+                w++;
+                workoutsExerciseFeaturesOn.add( HomeScreen.exercisesFromLoader.get( i ).getWorkoutIds().get( w ));
+                w++;
+                workoutsExerciseFeaturesOn.add( HomeScreen.exercisesFromLoader.get( i ).getWorkoutIds().get( w ));
+                w++;
+                workoutsExerciseFeaturesOn.add( HomeScreen.exercisesFromLoader.get( i ).getWorkoutIds().get( w ));
+                w++;
+                workoutsExerciseFeaturesOn.add( HomeScreen.exercisesFromLoader.get( i ).getWorkoutIds().get( w ));
+                w++;
+                workoutsExerciseFeaturesOn.add( HomeScreen.exercisesFromLoader.get( i ).getWorkoutIds().get( w ));
+                w++;
+                workoutsExerciseFeaturesOn.add( HomeScreen.exercisesFromLoader.get( i ).getWorkoutIds().get( w ));
+                w++;
+                workoutsExerciseFeaturesOn.add( HomeScreen.exercisesFromLoader.get( i ).getWorkoutIds().get( w ));
+                w++;
+                workoutsExerciseFeaturesOn.add( HomeScreen.exercisesFromLoader.get( i ).getWorkoutIds().get( w ));
+                w++;
+                workoutsExerciseFeaturesOn.add( HomeScreen.exercisesFromLoader.get( i ).getWorkoutIds().get( w ));
+                w++;
+                workoutsExerciseFeaturesOn.add( HomeScreen.exercisesFromLoader.get( i ).getWorkoutIds().get( w ));
+                w++;
+                workoutsExerciseFeaturesOn.add( HomeScreen.exercisesFromLoader.get( i ).getWorkoutIds().get( w ));
+                w++;
+                workoutsExerciseFeaturesOn.add( HomeScreen.exercisesFromLoader.get( i ).getWorkoutIds().get( w ));
+                w++;
+                workoutsExerciseFeaturesOn.add( HomeScreen.exercisesFromLoader.get( i ).getWorkoutIds().get( w ));
+                w++;
+                workoutsExerciseFeaturesOn.add( HomeScreen.exercisesFromLoader.get( i ).getWorkoutIds().get( w ));
+                w++;
+                workoutsExerciseFeaturesOn.add( HomeScreen.exercisesFromLoader.get( i ).getWorkoutIds().get( w ));
+                w++;
+                workoutsExerciseFeaturesOn.add( HomeScreen.exercisesFromLoader.get( i ).getWorkoutIds().get( w ));
+                w++;
+                workoutsExerciseFeaturesOn.add( HomeScreen.exercisesFromLoader.get( i ).getWorkoutIds().get( w ));
 
-                int idOfWorkoutsSize = idOfWorkouts.size();
+                int idOfWorkoutsSize = workoutsExerciseFeaturesOn.size();
                 int a = 0;
                 for (int b = 0; b < idOfWorkoutsSize; b++) {
-                    if (idOfWorkouts.get( b )!= 0) {
+                    if (workoutsExerciseFeaturesOn.get( b )!= 0) {
                         if (a < b) {
-                            Collections.swap( idOfWorkouts, a, b );
+                            Collections.swap( workoutsExerciseFeaturesOn, a, b );
                         }
                         a++;
                     }
@@ -125,14 +133,13 @@ public class ExerciseTableCleaner {
                 Exercise exerciseToAdd = new Exercise( exerciseName, categoryOneValue, categoryTwoValue, categoryThreeValue,
                         categoryFourValue, categoryFiveValue, categorySixValue, mediaSource, numberOfSets, maxWeight,
                         startingWeight, addToWorkoutRawValues, notes, context);
-                exerciseToAdd.mWorkoutIds = idOfWorkouts;
-                exerciseToAdd.mID = cursor.getInt( cursor.getColumnIndex( _ID ) );
-                exerciseToAdd.mMediaType = cursor.getInt( cursor.getColumnIndex( MEDIA_TYPE ) );
+                exerciseToAdd.mWorkoutIds = workoutsExerciseFeaturesOn;
+                exerciseToAdd.mID = HomeScreen.exercisesFromLoader.get( i ).getID();
+                exerciseToAdd.mMediaType = HomeScreen.exercisesFromLoader.get( i ).getMediaType();
 
                 exercisesList.add( exerciseToAdd);
             }
         }
-        cursor.close();
         return exercisesList;
     }
 

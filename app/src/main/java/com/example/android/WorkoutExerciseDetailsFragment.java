@@ -2,12 +2,9 @@ package com.example.android;
 
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.SharedPreferences;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,21 +12,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import com.example.android.Database.WorkoutsDatabase.WorkoutContract;
 import com.example.android.free.R;
-
-import junit.runner.BaseTestRunner;
-
 import java.util.ArrayList;
-import static android.provider.BaseColumns._ID;
-import static com.example.android.Database.WorkoutsDatabase.WorkoutContract.WorkoutsTable.CATEGORY_FIVE_STATE;
-import static com.example.android.Database.WorkoutsDatabase.WorkoutContract.WorkoutsTable.CATEGORY_FOUR_STATE;
-import static com.example.android.Database.WorkoutsDatabase.WorkoutContract.WorkoutsTable.CATEGORY_SIX_STATE;
-import static com.example.android.Database.WorkoutsDatabase.WorkoutContract.WorkoutsTable.CATEGORY_THREE_STATE;
-import static com.example.android.Database.WorkoutsDatabase.WorkoutContract.WorkoutsTable.CATEGORY_TWO_STATE;
-import static com.example.android.Database.WorkoutsDatabase.WorkoutContract.WorkoutsTable.WORKOUT_CONTENT_URI;
-import static com.example.android.Database.WorkoutsDatabase.WorkoutContract.WorkoutsTable.WORKOUT_NAME;
-import static com.example.android.WorkoutDetailsFragment.getExerciseTableNames;
 
 public class WorkoutExerciseDetailsFragment extends android.support.v4.app.Fragment{
 
@@ -214,24 +198,38 @@ public class WorkoutExerciseDetailsFragment extends android.support.v4.app.Fragm
 
     public void createWorkout (){
         if (HomeScreen.widgetWorkoutId != 777777) {
-            Cursor widgetCursor;
-            widgetCursor = getActivity().getContentResolver().query( WORKOUT_CONTENT_URI, null, null, null, null );
-            for (int i = 0; i < widgetCursor.getCount(); i++) {
-                widgetCursor.moveToPosition( i );
-                if (HomeScreen.widgetWorkoutId == widgetCursor.getInt( widgetCursor.getColumnIndex( _ID ) )) {
-                    String workoutName = widgetCursor.getString( widgetCursor.getColumnIndex( WORKOUT_NAME ) );
-                    int categoryOne = widgetCursor.getInt( widgetCursor.getColumnIndex( WorkoutContract.WorkoutsTable.CATEGORY_ONE_STATE ) );
-                    int categoryTwo = widgetCursor.getInt( widgetCursor.getColumnIndex( CATEGORY_TWO_STATE ) );
-                    int categoryThree = widgetCursor.getInt( widgetCursor.getColumnIndex( CATEGORY_THREE_STATE ) );
-                    int categoryFour = widgetCursor.getInt( widgetCursor.getColumnIndex( CATEGORY_FOUR_STATE ) );
-                    int categoryFive = widgetCursor.getInt( widgetCursor.getColumnIndex( CATEGORY_FIVE_STATE ) );
-                    int categorySix = widgetCursor.getInt( widgetCursor.getColumnIndex( CATEGORY_SIX_STATE ) );
-
-                    ArrayList<String> exerciseIdNames = getExerciseTableNames();
+            if (HomeScreen.workoutsFromLoader!=null){
+            for (int i = 0; i < HomeScreen.workoutsFromLoader.size(); i++) {
+                if (HomeScreen.widgetWorkoutId == HomeScreen.workoutsFromLoader.get( i ).getID()) {
+                    String workoutName = HomeScreen.workoutsFromLoader.get( i ).getWorkoutName();
+                    int categoryOne = HomeScreen.workoutsFromLoader.get( i ).getCategoryOneValue();
+                    int categoryTwo = HomeScreen.workoutsFromLoader.get( i ).getCategoryTwoValue();
+                    int categoryThree = HomeScreen.workoutsFromLoader.get( i ).getCategoryThreeValue();
+                    int categoryFour = HomeScreen.workoutsFromLoader.get( i ).getCategoryFourValue();
+                    int categoryFive = HomeScreen.workoutsFromLoader.get( i ).getCategoryFiveValue();
+                    int categorySix = HomeScreen.workoutsFromLoader.get( i ).getCategorySixValue();
                     ArrayList<Integer> exerciseIds = new ArrayList<>(  );
-                    for (int w = 0; w<exerciseIdNames.size(); w++){
-                        exerciseIds.add(widgetCursor.getInt( widgetCursor.getColumnIndex( exerciseIdNames.get( w )) ));
-                    }
+                    exerciseIds.add(HomeScreen.workoutsFromLoader.get( i ).getExerciseOneId());
+                    exerciseIds.add(HomeScreen.workoutsFromLoader.get( i ).getExerciseTwoId());
+                    exerciseIds.add(HomeScreen.workoutsFromLoader.get( i ).getExerciseThreeId());
+                    exerciseIds.add(HomeScreen.workoutsFromLoader.get( i ).getExerciseFourId());
+                    exerciseIds.add(HomeScreen.workoutsFromLoader.get( i ).getExerciseFiveId());
+                    exerciseIds.add(HomeScreen.workoutsFromLoader.get( i ).getExerciseSixId());
+                    exerciseIds.add(HomeScreen.workoutsFromLoader.get( i ).getExerciseSevenId());
+                    exerciseIds.add(HomeScreen.workoutsFromLoader.get( i ).getExerciseEightId());
+                    exerciseIds.add(HomeScreen.workoutsFromLoader.get( i ).getExerciseNineId());
+                    exerciseIds.add(HomeScreen.workoutsFromLoader.get( i ).getExerciseTenId());
+                    exerciseIds.add(HomeScreen.workoutsFromLoader.get( i ).getExerciseElevenId());
+                    exerciseIds.add(HomeScreen.workoutsFromLoader.get( i ).getExerciseTwelveId());
+                    exerciseIds.add(HomeScreen.workoutsFromLoader.get( i ).getExerciseThirteenId());
+                    exerciseIds.add(HomeScreen.workoutsFromLoader.get( i ).getExerciseFourteenId());
+                    exerciseIds.add(HomeScreen.workoutsFromLoader.get( i ).getExerciseFifteenId());
+                    exerciseIds.add(HomeScreen.workoutsFromLoader.get( i ).getExerciseSixteenId());
+                    exerciseIds.add(HomeScreen.workoutsFromLoader.get( i ).getExerciseSeventeenId());
+                    exerciseIds.add(HomeScreen.workoutsFromLoader.get( i ).getExerciseEighteenId());
+                    exerciseIds.add(HomeScreen.workoutsFromLoader.get( i ).getExerciseNineteenId());
+                    exerciseIds.add(HomeScreen.workoutsFromLoader.get( i ).getExerciseTwentyId());
+
                     int f=0;
                     Workout tempWorkout = new Workout(  );
                     tempWorkout.mWorkoutName=workoutName;
@@ -283,6 +281,6 @@ public class WorkoutExerciseDetailsFragment extends android.support.v4.app.Fragm
                     f++;
                     HomeScreen.workout = tempWorkout;
                 }
-            }}
+            }}}
     }
 }

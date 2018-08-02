@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.content.Loader;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -21,7 +22,7 @@ import github.nisrulz.recyclerviewhelper.RVHItemClickListener;
 import github.nisrulz.recyclerviewhelper.RVHItemDividerDecoration;
 import github.nisrulz.recyclerviewhelper.RVHItemTouchHelperCallback;
 
-public class WorkoutListFragment extends android.support.v4.app.Fragment{
+public class WorkoutListFragment extends android.support.v4.app.Fragment implements android.support.v4.app.LoaderManager.LoaderCallbacks<ArrayList<Workout>> {
 
     View rootView;
     ImageButton workoutListBackButton;
@@ -29,16 +30,16 @@ public class WorkoutListFragment extends android.support.v4.app.Fragment{
     ArrayList<Workout> allWorkouts;
     ArrayList<Workout> workouts;
     public Context mContext;
-    private RecyclerView recyclerView;
-    private WorkoutListAdapter workoutListAdapter;
+    RecyclerView recyclerView;
+    WorkoutListAdapter workoutListAdapter;
     Toolbar mToolbar;
 
 
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
+        getLoaderManager().initLoader(110, null, this);
         mContext = getContext();
 
-        allWorkouts = Workout.addWorkouts(mContext);
+        allWorkouts = HomeScreen.workoutsFromLoader;
         workouts = applyCategoryFilter( allWorkouts );
 
         rootView = inflater.inflate( R.layout.workout_list_fragment, container, false );
@@ -109,6 +110,25 @@ public class WorkoutListFragment extends android.support.v4.app.Fragment{
 
     WorkoutListFragment.onWorkoutListButtonSelected mCallback;
 
+    @NonNull
+    @Override
+    public android.support.v4.content.Loader<ArrayList<Workout>> onCreateLoader(int id, @Nullable Bundle args) {
+        return new FlexLoaderWorkouts( getContext(), 110 );
+    }
+
+    @Override
+    public void onLoadFinished(@NonNull android.support.v4.content.Loader<ArrayList<Workout>> loader, ArrayList<Workout> data) {
+        allWorkouts = data;
+        workouts = applyCategoryFilter( allWorkouts );
+        recyclerView.setAdapter( new WorkoutListAdapter( workouts, mContext ) );
+        HomeScreen.workoutsFromLoader = allWorkouts;
+    }
+
+    @Override
+    public void onLoaderReset(@NonNull android.support.v4.content.Loader<ArrayList<Workout>> loader) {
+
+    }
+
 
 
     //Interface for the click listener to send which button has been pushed to the home screen, and activate the fragment transaction
@@ -130,47 +150,55 @@ public class WorkoutListFragment extends android.support.v4.app.Fragment{
     public ArrayList<Workout> applyCategoryFilter (ArrayList<Workout>allWorkouts){
         ArrayList <Workout> workoutsInCategory = new ArrayList<>(  );
         int currentCategory = HomeScreen.workoutCategory;
-        for (int i=0; i<allWorkouts.size(); i++) {
-            Workout workoutToCheck = allWorkouts.get( i );
+        if (allWorkouts!=null) {
+            for (int i = 0; i < allWorkouts.size(); i++) {
+                Workout workoutToCheck = allWorkouts.get( i );
 
-            switch (currentCategory) {
-                case 1:
-                    if (workoutToCheck.getCategoryOneValue()==1){
-                        workoutsInCategory.add( workoutToCheck);
-                    };
-                    break;
-                case 2:
-                    if (workoutToCheck.getCategoryTwoValue()==1){
-                        workoutsInCategory.add( workoutToCheck);
-                    };
-                    break;
-                case 3:
-                    if (workoutToCheck.getCategoryThreeValue()==1){
-                        workoutsInCategory.add( workoutToCheck);
-                    };
-                    break;
-                case 4:
-                    if (workoutToCheck.getCategoryFourValue()==1){
-                        workoutsInCategory.add( workoutToCheck);
-                    };
-                    break;
-                case 5:
-                    if (workoutToCheck.getCategoryFiveValue()==1){
-                        workoutsInCategory.add( workoutToCheck);
-                    };
-                    break;
-                case 6:
-                    if (workoutToCheck.getCategorySixValue()==1){
-                        workoutsInCategory.add( workoutToCheck);
-                    };
-                    break;
-            }
-            for (int t = 0; t< workoutsInCategory.size(); t++){
-                if (HomeScreen.widgetToInflate!=666666){
-                    int toCompare = workoutsInCategory.get( t ).mID;
-                    if (toCompare== HomeScreen.widgetToInflate){
-                        HomeScreen.workout = workoutsInCategory.get( t );
-                        Log.e( "homescreen workout", "updated" );
+                switch (currentCategory) {
+                    case 1:
+                        if (workoutToCheck.getCategoryOneValue() == 1) {
+                            workoutsInCategory.add( workoutToCheck );
+                        }
+                        ;
+                        break;
+                    case 2:
+                        if (workoutToCheck.getCategoryTwoValue() == 1) {
+                            workoutsInCategory.add( workoutToCheck );
+                        }
+                        ;
+                        break;
+                    case 3:
+                        if (workoutToCheck.getCategoryThreeValue() == 1) {
+                            workoutsInCategory.add( workoutToCheck );
+                        }
+                        ;
+                        break;
+                    case 4:
+                        if (workoutToCheck.getCategoryFourValue() == 1) {
+                            workoutsInCategory.add( workoutToCheck );
+                        }
+                        ;
+                        break;
+                    case 5:
+                        if (workoutToCheck.getCategoryFiveValue() == 1) {
+                            workoutsInCategory.add( workoutToCheck );
+                        }
+                        ;
+                        break;
+                    case 6:
+                        if (workoutToCheck.getCategorySixValue() == 1) {
+                            workoutsInCategory.add( workoutToCheck );
+                        }
+                        ;
+                        break;
+                }
+                for (int t = 0; t < workoutsInCategory.size(); t++) {
+                    if (HomeScreen.widgetToInflate != 666666) {
+                        int toCompare = workoutsInCategory.get( t ).mID;
+                        if (toCompare == HomeScreen.widgetToInflate) {
+                            HomeScreen.workout = workoutsInCategory.get( t );
+                            Log.e( "homescreen workout", "updated" );
+                        }
                     }
                 }
             }

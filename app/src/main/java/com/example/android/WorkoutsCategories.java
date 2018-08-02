@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.Loader;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,8 +13,10 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import com.example.android.free.R;
 
+import java.util.ArrayList;
 
-public class WorkoutsCategories extends Fragment {
+
+public class WorkoutsCategories extends Fragment implements android.support.v4.app.LoaderManager.LoaderCallbacks<ArrayList<Exercise>> {
 
     Context mContext;
     ImageButton backButton;
@@ -33,6 +36,8 @@ public class WorkoutsCategories extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
+        getLoaderManager().initLoader(10, null, this);
 
         //Getting context and inflating the rootview
 
@@ -95,7 +100,21 @@ public class WorkoutsCategories extends Fragment {
 
     WorkoutsCategories.OnWorkoutCategorySelected mCallback;
 
+    @NonNull
+    @Override
+    public android.support.v4.content.Loader<ArrayList<Exercise>> onCreateLoader(int id, @Nullable Bundle args) {
+        return new FlexLoader( getContext(), 10 );
+    }
 
+    @Override
+    public void onLoadFinished(@NonNull android.support.v4.content.Loader<ArrayList<Exercise>> loader, ArrayList<Exercise> data) {
+        HomeScreen.exercisesFromLoader = data;
+    }
+
+    @Override
+    public void onLoaderReset(@NonNull android.support.v4.content.Loader<ArrayList<Exercise>> loader) {
+
+    }
 
     //Interface for the click listener to send which button has been pushed to the home screen, and activate the fragment transaction
     public interface OnWorkoutCategorySelected {

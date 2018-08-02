@@ -1,7 +1,6 @@
 package com.example.android;
 
 import android.content.Context;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -10,32 +9,19 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ScrollView;
-
-import com.example.android.Database.ExerciseContract;
-import com.example.android.Exercise;
-import com.example.android.ExerciseListAdapter;
-import com.example.android.HomeScreen;
 import com.example.android.free.R;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
-import com.google.android.gms.ads.MobileAds;
-
 import java.util.ArrayList;
-
 import github.nisrulz.recyclerviewhelper.RVHItemClickListener;
 import github.nisrulz.recyclerviewhelper.RVHItemDividerDecoration;
 import github.nisrulz.recyclerviewhelper.RVHItemTouchHelperCallback;
 
-import static com.example.android.Database.ExerciseContract.ExerciseTable.CONTENT_URI;
 
-
-public class ExerciseListFragment extends android.support.v4.app.Fragment{
+public class ExerciseListFragment extends android.support.v4.app.Fragment implements android.support.v4.app.LoaderManager.LoaderCallbacks<ArrayList<Exercise>> {
 
     public ExerciseListFragment () {
     }
@@ -47,16 +33,19 @@ public class ExerciseListFragment extends android.support.v4.app.Fragment{
     ArrayList<Exercise> exercises;
     Context mContext;
     Toolbar mToolbar;
+    RecyclerView recyclerView;
+    ExerciseListAdapter exerciseListAdapter;
 
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        allExercises = addExercises();
-        exercises = applyCategoryFilter(allExercises);
+        getLoaderManager().initLoader(10, null, this);
+
+        exercises = applyCategoryFilter( allExercises );
         mContext = getContext();
         rootView = inflater.inflate( R.layout.exercise_list_fragment, container, false );
         mToolbar = rootView.findViewById( R.id.toolbar );
-        RecyclerView recyclerView = rootView.findViewById( R.id.exercises_list_view );
-        ExerciseListAdapter exerciseListAdapter = new ExerciseListAdapter( exercises, mContext );
+        recyclerView = rootView.findViewById( R.id.exercises_list_view );
+        exerciseListAdapter = new ExerciseListAdapter( exercises, mContext );
         recyclerView.setAdapter( exerciseListAdapter );
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager( mContext, LinearLayoutManager.VERTICAL, false );
 
@@ -123,6 +112,25 @@ public class ExerciseListFragment extends android.support.v4.app.Fragment{
 
     ExerciseListFragment.OnExerciseButtonClickListener mCallback;
 
+    @NonNull
+    @Override
+    public android.support.v4.content.Loader<ArrayList<Exercise>> onCreateLoader(int id, @Nullable Bundle args) {
+        return new FlexLoader( getContext(), 10 );
+    }
+
+    @Override
+    public void onLoadFinished(@NonNull android.support.v4.content.Loader<ArrayList<Exercise>> loader, ArrayList<Exercise> data) {
+        allExercises = data;
+        exercises = applyCategoryFilter( allExercises );
+        recyclerView.setAdapter( new ExerciseListAdapter( exercises, mContext ) );
+        HomeScreen.exercisesFromLoader = allExercises;
+    }
+
+    @Override
+    public void onLoaderReset(@NonNull android.support.v4.content.Loader<ArrayList<Exercise>> loader) {
+
+    }
+
     //Interface for the click listener to send which button has been pushed to the home screen, and activate the fragment transaction
     public interface OnExerciseButtonClickListener {
         void onExerciseButtonSelected(int position);
@@ -139,99 +147,51 @@ public class ExerciseListFragment extends android.support.v4.app.Fragment{
         }
     }
 
-    public ArrayList<Exercise> addExercises() {
-            Cursor cursor = getActivity().getContentResolver().query( CONTENT_URI, null, null, null, null );
-            ArrayList<Exercise> exercisesList = new ArrayList<>();
-            if (cursor != null && cursor.moveToFirst()) {
-                for (int i = 0; i < cursor.getCount(); i++) {
-                    cursor.moveToPosition( i );
-                    String exerciseName = cursor.getString( cursor.getColumnIndex( ExerciseContract.ExerciseTable.EXERCISE_NAME ) );
-                    int categoriesOneValue = cursor.getInt( cursor.getColumnIndex( ExerciseContract.ExerciseTable.CATEGORY_ONE_STATE ) );
-                    int categoriesTwoValue = cursor.getInt( cursor.getColumnIndex( ExerciseContract.ExerciseTable.CATEGORY_TWO_STATE ) );
-                    int categoriesThreeValue = cursor.getInt( cursor.getColumnIndex( ExerciseContract.ExerciseTable.CATEGORY_THREE_STATE ) );
-                    int categoriesFourValue = cursor.getInt( cursor.getColumnIndex( ExerciseContract.ExerciseTable.CATEGORY_FOUR_STATE ) );
-                    int categoriesFiveValue = cursor.getInt( cursor.getColumnIndex( ExerciseContract.ExerciseTable.CATEGORY_FIVE_STATE ) );
-                    int categoriesSixValue = cursor.getInt( cursor.getColumnIndex( ExerciseContract.ExerciseTable.CATEGORY_SIX_STATE ) );
-                    String mediaSource = cursor.getString( cursor.getColumnIndex( ExerciseContract.ExerciseTable.MEDIA_SOURCE ) );
-                    int numberOfSets = cursor.getInt( cursor.getColumnIndex( ExerciseContract.ExerciseTable.NUMBER_OF_SETS ) );
-                    int maxWeight = cursor.getInt( cursor.getColumnIndex( ExerciseContract.ExerciseTable.MAX_WEIGHT ) );
-                    int startingWeight = cursor.getInt( cursor.getColumnIndex( ExerciseContract.ExerciseTable.STARTING_WEIGHT ) );
-                    String addToWorkout = cursor.getString( cursor.getColumnIndex( ExerciseContract.ExerciseTable.ADD_TO_WORKOUT ) );
-                    String notes = cursor.getString( cursor.getColumnIndex( ExerciseContract.ExerciseTable.NOTES ) );
-                    ArrayList<Integer> workoutsExerciseFeaturesOn = new ArrayList<>();
-                    workoutsExerciseFeaturesOn.add( cursor.getInt( cursor.getColumnIndex( ExerciseContract.ExerciseTable.WORKOUT_ONE ) ) );
-                    workoutsExerciseFeaturesOn.add( cursor.getInt( cursor.getColumnIndex( ExerciseContract.ExerciseTable.WORKOUT_TWO ) ) );
-                    workoutsExerciseFeaturesOn.add( cursor.getInt( cursor.getColumnIndex( ExerciseContract.ExerciseTable.WORKOUT_THREE ) ) );
-                    workoutsExerciseFeaturesOn.add( cursor.getInt( cursor.getColumnIndex( ExerciseContract.ExerciseTable.WORKOUT_FOUR ) ) );
-                    workoutsExerciseFeaturesOn.add( cursor.getInt( cursor.getColumnIndex( ExerciseContract.ExerciseTable.WORKOUT_FIVE ) ) );
-                    workoutsExerciseFeaturesOn.add( cursor.getInt( cursor.getColumnIndex( ExerciseContract.ExerciseTable.WORKOUT_SIX ) ) );
-                    workoutsExerciseFeaturesOn.add( cursor.getInt( cursor.getColumnIndex( ExerciseContract.ExerciseTable.WORKOUT_SEVEN ) ) );
-                    workoutsExerciseFeaturesOn.add( cursor.getInt( cursor.getColumnIndex( ExerciseContract.ExerciseTable.WORKOUT_EIGHT ) ) );
-                    workoutsExerciseFeaturesOn.add( cursor.getInt( cursor.getColumnIndex( ExerciseContract.ExerciseTable.WORKOUT_NINE ) ) );
-                    workoutsExerciseFeaturesOn.add( cursor.getInt( cursor.getColumnIndex( ExerciseContract.ExerciseTable.WORKOUT_TEN ) ) );
-                    workoutsExerciseFeaturesOn.add( cursor.getInt( cursor.getColumnIndex( ExerciseContract.ExerciseTable.WORKOUT_ELEVEN ) ) );
-                    workoutsExerciseFeaturesOn.add( cursor.getInt( cursor.getColumnIndex( ExerciseContract.ExerciseTable.WORKOUT_TWELVE ) ) );
-                    workoutsExerciseFeaturesOn.add( cursor.getInt( cursor.getColumnIndex( ExerciseContract.ExerciseTable.WORKOUT_THIRTEEN ) ) );
-                    workoutsExerciseFeaturesOn.add( cursor.getInt( cursor.getColumnIndex( ExerciseContract.ExerciseTable.WORKOUT_FOURTEEN ) ) );
-                    workoutsExerciseFeaturesOn.add( cursor.getInt( cursor.getColumnIndex( ExerciseContract.ExerciseTable.WORKOUT_FIFTEEN ) ) );
-                    workoutsExerciseFeaturesOn.add( cursor.getInt( cursor.getColumnIndex( ExerciseContract.ExerciseTable.WORKOUT_SIXTEEN ) ) );
-                    workoutsExerciseFeaturesOn.add( cursor.getInt( cursor.getColumnIndex( ExerciseContract.ExerciseTable.WORKOUT_SEVENTEEN ) ) );
-                    workoutsExerciseFeaturesOn.add( cursor.getInt( cursor.getColumnIndex( ExerciseContract.ExerciseTable.WORKOUT_EIGHTEEN ) ) );
-                    workoutsExerciseFeaturesOn.add( cursor.getInt( cursor.getColumnIndex( ExerciseContract.ExerciseTable.WORKOUT_NINETEEN ) ) );
-                    workoutsExerciseFeaturesOn.add( cursor.getInt( cursor.getColumnIndex( ExerciseContract.ExerciseTable.WORKOUT_TWENTY ) ) );
-                    Exercise exerciseToAdd = new Exercise( exerciseName, categoriesOneValue, categoriesTwoValue,
-                            categoriesThreeValue, categoriesFourValue, categoriesFiveValue, categoriesSixValue,
-                            mediaSource, numberOfSets, maxWeight, startingWeight, addToWorkout, notes );
-                    exerciseToAdd.mID = cursor.getInt( cursor.getColumnIndex( ExerciseContract.ExerciseTable._ID ) );
-                    exerciseToAdd.mMediaType = cursor.getInt( cursor.getColumnIndex( ExerciseContract.ExerciseTable.MEDIA_TYPE ) );
-                    exerciseToAdd.mWorkoutIds = workoutsExerciseFeaturesOn;
-                    exerciseToAdd.mExerciseType = cursor.getInt( cursor.getColumnIndex( ExerciseContract.ExerciseTable.EXERCISE_TYPE ) );
-                    exerciseToAdd.mDistance = cursor.getInt( cursor.getColumnIndex( ExerciseContract.ExerciseTable.DISTANCE ) );
-                    exerciseToAdd.mTime = cursor.getInt( cursor.getColumnIndex( ExerciseContract.ExerciseTable.MINUTES) );
-                    exercisesList.add( exerciseToAdd );
-                }
-                cursor.close();
-            }
-        return exercisesList;
-    }
-
     public ArrayList<Exercise> applyCategoryFilter (ArrayList<Exercise>allExercises){
         ArrayList <Exercise> exercisesInCategory = new ArrayList<>(  );
         int currentCategory = HomeScreen.exerciseCategory;
         String selection = "";
-        for (int i=0; i<allExercises.size(); i++) {
-            Exercise exerciseToCheck = allExercises.get( i );
-            switch (currentCategory) {
-                case 1:
-                    if (exerciseToCheck.getCategoryOneValue()==1){
-                        exercisesInCategory.add( exerciseToCheck );
-                    };
-                    break;
-                case 2:
-                    if (exerciseToCheck.getCategoryTwoValue()==1){
-                        exercisesInCategory.add( exerciseToCheck );
-                    };
-                    break;
-                case 3:
-                    if (exerciseToCheck.getCategoryThreeValue()==1){
-                        exercisesInCategory.add( exerciseToCheck );
-                    };
-                    break;
-                case 4:
-                    if (exerciseToCheck.getCategoryFourValue()==1){
-                        exercisesInCategory.add( exerciseToCheck );
-                    };
-                    break;
-                case 5:
-                    if (exerciseToCheck.getCategoryFiveValue()==1){
-                        exercisesInCategory.add( exerciseToCheck );
-                    };
-                    break;
-                case 6:
-                    if (exerciseToCheck.getCategorySixValue()==1){
-                        exercisesInCategory.add( exerciseToCheck );
-                    };
-                    break;
+        if (allExercises!=null) {
+            for (int i = 0; i < allExercises.size(); i++) {
+                Exercise exerciseToCheck = allExercises.get( i );
+                switch (currentCategory) {
+                    case 1:
+                        if (exerciseToCheck.getCategoryOneValue() == 1) {
+                            exercisesInCategory.add( exerciseToCheck );
+                        }
+                        ;
+                        break;
+                    case 2:
+                        if (exerciseToCheck.getCategoryTwoValue() == 1) {
+                            exercisesInCategory.add( exerciseToCheck );
+                        }
+                        ;
+                        break;
+                    case 3:
+                        if (exerciseToCheck.getCategoryThreeValue() == 1) {
+                            exercisesInCategory.add( exerciseToCheck );
+                        }
+                        ;
+                        break;
+                    case 4:
+                        if (exerciseToCheck.getCategoryFourValue() == 1) {
+                            exercisesInCategory.add( exerciseToCheck );
+                        }
+                        ;
+                        break;
+                    case 5:
+                        if (exerciseToCheck.getCategoryFiveValue() == 1) {
+                            exercisesInCategory.add( exerciseToCheck );
+                        }
+                        ;
+                        break;
+                    case 6:
+                        if (exerciseToCheck.getCategorySixValue() == 1) {
+                            exercisesInCategory.add( exerciseToCheck );
+                        }
+                        ;
+                        break;
+                }
             }
         }
         return exercisesInCategory;

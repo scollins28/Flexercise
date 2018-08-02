@@ -3,7 +3,6 @@ package com.example.android;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -20,9 +19,6 @@ import com.example.android.Database.WorkoutsDatabase.WorkoutUpdateExerciseLists;
 import com.example.android.free.R;
 import java.util.ArrayList;
 import io.apptik.widget.multiselectspinner.MultiSelectSpinner;
-import static android.provider.BaseColumns._ID;
-import static com.example.android.Database.ExerciseContract.ExerciseTable.CONTENT_URI;
-import static com.example.android.Database.ExerciseContract.ExerciseTable.EXERCISE_NAME;
 import static com.example.android.Database.WorkoutsDatabase.WorkoutContract.WorkoutsTable.CATEGORY_FIVE_STATE;
 import static com.example.android.Database.WorkoutsDatabase.WorkoutContract.WorkoutsTable.CATEGORY_FOUR_STATE;
 import static com.example.android.Database.WorkoutsDatabase.WorkoutContract.WorkoutsTable.CATEGORY_ONE_STATE;
@@ -245,14 +241,12 @@ public class NewWorkoutFragment extends android.support.v4.app.Fragment{
         categoriesFab.setOnClickListener( categoryButtonListener );
 
         options = new ArrayList<>();
-        Cursor cursor = getActivity().getContentResolver().query( CONTENT_URI, null, null, null, null );
-        cursor.moveToFirst();
-        for (int i=0; i<cursor.getCount(); i++){
-            cursor.moveToPosition( i );
-            String newExercise = cursor.getString( cursor.getColumnIndex( EXERCISE_NAME ) );
-            options.add(newExercise);
+        if (HomeScreen.exercisesFromLoader!=null) {
+            for (int i = 0; i < HomeScreen.exercisesFromLoader.size(); i++) {
+                String newExercise = HomeScreen.exercisesFromLoader.get( i ).getExerciseName();
+                options.add( newExercise );
+            }
         }
-        cursor.close();
         MultiSelectSpinner multiSelectSpinner = rootView.findViewById(R.id.new_exercise_workout_list_spinner);
         ArrayAdapter<String> adapter = new ArrayAdapter <String>(getActivity(), android.R.layout.simple_list_item_multiple_choice, options);
 
@@ -305,18 +299,17 @@ public class NewWorkoutFragment extends android.support.v4.app.Fragment{
         boolean[] checked = addToWorkoutSpinner.getSelected();
         ArrayList<Integer>  exercisesToAdd =  new ArrayList<Integer>();
         for (int i = 0; i < (checked.length); i++){
-            if (checked[i]==true){
+            if (checked[i]){
                 String toAdd = options.get( i );
-                Cursor cursor = getActivity().getContentResolver().query( CONTENT_URI, null, null, null, null );
-                cursor.moveToFirst();
-                for (int x=0; x<cursor.getCount(); x++){
-                    cursor.moveToPosition( x );
-                    String toCompare = cursor.getString( cursor.getColumnIndex( EXERCISE_NAME ) );
+                if (HomeScreen.exercisesFromLoader!=null){
+                for (int x=0; x<HomeScreen.exercisesFromLoader.size(); x++){
+                    String toCompare = HomeScreen.exercisesFromLoader.get( x ).getExerciseName();
                     if (toCompare.equals( toAdd )){
-                        int toAddId = cursor.getInt( cursor.getColumnIndex( _ID ) );
+                        int toAddId = HomeScreen.exercisesFromLoader.get( x ).getID();
                         exercisesToAdd.add( toAddId );
                 }
                 }
+            }
             }
         }
             while (exercisesToAdd.size()<20) {

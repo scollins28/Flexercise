@@ -1,9 +1,7 @@
 package com.example.android;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -18,43 +16,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
-
-import com.example.android.Database.ExerciseContract;
-import com.example.android.Database.WorkoutsDatabase.WorkoutContract;
 import com.example.android.Database.WorkoutsDatabase.WorkoutUpdateExerciseLists;
 import com.example.android.Database.WorkoutsDatabase.WorkoutsTableCleaner;
-import com.example.android.HomeScreen;
-import com.example.android.Workout;
 import com.example.android.free.R;
-
 import java.util.ArrayList;
-
 import io.apptik.widget.multiselectspinner.MultiSelectSpinner;
-
-import static android.provider.BaseColumns._ID;
-import static com.example.android.Database.ExerciseContract.ExerciseTable.CONTENT_URI;
-import static com.example.android.Database.ExerciseContract.ExerciseTable.EXERCISE_NAME;
-import static com.example.android.Database.WorkoutsDatabase.WorkoutContract.WorkoutsTable.EXERCISE_EIGHTEEN_ID;
-import static com.example.android.Database.WorkoutsDatabase.WorkoutContract.WorkoutsTable.EXERCISE_EIGHT_ID;
-import static com.example.android.Database.WorkoutsDatabase.WorkoutContract.WorkoutsTable.EXERCISE_ELEVEN_ID;
-import static com.example.android.Database.WorkoutsDatabase.WorkoutContract.WorkoutsTable.EXERCISE_FIFTEEN_ID;
-import static com.example.android.Database.WorkoutsDatabase.WorkoutContract.WorkoutsTable.EXERCISE_FIVE_ID;
-import static com.example.android.Database.WorkoutsDatabase.WorkoutContract.WorkoutsTable.EXERCISE_FOURTEEN_ID;
-import static com.example.android.Database.WorkoutsDatabase.WorkoutContract.WorkoutsTable.EXERCISE_FOUR_ID;
-import static com.example.android.Database.WorkoutsDatabase.WorkoutContract.WorkoutsTable.EXERCISE_NINETEEN_ID;
-import static com.example.android.Database.WorkoutsDatabase.WorkoutContract.WorkoutsTable.EXERCISE_NINE_ID;
-import static com.example.android.Database.WorkoutsDatabase.WorkoutContract.WorkoutsTable.EXERCISE_ONE_ID;
-import static com.example.android.Database.WorkoutsDatabase.WorkoutContract.WorkoutsTable.EXERCISE_SEVENTEEN_ID;
-import static com.example.android.Database.WorkoutsDatabase.WorkoutContract.WorkoutsTable.EXERCISE_SEVEN_ID;
-import static com.example.android.Database.WorkoutsDatabase.WorkoutContract.WorkoutsTable.EXERCISE_SIXTEEN_ID;
-import static com.example.android.Database.WorkoutsDatabase.WorkoutContract.WorkoutsTable.EXERCISE_SIX_ID;
-import static com.example.android.Database.WorkoutsDatabase.WorkoutContract.WorkoutsTable.EXERCISE_TEN_ID;
-import static com.example.android.Database.WorkoutsDatabase.WorkoutContract.WorkoutsTable.EXERCISE_THIRTEEN_ID;
-import static com.example.android.Database.WorkoutsDatabase.WorkoutContract.WorkoutsTable.EXERCISE_THREE_ID;
-import static com.example.android.Database.WorkoutsDatabase.WorkoutContract.WorkoutsTable.EXERCISE_TWELVE_ID;
-import static com.example.android.Database.WorkoutsDatabase.WorkoutContract.WorkoutsTable.EXERCISE_TWENTY_ID;
-import static com.example.android.Database.WorkoutsDatabase.WorkoutContract.WorkoutsTable.EXERCISE_TWO_ID;
-import static com.example.android.Database.WorkoutsDatabase.WorkoutContract.WorkoutsTable.WORKOUT_NAME;
 
 public class EditWorkoutFragment extends android.support.v4.app.Fragment{
 
@@ -291,14 +257,12 @@ public class EditWorkoutFragment extends android.support.v4.app.Fragment{
 
 
         options = new ArrayList<>();
-        Cursor cursor = getActivity().getContentResolver().query( CONTENT_URI, null, null, null, null );
-        cursor.moveToFirst();
-        for (int i=0; i<cursor.getCount(); i++){
-            cursor.moveToPosition( i );
-            String newExercise = cursor.getString( cursor.getColumnIndex( EXERCISE_NAME ) );
-            options.add(newExercise);
+        if (HomeScreen.exercisesFromLoader!=null) {
+            for (int i = 0; i < HomeScreen.exercisesFromLoader.size(); i++) {
+                String newExercise = HomeScreen.exercisesFromLoader.get( i ).getExerciseName();
+                options.add( newExercise );
+            }
         }
-        cursor.close();
         final MultiSelectSpinner multiSelectSpinner = rootView.findViewById(R.id.new_exercise_workout_list_spinner);
         ArrayAdapter<String> adapter = new ArrayAdapter <String>(getActivity(), android.R.layout.simple_list_item_multiple_choice, options);
 
@@ -355,14 +319,13 @@ public class EditWorkoutFragment extends android.support.v4.app.Fragment{
         for (int i = 0; i < (checked.length); i++) {
             if (checked[i] == true) {
                 String toAdd = options.get( i );
-                Cursor cursor = getActivity().getContentResolver().query( CONTENT_URI, null, null, null, null );
-                cursor.moveToFirst();
-                for (int x = 0; x < cursor.getCount(); x++) {
-                    cursor.moveToPosition( x );
-                    if (cursor.getString( cursor.getColumnIndex( EXERCISE_NAME ) ).equals( toAdd )) {
-                        int toAddId = cursor.getInt( cursor.getColumnIndex( _ID ) );
-                        exercisesToAdd.add( toAddId );
-                        Log.e( "id", String.valueOf( toAddId ) );
+                if (HomeScreen.exercisesFromLoader != null) {
+                    for (int x = 0; x < HomeScreen.exercisesFromLoader.size(); x++) {
+                        if (HomeScreen.exercisesFromLoader.get( x ).getExerciseName().equals( toAdd )) {
+                            int toAddId = HomeScreen.exercisesFromLoader.get(x).getID();
+                            exercisesToAdd.add( toAddId );
+                            Log.e( "id", String.valueOf( toAddId ) );
+                        }
                     }
                 }
             }
@@ -387,60 +350,21 @@ public class EditWorkoutFragment extends android.support.v4.app.Fragment{
 
     public void insertNewData (Workout workoutToAdd){
         HomeScreen.workout = WorkoutsTableCleaner.cleanSingleWorkout (context, workoutToAdd);
-
-        //ContentValues contentValues = newContentValues(workoutToAdd);
-        //long id = workoutToEdit.getID();
-       // Uri updateUri =  CONTENT_URI.buildUpon().appendPath(Long.toString(id)).build();
-       // mContext.getContentResolver().update( updateUri, contentValues, null, null);
-    }
-
-    public static ContentValues newContentValues (Workout workoutToAdd) {
-        ContentValues contentValues = new ContentValues(  );
-        contentValues.put( WORKOUT_NAME, workoutToAdd.getWorkoutName());
-        contentValues.put( WorkoutContract.WorkoutsTable.CATEGORY_ONE_STATE, workoutToAdd.getCategoryOneValue() );
-        contentValues.put( WorkoutContract.WorkoutsTable.CATEGORY_TWO_STATE, workoutToAdd.getCategoryTwoValue() );
-        contentValues.put( WorkoutContract.WorkoutsTable.CATEGORY_THREE_STATE, workoutToAdd.getCategoryThreeValue() );
-        contentValues.put( WorkoutContract.WorkoutsTable.CATEGORY_FOUR_STATE, workoutToAdd.getCategoryFourValue() );
-        contentValues.put( WorkoutContract.WorkoutsTable.CATEGORY_FIVE_STATE, workoutToAdd.getCategoryFiveValue() );
-        contentValues.put( WorkoutContract.WorkoutsTable.CATEGORY_SIX_STATE, workoutToAdd.getCategorySixValue() );
-        contentValues.put( EXERCISE_ONE_ID, workoutToAdd.getExerciseOneId() );
-        contentValues.put( EXERCISE_TWO_ID, workoutToAdd.getExerciseTwoId() );
-        contentValues.put( EXERCISE_THREE_ID, workoutToAdd.getExerciseThreeId() );
-        contentValues.put( EXERCISE_FOUR_ID, workoutToAdd.getExerciseFourId() );
-        contentValues.put( EXERCISE_FIVE_ID, workoutToAdd.getExerciseFiveId() );
-        contentValues.put( EXERCISE_SIX_ID, workoutToAdd.getExerciseSixId() );
-        contentValues.put( EXERCISE_SEVEN_ID, workoutToAdd.getExerciseSevenId() );
-        contentValues.put( EXERCISE_EIGHT_ID, workoutToAdd.getExerciseEightId() );
-        contentValues.put( EXERCISE_NINE_ID, workoutToAdd.getExerciseNineId() );
-        contentValues.put( EXERCISE_TEN_ID, workoutToAdd.getExerciseTenId() );
-        contentValues.put( EXERCISE_ELEVEN_ID, workoutToAdd.getExerciseElevenId() );
-        contentValues.put( EXERCISE_TWELVE_ID, workoutToAdd.getExerciseTwelveId() );
-        contentValues.put( EXERCISE_THIRTEEN_ID, workoutToAdd.getExerciseThirteenId() );
-        contentValues.put( EXERCISE_FOURTEEN_ID, workoutToAdd.getExerciseFourteenId() );
-        contentValues.put( EXERCISE_FIFTEEN_ID, workoutToAdd.getExerciseFifteenId() );
-        contentValues.put( EXERCISE_SIXTEEN_ID, workoutToAdd.getExerciseSixteenId() );
-        contentValues.put( EXERCISE_SEVENTEEN_ID, workoutToAdd.getExerciseSeventeenId() );
-        contentValues.put( EXERCISE_EIGHTEEN_ID, workoutToAdd.getExerciseEighteenId() );
-        contentValues.put( EXERCISE_NINETEEN_ID, workoutToAdd.getExerciseNineteenId() );
-        contentValues.put( EXERCISE_TWENTY_ID, workoutToAdd.getExerciseTwentyId() );
-        return contentValues;
     }
 
     public boolean [] checkState(){
         boolean[] checkList = addToWorkoutSpinner.getSelected();
         for (int i = 0; i < (checkList.length); i++) {
                 String checklistOption = options.get( i );
-                Cursor cursor = getActivity().getContentResolver().query( CONTENT_URI, null, null, null, null );
-                cursor.moveToFirst();
                 int toCompareAgainstId = 0;
-                for (int x = 0; x < cursor.getCount(); x++) {
-                    cursor.moveToPosition( x );
-                    String toCompareAgainst = cursor.getString( cursor.getColumnIndex( EXERCISE_NAME ) );
-                    if (toCompareAgainst.equals( checklistOption )) {
-                        toCompareAgainstId = cursor.getInt( cursor.getColumnIndex( ExerciseContract.ExerciseTable._ID  ) );
+                if (HomeScreen.exercisesFromLoader!=null) {
+                    for (int x = 0; x < HomeScreen.exercisesFromLoader.size(); x++) {
+                        String toCompareAgainst = HomeScreen.exercisesFromLoader.get( x ).getExerciseName();
+                        if (toCompareAgainst.equals( checklistOption )) {
+                            toCompareAgainstId = HomeScreen.exercisesFromLoader.get( x ).getID();
+                        }
                     }
                 }
-
             if (toCompareAgainstId>0){
             if (toCompareAgainstId==workoutToEdit.getExerciseOneId() || toCompareAgainstId==workoutToEdit.getExerciseTwoId() ||
                     toCompareAgainstId==workoutToEdit.getExerciseThreeId() || toCompareAgainstId==workoutToEdit.getExerciseFourId() ||

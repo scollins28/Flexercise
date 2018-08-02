@@ -3,7 +3,6 @@ package com.example.android;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -22,15 +21,10 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
-
 import com.example.android.Database.ExerciseUpdateWorkoutLists;
 import com.example.android.free.R;
-
 import java.util.ArrayList;
-
 import io.apptik.widget.multiselectspinner.MultiSelectSpinner;
-
-import static android.provider.BaseColumns._ID;
 import static android.view.View.GONE;
 import static com.example.android.Database.ExerciseContract.ExerciseTable.ADD_TO_WORKOUT;
 import static com.example.android.Database.ExerciseContract.ExerciseTable.CATEGORY_FIVE_STATE;
@@ -70,8 +64,6 @@ import static com.example.android.Database.ExerciseContract.ExerciseTable.WORKOU
 import static com.example.android.Database.ExerciseContract.ExerciseTable.WORKOUT_TWELVE;
 import static com.example.android.Database.ExerciseContract.ExerciseTable.WORKOUT_TWENTY;
 import static com.example.android.Database.ExerciseContract.ExerciseTable.WORKOUT_TWO;
-import static com.example.android.Database.WorkoutsDatabase.WorkoutContract.WorkoutsTable.WORKOUT_CONTENT_URI;
-import static com.example.android.Database.WorkoutsDatabase.WorkoutContract.WorkoutsTable.WORKOUT_NAME;
 
 public class NewExerciseFragment extends android.support.v4.app.Fragment{
 
@@ -431,15 +423,11 @@ public class NewExerciseFragment extends android.support.v4.app.Fragment{
 
 
         options = new ArrayList<>();
-        Cursor cursor = getActivity().getContentResolver().query( WORKOUT_CONTENT_URI, null, null, null, null );
-        if (cursor!=null) {
-            cursor.moveToFirst();
-            for (int i = 0; i < cursor.getCount(); i++) {
-                cursor.moveToPosition( i );
-                String newWorkout = cursor.getString( cursor.getColumnIndex( WORKOUT_NAME ) );
+        if (HomeScreen.workoutsFromLoader!=null) {
+            for (int i = 0; i < HomeScreen.workoutsFromLoader.size(); i++) {
+                String newWorkout = HomeScreen.workoutsFromLoader.get( i ).getWorkoutName();
                 options.add( newWorkout );
             }
-            cursor.close();
         }
         MultiSelectSpinner multiSelectSpinner = rootView.findViewById(R.id.new_exercise_workout_list_spinner);
         ArrayAdapter<String> adapter = new ArrayAdapter <String>(getActivity(), android.R.layout.simple_list_item_multiple_choice, options);
@@ -536,12 +524,9 @@ public class NewExerciseFragment extends android.support.v4.app.Fragment{
         boolean[] checked = addToWorkoutSpinner.getSelected();
         ArrayList<String>  addToWorkoutRawValues =  new ArrayList<String>();
         ArrayList<Integer> workoutsExerciseIsOn = new ArrayList<>( );
-        Cursor cursor = getActivity().getContentResolver().query( WORKOUT_CONTENT_URI, null, null, null, null );
-        if (cursor!=null) {
-            cursor.moveToFirst();
+        if (HomeScreen.workoutsFromLoader!=null) {
             int hasValue = 0;
             for (int i = 0; i < (checked.length); i++) {
-                cursor.moveToPosition( i );
                 if (checked[i] == true) {
                     if (hasValue == 1) {
                         String toAdd = options.get( i );
@@ -552,7 +537,7 @@ public class NewExerciseFragment extends android.support.v4.app.Fragment{
                         addToWorkoutRawValues.add( starterString );
                         hasValue = 1;
                     }
-                    workoutsExerciseIsOn.add( cursor.getInt( cursor.getColumnIndex( _ID ) ) );
+                    workoutsExerciseIsOn.add( HomeScreen.workoutsFromLoader.get( i ).getID());
                 }
             }
         }

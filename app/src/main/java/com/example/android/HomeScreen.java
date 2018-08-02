@@ -116,7 +116,6 @@ public class HomeScreen extends FragmentActivity implements MasterListFragment.O
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState( outState );
-        Log.e( "saving state", "NOW" );
         outState.putParcelableArrayList( "widgetWorkout", widgetWorkoutDetails );
         outState.putInt( "widgetWorkoutId", widgetWorkoutId );
         outState.putString( "currentMediaSource", currentMediaSource );
@@ -160,10 +159,8 @@ public class HomeScreen extends FragmentActivity implements MasterListFragment.O
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             widgetToInflate = extras.getInt( "code" );
-            Log.e( "extras", String.valueOf( widgetToInflate ) + "  ................." + String.valueOf( widgetWorkoutId ) );
             if (extras.containsKey( "codeTwo" )) {
                 widgetWorkoutId = extras.getInt( "codeTwo" );
-                Log.e( "extras", String.valueOf( widgetToInflate ) + "  ................." + String.valueOf( widgetWorkoutId ) );
                 workoutCategory = extras.getInt( "category" );
             }
         }
@@ -204,13 +201,10 @@ public class HomeScreen extends FragmentActivity implements MasterListFragment.O
         super.onResume();
         mContext = getApplicationContext();
         Bundle extras = getIntent().getExtras();
-        Log.e( "extras", String.valueOf( extras ) );
         if (extras != null) {
             widgetToInflate = extras.getInt( "code" );
-            Log.e( "extras", String.valueOf( widgetToInflate ) + "  ................." + String.valueOf( widgetWorkoutId ) );
             if (extras.containsKey( "codeTwo" )) {
                 widgetWorkoutId = extras.getInt( "codeTwo" );
-                Log.e( "extras", String.valueOf( widgetToInflate ) + "  ................." + String.valueOf( widgetWorkoutId ) );
                 workoutCategory = extras.getInt( "category" );
             }
         }
@@ -230,14 +224,12 @@ public class HomeScreen extends FragmentActivity implements MasterListFragment.O
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState( savedInstanceState );
         if (savedInstanceState.size()>0) {
-            Log.e( "SAVED NOT NULL", "YAY" );
             widgetWorkoutDetails = savedInstanceState.getParcelableArrayList( "widgetWorkout" );
             Bundle extras = getIntent().getExtras();
             if (extras != null) {
                 widgetToInflate = extras.getInt( "code" );
                 if (extras.containsKey( "codeTwo" )) {
                     widgetWorkoutId = extras.getInt( "codeTwo" );
-                    Log.e( "extras", String.valueOf( widgetToInflate ) + "  ................." + String.valueOf( widgetWorkoutId ) );
                     workoutCategory = extras.getInt( "category" );
                 }
             }
@@ -248,7 +240,6 @@ public class HomeScreen extends FragmentActivity implements MasterListFragment.O
             sendBroadcast( intent );
             widgetWorkoutDetails = extras.getParcelableArrayList( "widgetWorkout" );
             widgetWorkoutId = extras.getInt( "widgetWorkoutId" );
-            Log.e( "widgetWorkoutId", String.valueOf( extras.getInt( "widgetWorkoutId" ) ) );
             currentMediaSource = extras.getString( "currentMediaSource" );
             listStateOne = extras.getInt( "listStateOne" );
             listStateTwo = extras.getInt( "listStateTwo" );
@@ -383,6 +374,9 @@ public class HomeScreen extends FragmentActivity implements MasterListFragment.O
         switch (position) {
             case 0:
                 exerciseListFragment = new ExerciseListFragment();
+                if (exercisesFromLoader!=null){
+                    exerciseListFragment.allExercises = exercisesFromLoader;
+                }
                 newExerciseScreenButtonFragmentTransaction.replace( R.id.master_list_fragment, exerciseListFragment );
                 mTracker.setScreenName( "Page: exercise list" );
                 mTracker.send( new HitBuilders.ScreenViewBuilder().build() );
@@ -532,7 +526,6 @@ public class HomeScreen extends FragmentActivity implements MasterListFragment.O
         switch (position) {
             case 0:
                 workoutDetailsFragment = new WorkoutDetailsFragment();
-                addWorkouts();
                 workoutDetailsFragment.workout = workout;
                 workoutExerciseDetailsButtonFragmentTransaction.replace( R.id.master_list_fragment, workoutDetailsFragment );
                 mTracker.setScreenName( "Page: workout details" );
@@ -629,99 +622,43 @@ public class HomeScreen extends FragmentActivity implements MasterListFragment.O
 
     public void loadFromWidget(android.support.v4.app.FragmentTransaction fragmentTransaction) {
         updatePreferences();
+        new Categories();
+        new WorkoutsCategories();
         if (widgetToInflate == 999999) {
             workoutCategories = new WorkoutsCategories();
             fragmentTransaction.replace( R.id.master_list_fragment, workoutCategories );
         } else if (widgetToInflate != 666666) {
-            Log.e( "Widget to inflate", String.valueOf( widgetToInflate ) );
+            new WorkoutsCategories();
             fragmentTransaction = getSupportFragmentManager().beginTransaction();
             fragmentTransaction.add( R.id.master_list_fragment, masterListFragment ).addToBackStack( null );
             workoutExerciseDetailsFragment = new WorkoutExerciseDetailsFragment();
-            Cursor exerciseCursor = getContentResolver().query( CONTENT_URI, null, null, null, null );
-            exerciseCursor.moveToFirst();
-            for (int a = 0; a < exerciseCursor.getCount(); a++) {
-                exerciseCursor.moveToPosition( a );
-                if (widgetToInflate == exerciseCursor.getInt( exerciseCursor.getColumnIndex( _ID ) )) {
-                    String exerciseName = exerciseCursor.getString( exerciseCursor.getColumnIndex( ExerciseContract.ExerciseTable.EXERCISE_NAME ) );
-                    int categoriesOneValue = exerciseCursor.getInt( exerciseCursor.getColumnIndex( ExerciseContract.ExerciseTable.CATEGORY_ONE_STATE ) );
-                    int categoriesTwoValue = exerciseCursor.getInt( exerciseCursor.getColumnIndex( ExerciseContract.ExerciseTable.CATEGORY_TWO_STATE ) );
-                    int categoriesThreeValue = exerciseCursor.getInt( exerciseCursor.getColumnIndex( ExerciseContract.ExerciseTable.CATEGORY_THREE_STATE ) );
-                    int categoriesFourValue = exerciseCursor.getInt( exerciseCursor.getColumnIndex( ExerciseContract.ExerciseTable.CATEGORY_FOUR_STATE ) );
-                    int categoriesFiveValue = exerciseCursor.getInt( exerciseCursor.getColumnIndex( ExerciseContract.ExerciseTable.CATEGORY_FIVE_STATE ) );
-                    int categoriesSixValue = exerciseCursor.getInt( exerciseCursor.getColumnIndex( ExerciseContract.ExerciseTable.CATEGORY_SIX_STATE ) );
-                    String mediaSource = exerciseCursor.getString( exerciseCursor.getColumnIndex( ExerciseContract.ExerciseTable.MEDIA_SOURCE ) );
-                    int numberOfSets = exerciseCursor.getInt( exerciseCursor.getColumnIndex( ExerciseContract.ExerciseTable.NUMBER_OF_SETS ) );
-                    int maxWeight = exerciseCursor.getInt( exerciseCursor.getColumnIndex( ExerciseContract.ExerciseTable.MAX_WEIGHT ) );
-                    int startingWeight = exerciseCursor.getInt( exerciseCursor.getColumnIndex( ExerciseContract.ExerciseTable.STARTING_WEIGHT ) );
-                    String addToWorkout = exerciseCursor.getString( exerciseCursor.getColumnIndex( ExerciseContract.ExerciseTable.ADD_TO_WORKOUT ) );
-                    String notes = exerciseCursor.getString( exerciseCursor.getColumnIndex( ExerciseContract.ExerciseTable.NOTES ) );
-                    Exercise exerciseToAdd = new Exercise( exerciseName, categoriesOneValue, categoriesTwoValue,
-                            categoriesThreeValue, categoriesFourValue, categoriesFiveValue, categoriesSixValue,
-                            mediaSource, numberOfSets, maxWeight, startingWeight, addToWorkout, notes );
-                    exerciseToAdd.mID = exerciseCursor.getInt( exerciseCursor.getColumnIndex( ExerciseContract.ExerciseTable._ID ) );
-                    workoutExerciseDetailsFragment.exercise = exerciseToAdd;
-                    fragmentTransaction.replace( R.id.master_list_fragment, workoutExerciseDetailsFragment );
-                    fragmentTransaction.addToBackStack( null ).commit();
-                }
-            }
-            exerciseCursor.close();
-        }
-    }
-
-    public ArrayList<Workout> addWorkouts() {
-        Cursor cursor = getApplicationContext().getContentResolver().query( WORKOUT_CONTENT_URI, null, null, null, null );
-        ArrayList<Workout> workoutsList = new ArrayList<>();
-        if (cursor != null && cursor.moveToFirst()) {
-            for (int i = 0; i < cursor.getCount(); i++) {
-                cursor.moveToPosition( i );
-                String workoutName = cursor.getString( cursor.getColumnIndex( WorkoutContract.WorkoutsTable.WORKOUT_NAME ) );
-                int categoriesOneValue = cursor.getInt( cursor.getColumnIndex( WorkoutContract.WorkoutsTable.CATEGORY_ONE_STATE ) );
-                int categoriesTwoValue = cursor.getInt( cursor.getColumnIndex( WorkoutContract.WorkoutsTable.CATEGORY_TWO_STATE ) );
-                int categoriesThreeValue = cursor.getInt( cursor.getColumnIndex( WorkoutContract.WorkoutsTable.CATEGORY_THREE_STATE ) );
-                int categoriesFourValue = cursor.getInt( cursor.getColumnIndex( WorkoutContract.WorkoutsTable.CATEGORY_FOUR_STATE ) );
-                int categoriesFiveValue = cursor.getInt( cursor.getColumnIndex( WorkoutContract.WorkoutsTable.CATEGORY_FIVE_STATE ) );
-                int categoriesSixValue = cursor.getInt( cursor.getColumnIndex( WorkoutContract.WorkoutsTable.CATEGORY_SIX_STATE ) );
-                ArrayList<Integer> idOfExercises = new ArrayList<>();
-                idOfExercises.add( cursor.getInt( cursor.getColumnIndex( WorkoutContract.WorkoutsTable.EXERCISE_ONE_ID ) ) );
-                idOfExercises.add( cursor.getInt( cursor.getColumnIndex( WorkoutContract.WorkoutsTable.EXERCISE_TWO_ID ) ) );
-                idOfExercises.add( cursor.getInt( cursor.getColumnIndex( WorkoutContract.WorkoutsTable.EXERCISE_THREE_ID ) ) );
-                idOfExercises.add( cursor.getInt( cursor.getColumnIndex( WorkoutContract.WorkoutsTable.EXERCISE_FOUR_ID ) ) );
-                idOfExercises.add( cursor.getInt( cursor.getColumnIndex( WorkoutContract.WorkoutsTable.EXERCISE_FIVE_ID ) ) );
-                idOfExercises.add( cursor.getInt( cursor.getColumnIndex( WorkoutContract.WorkoutsTable.EXERCISE_SIX_ID ) ) );
-                idOfExercises.add( cursor.getInt( cursor.getColumnIndex( WorkoutContract.WorkoutsTable.EXERCISE_SEVEN_ID ) ) );
-                idOfExercises.add( cursor.getInt( cursor.getColumnIndex( WorkoutContract.WorkoutsTable.EXERCISE_EIGHT_ID ) ) );
-                idOfExercises.add( cursor.getInt( cursor.getColumnIndex( WorkoutContract.WorkoutsTable.EXERCISE_NINE_ID ) ) );
-                idOfExercises.add( cursor.getInt( cursor.getColumnIndex( WorkoutContract.WorkoutsTable.EXERCISE_TEN_ID ) ) );
-                idOfExercises.add( cursor.getInt( cursor.getColumnIndex( WorkoutContract.WorkoutsTable.EXERCISE_ELEVEN_ID ) ) );
-                idOfExercises.add( cursor.getInt( cursor.getColumnIndex( WorkoutContract.WorkoutsTable.EXERCISE_TWELVE_ID ) ) );
-                idOfExercises.add( cursor.getInt( cursor.getColumnIndex( WorkoutContract.WorkoutsTable.EXERCISE_THIRTEEN_ID ) ) );
-                idOfExercises.add( cursor.getInt( cursor.getColumnIndex( WorkoutContract.WorkoutsTable.EXERCISE_FOURTEEN_ID ) ) );
-                idOfExercises.add( cursor.getInt( cursor.getColumnIndex( WorkoutContract.WorkoutsTable.EXERCISE_FIFTEEN_ID ) ) );
-                idOfExercises.add( cursor.getInt( cursor.getColumnIndex( WorkoutContract.WorkoutsTable.EXERCISE_SIXTEEN_ID ) ) );
-                idOfExercises.add( cursor.getInt( cursor.getColumnIndex( WorkoutContract.WorkoutsTable.EXERCISE_SEVENTEEN_ID ) ) );
-                idOfExercises.add( cursor.getInt( cursor.getColumnIndex( WorkoutContract.WorkoutsTable.EXERCISE_EIGHTEEN_ID ) ) );
-                idOfExercises.add( cursor.getInt( cursor.getColumnIndex( WorkoutContract.WorkoutsTable.EXERCISE_NINETEEN_ID ) ) );
-                idOfExercises.add( cursor.getInt( cursor.getColumnIndex( WorkoutContract.WorkoutsTable.EXERCISE_TWENTY_ID ) ) );
-
-                Workout workoutToAdd = new Workout( workoutName, categoriesOneValue, categoriesTwoValue,
-                        categoriesThreeValue, categoriesFourValue, categoriesFiveValue, categoriesSixValue, idOfExercises.get( 0 ),
-                        idOfExercises.get( 1 ), idOfExercises.get( 2 ), idOfExercises.get( 3 ), idOfExercises.get( 4 ),
-                        idOfExercises.get( 5 ), idOfExercises.get( 6 ), idOfExercises.get( 7 ), idOfExercises.get( 8 ),
-                        idOfExercises.get( 9 ), idOfExercises.get( 10 ), idOfExercises.get( 11 ), idOfExercises.get( 12 ),
-                        idOfExercises.get( 13 ), idOfExercises.get( 14 ), idOfExercises.get( 15 ), idOfExercises.get( 16 ),
-                        idOfExercises.get( 17 ), idOfExercises.get( 18 ), idOfExercises.get( 19 )
-                );
-                workoutToAdd.mID = cursor.getInt( cursor.getColumnIndex( _ID ) );
-                workoutsList.add( workoutToAdd );
-                Log.e( "WORKOUT", String.valueOf( workoutToAdd.mID ) + "....." + String.valueOf( widgetWorkoutId ) );
-                if (workoutToAdd.mID == HomeScreen.widgetWorkoutId) {
-                    HomeScreen.workout = workoutToAdd;
-                    Log.e( "Changed", "here" );
+            if (exercisesFromLoader != null) {
+                for (int a = 0; a < exercisesFromLoader.size(); a++) {
+                    if (widgetToInflate == exercisesFromLoader.get( a ).getID()) {
+                        String exerciseName = exercisesFromLoader.get( a ).getExerciseName();
+                        int categoriesOneValue = exercisesFromLoader.get( a ).getCategoryOneValue();
+                        int categoriesTwoValue = exercisesFromLoader.get( a ).getCategoryTwoValue();
+                        int categoriesThreeValue = exercisesFromLoader.get( a ).getCategoryThreeValue();
+                        int categoriesFourValue = exercisesFromLoader.get( a ).getCategoryFourValue();
+                        int categoriesFiveValue = exercisesFromLoader.get( a ).getCategoryFiveValue();
+                        int categoriesSixValue = exercisesFromLoader.get( a ).getCategorySixValue();
+                        String mediaSource = exercisesFromLoader.get( a ).getMediaSource();
+                        int numberOfSets = exercisesFromLoader.get( a ).getNumberofSets();
+                        int maxWeight = exercisesFromLoader.get( a ).getMaxWeight();
+                        int startingWeight = exercisesFromLoader.get( a ).getStartingWeight();
+                        String addToWorkout = exercisesFromLoader.get( a ).getAddToWorkout();
+                        String notes = exercisesFromLoader.get( a ).getNotes();
+                        Exercise exerciseToAdd = new Exercise( exerciseName, categoriesOneValue, categoriesTwoValue,
+                                categoriesThreeValue, categoriesFourValue, categoriesFiveValue, categoriesSixValue,
+                                mediaSource, numberOfSets, maxWeight, startingWeight, addToWorkout, notes );
+                        exerciseToAdd.mID = exercisesFromLoader.get( a ).getID();
+                        workoutExerciseDetailsFragment.exercise = exerciseToAdd;
+                        fragmentTransaction.replace( R.id.master_list_fragment, workoutExerciseDetailsFragment );
+                        fragmentTransaction.addToBackStack( null ).commit();
+                    }
                 }
             }
         }
-        cursor.close();
-        return workoutsList;
     }
 
     public static void checkDisplayBanner(View view, int AdsDisabled) {
@@ -792,7 +729,6 @@ public class HomeScreen extends FragmentActivity implements MasterListFragment.O
 
     public void newConnection() {
         //Connectivity Manager, determines if there is internet connectivity
-        Log.e( "New connection", "has started" );
         ConnectivityManager cm = (ConnectivityManager) this.getSystemService( Context.CONNECTIVITY_SERVICE );
         isNetworkActive = cm.getActiveNetworkInfo();
         if (isNetworkActive != null && isNetworkActive.isConnectedOrConnecting()) {
@@ -802,7 +738,6 @@ public class HomeScreen extends FragmentActivity implements MasterListFragment.O
             }
             LoaderManager loaderManager = getLoaderManager();
             loaderManager.initLoader( NEWS_LOADER_ID, null, this );
-            Log.e( "Init loader", "has started" );
             loaderChecker++;
         } else if (isNetworkActive == null) {
             if (loaderChecker >= 1) {
@@ -817,16 +752,11 @@ public class HomeScreen extends FragmentActivity implements MasterListFragment.O
 
     @Override
     public Loader<ArrayList<News>> onCreateLoader(int id, Bundle args) {
-        if (id>10){
-            return new FlexLoader (this, id);
-        }else {
-            return new NewsLoader(this, getString( R.string.newsJson ));
-        }
+        return new NewsLoader(this, getString( R.string.newsJson ));
     }
 
     @Override
     public void onLoadFinished(Loader<ArrayList<News>> loader, ArrayList<News> newNews) {
-        Log.e( "Loader", "has finished" );
         news = newNews;
         newsFeedFragment = new NewsFeed();
         android.support.v4.app.FragmentTransaction loaderTransaction = getSupportFragmentManager().beginTransaction();

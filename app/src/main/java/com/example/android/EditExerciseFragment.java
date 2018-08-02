@@ -3,7 +3,6 @@ package com.example.android;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -20,22 +19,14 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
-
 import com.example.android.Database.ExerciseTableCleaner;
 import com.example.android.Database.ExerciseUpdateWorkoutLists;
-import com.example.android.Database.WorkoutsDatabase.WorkoutContract;
 import com.example.android.free.R;
-
 import java.util.ArrayList;
-
 import io.apptik.widget.multiselectspinner.MultiSelectSpinner;
 
-import static android.provider.BaseColumns._ID;
-import static com.example.android.Database.WorkoutsDatabase.WorkoutContract.WorkoutsTable.WORKOUT_CONTENT_URI;
-import static com.example.android.Database.WorkoutsDatabase.WorkoutContract.WorkoutsTable.WORKOUT_NAME;
 
 public class EditExerciseFragment extends android.support.v4.app.Fragment{
 
@@ -446,14 +437,12 @@ public class EditExerciseFragment extends android.support.v4.app.Fragment{
 
 
         options = new ArrayList<>();
-        Cursor cursor = getActivity().getContentResolver().query( WORKOUT_CONTENT_URI, null, null, null, null );
-        cursor.moveToFirst();
-        for (int i=0; i<cursor.getCount(); i++){
-            cursor.moveToPosition( i );
-            String newWorkout = cursor.getString( cursor.getColumnIndex( WORKOUT_NAME) );
-            options.add(newWorkout);
+        if (HomeScreen.workoutsFromLoader!=null) {
+            for (int i = 0; i < HomeScreen.workoutsFromLoader.size(); i++) {
+                String newWorkout = HomeScreen.workoutsFromLoader.get( i ).getWorkoutName();
+                options.add( newWorkout );
+            }
         }
-        cursor.close();
         final MultiSelectSpinner multiSelectSpinner = rootView.findViewById(R.id.new_exercise_workout_list_spinner);
         ArrayAdapter<String> adapter = new ArrayAdapter <String>(getActivity(), android.R.layout.simple_list_item_multiple_choice, options);
 
@@ -558,19 +547,18 @@ public class EditExerciseFragment extends android.support.v4.app.Fragment{
         ArrayList<String>  addToWorkoutRawValues =  new ArrayList<String>();
         ArrayList<Integer>  workoutsToAdd =  new ArrayList<Integer>();
         int hasValue = 0;
-        Cursor cursor = getActivity().getContentResolver().query( WORKOUT_CONTENT_URI, null, null, null, null );
-        cursor.moveToFirst();
 
         for (int i = 0; i < (checked.length); i++){
             if (checked[i]){
-                if (hasValue == 1){
+                if (hasValue == 1) {
                     String toAdd = options.get( i );
                     addToWorkoutRawValues.add( toAdd );
-                    for (int x = 0; x < cursor.getCount(); x++) {
-                        cursor.moveToPosition( x );
-                        if (cursor.getString( cursor.getColumnIndex( WORKOUT_NAME ) ).equals( toAdd )) {
-                            int toAddId = cursor.getInt( cursor.getColumnIndex( _ID ) );
-                            workoutsToAdd.add( toAddId );
+                    if (HomeScreen.workoutsFromLoader != null) {
+                        for (int x = 0; x < HomeScreen.workoutsFromLoader.size(); x++) {
+                            if (HomeScreen.workoutsFromLoader.get( x ).getWorkoutName().equals( toAdd )) {
+                                int toAddId = HomeScreen.workoutsFromLoader.get( x ).getID();
+                                workoutsToAdd.add( toAddId );
+                            }
                         }
                     }
                 }
@@ -579,15 +567,15 @@ public class EditExerciseFragment extends android.support.v4.app.Fragment{
                     addToWorkoutRawValues.clear();
                     addToWorkoutRawValues.add( starterString );
                     hasValue = 1;
-                    for (int x = 0; x < cursor.getCount(); x++) {
-                        cursor.moveToPosition( x );
-                        if (cursor.getString( cursor.getColumnIndex( WORKOUT_NAME ) ).equals( options.get(i) )) {
-                            int toAddId = cursor.getInt( cursor.getColumnIndex( _ID ) );
-                            workoutsToAdd.add( toAddId );
+                    if (HomeScreen.workoutsFromLoader != null) {
+                        for (int x = 0; x < HomeScreen.workoutsFromLoader.size(); x++) {
+                            if (HomeScreen.workoutsFromLoader.get( x ).getWorkoutName().equals( options.get( i ) )) {
+                                int toAddId = HomeScreen.workoutsFromLoader.get( x ).getID();
+                                workoutsToAdd.add( toAddId );
+                            }
                         }
                     }
                 }
-
             }
         }
         while (workoutsToAdd.size()<20) {
@@ -621,15 +609,13 @@ public class EditExerciseFragment extends android.support.v4.app.Fragment{
         boolean[] checkList = addToWorkoutSpinner.getSelected();
         for (int i = 0; i < (checkList.length); i++) {
             String checklistOption = options.get( i );
-            Cursor cursor = getActivity().getContentResolver().query( WORKOUT_CONTENT_URI, null, null, null, null );
-            cursor.moveToFirst();
             int toCompareAgainstId = 0;
-            for (int x = 0; x < cursor.getCount(); x++) {
-                cursor.moveToPosition( x );
-                String toCompareAgainst = cursor.getString( cursor.getColumnIndex( WORKOUT_NAME ) );
-                if (toCompareAgainst.equals( checklistOption )) {
-                    toCompareAgainstId = cursor.getInt( cursor.getColumnIndex( WorkoutContract.WorkoutsTable._ID ) );
-                    Log.e( "blah", String.valueOf( exerciseToEdit.getWorkoutIds() ) );
+            if (HomeScreen.workoutsFromLoader!=null) {
+                for (int x = 0; x < HomeScreen.workoutsFromLoader.size(); x++) {
+                    String toCompareAgainst = HomeScreen.workoutsFromLoader.get( x ).getWorkoutName();
+                    if (toCompareAgainst.equals( checklistOption )) {
+                        toCompareAgainstId = HomeScreen.workoutsFromLoader.get( x ).getID();
+                    }
                 }
             }
             if (toCompareAgainstId>0){

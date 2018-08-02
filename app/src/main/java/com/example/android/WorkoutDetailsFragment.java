@@ -2,7 +2,6 @@ package com.example.android;
 
 import android.content.Context;
 import android.content.DialogInterface;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -18,44 +17,12 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import com.example.android.Database.ExerciseContract;
 import com.example.android.Widget.WidgetWorkoutDetails;
 import com.example.android.free.R;
 import java.util.ArrayList;
 import github.nisrulz.recyclerviewhelper.RVHItemClickListener;
 import github.nisrulz.recyclerviewhelper.RVHItemDividerDecoration;
 import github.nisrulz.recyclerviewhelper.RVHItemTouchHelperCallback;
-import static android.provider.BaseColumns._ID;
-import static com.example.android.Database.ExerciseContract.ExerciseTable.CONTENT_URI;
-import static com.example.android.Database.ExerciseContract.ExerciseTable.DISTANCE;
-import static com.example.android.Database.ExerciseContract.ExerciseTable.EXERCISE_NAME;
-import static com.example.android.Database.ExerciseContract.ExerciseTable.EXERCISE_TYPE;
-import static com.example.android.Database.ExerciseContract.ExerciseTable.MAX_WEIGHT;
-import static com.example.android.Database.ExerciseContract.ExerciseTable.MINUTES;
-import static com.example.android.Database.ExerciseContract.ExerciseTable.NUMBER_OF_SETS;
-import static com.example.android.Database.ExerciseContract.ExerciseTable.STARTING_WEIGHT;
-import static com.example.android.Database.WorkoutsDatabase.WorkoutContract.WorkoutsTable.EXERCISE_EIGHTEEN_ID;
-import static com.example.android.Database.WorkoutsDatabase.WorkoutContract.WorkoutsTable.EXERCISE_EIGHT_ID;
-import static com.example.android.Database.WorkoutsDatabase.WorkoutContract.WorkoutsTable.EXERCISE_ELEVEN_ID;
-import static com.example.android.Database.WorkoutsDatabase.WorkoutContract.WorkoutsTable.EXERCISE_FIFTEEN_ID;
-import static com.example.android.Database.WorkoutsDatabase.WorkoutContract.WorkoutsTable.EXERCISE_FIVE_ID;
-import static com.example.android.Database.WorkoutsDatabase.WorkoutContract.WorkoutsTable.EXERCISE_FOURTEEN_ID;
-import static com.example.android.Database.WorkoutsDatabase.WorkoutContract.WorkoutsTable.EXERCISE_FOUR_ID;
-import static com.example.android.Database.WorkoutsDatabase.WorkoutContract.WorkoutsTable.EXERCISE_NINETEEN_ID;
-import static com.example.android.Database.WorkoutsDatabase.WorkoutContract.WorkoutsTable.EXERCISE_NINE_ID;
-import static com.example.android.Database.WorkoutsDatabase.WorkoutContract.WorkoutsTable.EXERCISE_ONE_ID;
-import static com.example.android.Database.WorkoutsDatabase.WorkoutContract.WorkoutsTable.EXERCISE_SEVENTEEN_ID;
-import static com.example.android.Database.WorkoutsDatabase.WorkoutContract.WorkoutsTable.EXERCISE_SEVEN_ID;
-import static com.example.android.Database.WorkoutsDatabase.WorkoutContract.WorkoutsTable.EXERCISE_SIXTEEN_ID;
-import static com.example.android.Database.WorkoutsDatabase.WorkoutContract.WorkoutsTable.EXERCISE_SIX_ID;
-import static com.example.android.Database.WorkoutsDatabase.WorkoutContract.WorkoutsTable.EXERCISE_TEN_ID;
-import static com.example.android.Database.WorkoutsDatabase.WorkoutContract.WorkoutsTable.EXERCISE_THIRTEEN_ID;
-import static com.example.android.Database.WorkoutsDatabase.WorkoutContract.WorkoutsTable.EXERCISE_THREE_ID;
-import static com.example.android.Database.WorkoutsDatabase.WorkoutContract.WorkoutsTable.EXERCISE_TWELVE_ID;
-import static com.example.android.Database.WorkoutsDatabase.WorkoutContract.WorkoutsTable.EXERCISE_TWENTY_ID;
-import static com.example.android.Database.WorkoutsDatabase.WorkoutContract.WorkoutsTable.EXERCISE_TWO_ID;
-import static com.example.android.Database.WorkoutsDatabase.WorkoutContract.WorkoutsTable.WORKOUT_CONTENT_URI;
-
 
 public class WorkoutDetailsFragment extends android.support.v4.app.Fragment implements DialogInterface {
 
@@ -71,8 +38,6 @@ public class WorkoutDetailsFragment extends android.support.v4.app.Fragment impl
     public WorkoutDetailsAdapter workoutDetailsAdapter;
     Context mContext;
     com.github.clans.fab.FloatingActionButton newExerciseFabButton;
-    Cursor widgetCursor;
-    Cursor widgetExerciseCursor;
     Toolbar mToolbar;
 
     public WorkoutDetailsFragment() {
@@ -80,13 +45,17 @@ public class WorkoutDetailsFragment extends android.support.v4.app.Fragment impl
 
 
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
+        if (HomeScreen.widgetWorkoutId!=666666) {
+            for (int i = 0; i < HomeScreen.workoutsFromLoader.size(); i++) {
+                if (HomeScreen.widgetWorkoutId == HomeScreen.workoutsFromLoader.get( i ).getID()) {
+                    workout = HomeScreen.workoutsFromLoader.get( i );
+                }
+            }
+        }
         exercises = getExercises();
         mContext = getContext();
         rootView = inflater.inflate( R.layout.workout_details_fragment, container, false );
         mToolbar = rootView.findViewById( R.id.toolbar );
-        widgetCursor = getActivity().getContentResolver().query( WORKOUT_CONTENT_URI, null, null, null, null );
-        widgetExerciseCursor = getActivity().getContentResolver().query( CONTENT_URI, null, null, null, null );
         workoutDetailsBackButton = rootView.findViewById( R.id.workout_details_back_button );
         workoutEditButton = rootView.findViewById( R.id.workout_edit_button );
         recyclerView = rootView.findViewById( R.id.workouts_details_view );
@@ -140,35 +109,32 @@ public class WorkoutDetailsFragment extends android.support.v4.app.Fragment impl
                 }else if (v == newExerciseFabButton){
                     HomeScreen.widgetWorkoutId = workout.mID;
                     ArrayList <WidgetWorkoutDetails> widgetExercises = new ArrayList<>(  );
-                    ArrayList<String> exerciseIds = getExerciseTableNames();
-                    for (int i = 0; i<exerciseIds.size(); i++){
-                        for (int y=0; y<widgetCursor.getCount(); y++){
-                            widgetCursor.moveToPosition( y );
-                            int currentExerciseId = widgetCursor.getInt(widgetCursor.getColumnIndex(getExerciseTableNames().get( i )));
-                            if (currentExerciseId !=0) {
-                                for (int p = 0; p<widgetExerciseCursor.getCount(); p++) {
-                                    widgetExerciseCursor.moveToPosition( p );
-                                    if (widgetExerciseCursor.getInt( widgetExerciseCursor.getColumnIndex( _ID ) ) == currentExerciseId) {
-                                        String exerciseName = widgetExerciseCursor.getString( widgetExerciseCursor.getColumnIndex( EXERCISE_NAME ) );
-                                        int numberOfSets = widgetExerciseCursor.getInt( widgetExerciseCursor.getColumnIndex( NUMBER_OF_SETS ) );
-                                        int maxWeight = widgetExerciseCursor.getInt( widgetExerciseCursor.getColumnIndex( MAX_WEIGHT ) );
-                                        int startingWeight = widgetExerciseCursor.getInt( widgetExerciseCursor.getColumnIndex( STARTING_WEIGHT ) );
-                                        int distance = widgetExerciseCursor.getInt( widgetExerciseCursor.getColumnIndex( DISTANCE) );
-                                        int time = widgetExerciseCursor.getInt( widgetExerciseCursor.getColumnIndex( MINUTES) );
-                                        int exerciseType = widgetExerciseCursor.getInt( widgetExerciseCursor.getColumnIndex( EXERCISE_TYPE ));
-                                        WidgetWorkoutDetails toAdd = new WidgetWorkoutDetails( currentExerciseId, exerciseName, numberOfSets, maxWeight, startingWeight,
-                                                                                               distance, time, exerciseType );
-                                        toAdd.mCurrentWorkoutId = workout.mID;
-                                        toAdd.mWorkoutCategory = HomeScreen.workoutCategory;
-                                        widgetExercises.add( toAdd);
-
-                                    }
+                        for (int y = 0; y < HomeScreen.workoutsFromLoader.size(); y++) {
+                            Workout currentWorkout = workout;
+                            int [] workoutExerciseListIdsToCheck = workoutExerciseIds(currentWorkout);
+                            int currentExerciseId = workoutExerciseListIdsToCheck[y];
+                                if (HomeScreen.exercisesFromLoader != null) {
+                                    for (int p = 0; p < HomeScreen.exercisesFromLoader.size(); p++) {
+                                        Exercise currentExercise = HomeScreen.exercisesFromLoader.get( p );
+                                        if (currentExercise.getID() == workoutExerciseListIdsToCheck[p]) {
+                                            String exerciseName = currentExercise.getExerciseName();
+                                            int numberOfSets = currentExercise.getNumberofSets();
+                                            int maxWeight = currentExercise.getMaxWeight();
+                                            int startingWeight = currentExercise.getStartingWeight();
+                                            int distance = currentExercise.getDistance();
+                                            int time = currentExercise.getTime();
+                                            int exerciseType = currentExercise.getExerciseType();
+                                            WidgetWorkoutDetails toAdd = new WidgetWorkoutDetails( currentExerciseId, exerciseName, numberOfSets, maxWeight, startingWeight,
+                                                    distance, time, exerciseType );
+                                            toAdd.mCurrentWorkoutId = workout.mID;
+                                            toAdd.mWorkoutCategory = HomeScreen.workoutCategory;
+                                            widgetExercises.add( toAdd );
+                                        }
                                 }
-                            }
                         }
-                        ScrollView scrollView = rootView.findViewById( R.id.workout_details_sv );
-                        HomeScreen.listStateTwo =scrollView.getScrollY();
                     }
+                    ScrollView scrollView = rootView.findViewById( R.id.workout_details_sv );
+                    HomeScreen.listStateTwo =scrollView.getScrollY();
                     HomeScreen.widgetWorkoutDetails = widgetExercises;
                     position = 4;
                     mCallback.onWorkoutDetailsButtonSelected( position );
@@ -257,36 +223,11 @@ public class WorkoutDetailsFragment extends android.support.v4.app.Fragment impl
         ArrayList<Exercise> exercisesToFeature = new ArrayList<>();
         for (int i = 0; i < exerciseIds.size(); i++) {
             if (exerciseIds.get( i ) != 0) {
-                Cursor cursor = getActivity().getContentResolver().query( CONTENT_URI, null, null, null, null );
-                cursor.moveToFirst();
-                for (int x = 0; x < cursor.getCount(); x++) {
-                    cursor.moveToPosition( x );
-                    int currentId = cursor.getInt( cursor.getColumnIndex( ExerciseContract.ExerciseTable._ID ) );
+                for (int x = 0; x < HomeScreen.exercisesFromLoader.size(); x++) {
+                    Exercise currentExercise = HomeScreen.exercisesFromLoader.get( x );
+                    int currentId = currentExercise.getID();
                     if (currentId == exerciseIds.get( i )) {
-                        String exerciseName = cursor.getString( cursor.getColumnIndex( ExerciseContract.ExerciseTable.EXERCISE_NAME) );
-                        int categoriesOneValue = cursor.getInt( cursor.getColumnIndex( ExerciseContract.ExerciseTable.CATEGORY_ONE_STATE) );
-                        int categoriesTwoValue = cursor.getInt( cursor.getColumnIndex( ExerciseContract.ExerciseTable.CATEGORY_TWO_STATE) );
-                        int categoriesThreeValue = cursor.getInt( cursor.getColumnIndex( ExerciseContract.ExerciseTable.CATEGORY_THREE_STATE) );
-                        int categoriesFourValue = cursor.getInt( cursor.getColumnIndex( ExerciseContract.ExerciseTable.CATEGORY_FOUR_STATE) );
-                        int categoriesFiveValue = cursor.getInt( cursor.getColumnIndex( ExerciseContract.ExerciseTable.CATEGORY_FIVE_STATE) );
-                        int categoriesSixValue = cursor.getInt( cursor.getColumnIndex( ExerciseContract.ExerciseTable.CATEGORY_SIX_STATE) );
-                        String mediaSource = cursor.getString( cursor.getColumnIndex( ExerciseContract.ExerciseTable.MEDIA_SOURCE) );
-                        int numberOfSets = cursor.getInt( cursor.getColumnIndex( ExerciseContract.ExerciseTable.NUMBER_OF_SETS) );
-                        int maxWeight = cursor.getInt( cursor.getColumnIndex( ExerciseContract.ExerciseTable.MAX_WEIGHT) );
-                        int startingWeight = cursor.getInt( cursor.getColumnIndex( ExerciseContract.ExerciseTable.STARTING_WEIGHT) );
-                        String addToWorkout = cursor.getString( cursor.getColumnIndex( ExerciseContract.ExerciseTable.ADD_TO_WORKOUT) );
-                        String notes = cursor.getString( cursor.getColumnIndex( ExerciseContract.ExerciseTable.NOTES) );
-                        Exercise exerciseToAdd = new Exercise( exerciseName, categoriesOneValue, categoriesTwoValue,
-                                categoriesThreeValue, categoriesFourValue, categoriesFiveValue, categoriesSixValue,
-                                mediaSource, numberOfSets, maxWeight, startingWeight, addToWorkout, notes);
-                        exerciseToAdd.mID = cursor.getInt (cursor.getColumnIndex( ExerciseContract.ExerciseTable._ID ));
-                        exerciseToAdd.mMediaType = cursor.getInt( cursor.getColumnIndex( ExerciseContract.ExerciseTable.MEDIA_TYPE ) );
-                        exerciseToAdd.mExerciseType = cursor.getInt( cursor.getColumnIndex( ExerciseContract.ExerciseTable.EXERCISE_TYPE ) );
-                        if (cursor.getInt( cursor.getColumnIndex( ExerciseContract.ExerciseTable.EXERCISE_TYPE ) )==1) {
-                            exerciseToAdd.mDistance = cursor.getColumnIndex( ExerciseContract.ExerciseTable.DISTANCE );
-                            exerciseToAdd.mTime = cursor.getColumnIndex( ExerciseContract.ExerciseTable.MINUTES);
-                        }
-                        exercisesToFeature.add( exerciseToAdd );
+                        exercisesToFeature.add( currentExercise );
                             }
                         }
                     }
@@ -295,28 +236,48 @@ public class WorkoutDetailsFragment extends android.support.v4.app.Fragment impl
         return exercisesToFeature;
     }
 
-    public static ArrayList<String> getExerciseTableNames() {
-        ArrayList <String> exerciseTableNames = new ArrayList<>(  );
-        exerciseTableNames.add( EXERCISE_ONE_ID);
-        exerciseTableNames.add( EXERCISE_TWO_ID);
-        exerciseTableNames.add( EXERCISE_THREE_ID);
-        exerciseTableNames.add( EXERCISE_FOUR_ID);
-        exerciseTableNames.add( EXERCISE_FIVE_ID);
-        exerciseTableNames.add( EXERCISE_SIX_ID);
-        exerciseTableNames.add( EXERCISE_SEVEN_ID);
-        exerciseTableNames.add( EXERCISE_EIGHT_ID);
-        exerciseTableNames.add( EXERCISE_NINE_ID);
-        exerciseTableNames.add( EXERCISE_TEN_ID);
-        exerciseTableNames.add( EXERCISE_ELEVEN_ID);
-        exerciseTableNames.add( EXERCISE_TWELVE_ID);
-        exerciseTableNames.add( EXERCISE_THIRTEEN_ID);
-        exerciseTableNames.add( EXERCISE_FOURTEEN_ID);
-        exerciseTableNames.add( EXERCISE_FIFTEEN_ID);
-        exerciseTableNames.add( EXERCISE_SIXTEEN_ID);
-        exerciseTableNames.add( EXERCISE_SEVENTEEN_ID);
-        exerciseTableNames.add( EXERCISE_EIGHTEEN_ID);
-        exerciseTableNames.add( EXERCISE_NINETEEN_ID);
-        exerciseTableNames.add( EXERCISE_TWENTY_ID);
-        return exerciseTableNames;
+    public static int[] workoutExerciseIds (Workout workout){
+        int exerciseListIds [] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+        int g = 0;
+        exerciseListIds[g] = workout.getExerciseOneId();
+        g++;
+        exerciseListIds[g] = workout.getExerciseTwoId();
+        g++;
+        exerciseListIds[g] = workout.getExerciseThreeId();
+        g++;
+        exerciseListIds[g] = workout.getExerciseFourId();
+        g++;
+        exerciseListIds[g] = workout.getExerciseFiveId();
+        g++;
+        exerciseListIds[g] = workout.getExerciseSixId();
+        g++;
+        exerciseListIds[g] = workout.getExerciseSevenId();
+        g++;
+        exerciseListIds[g] = workout.getExerciseEightId();
+        g++;
+        exerciseListIds[g] = workout.getExerciseNineId();
+        g++;
+        exerciseListIds[g] = workout.getExerciseTenId();
+        g++;
+        exerciseListIds[g] = workout.getExerciseElevenId();
+        g++;
+        exerciseListIds[g] = workout.getExerciseTwelveId();
+        g++;
+        exerciseListIds[g] = workout.getExerciseThirteenId();
+        g++;
+        exerciseListIds[g] = workout.getExerciseFourteenId();
+        g++;
+        exerciseListIds[g] = workout.getExerciseFifteenId();
+        g++;
+        exerciseListIds[g] = workout.getExerciseSixteenId();
+        g++;
+        exerciseListIds[g] = workout.getExerciseSeventeenId();
+        g++;
+        exerciseListIds[g] = workout.getExerciseEighteenId();
+        g++;
+        exerciseListIds[g] = workout.getExerciseNineteenId();
+        g++;
+        exerciseListIds[g] = workout.getExerciseTwentyId();
+        return exerciseListIds;
     }
 }

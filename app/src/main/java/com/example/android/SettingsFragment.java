@@ -4,14 +4,11 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,12 +19,8 @@ import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.Switch;
 import android.widget.TextView;
-
 import com.example.android.Widget.WorkoutWidget;
-import com.example.android.HomeScreen;
 import com.example.android.free.R;
-
-import static android.provider.BaseColumns._ID;
 import static android.view.View.GONE;
 import static com.example.android.Database.ExerciseContract.ExerciseTable.CONTENT_URI;
 import static com.example.android.Database.ExerciseContract.ExerciseTable.DISTANCE;
@@ -244,14 +237,12 @@ public class SettingsFragment extends android.support.v4.app.Fragment {
     }
 
     public void updateExerciseValues() {
-        Cursor cursor = getActivity().getContentResolver().query( CONTENT_URI, null, null, null, null );
-        cursor.moveToFirst();
+        if (HomeScreen.exercisesFromLoader!=null){
         int rowsUpdated;
-        for (int x = 0; x < cursor.getCount(); x++) {
-            cursor.moveToPosition( x );
-            int idOfExercise = cursor.getInt( cursor.getColumnIndex( _ID ) );
-            int exerciseMaxWeight = cursor.getInt( cursor.getColumnIndex( MAX_WEIGHT ) );
-            int exerciseStartingWeight = cursor.getInt( cursor.getColumnIndex( STARTING_WEIGHT ) );
+        for (int x = 0; x < HomeScreen.exercisesFromLoader.size(); x++) {
+            int idOfExercise = HomeScreen.exercisesFromLoader.get( x ).getID();
+            int exerciseMaxWeight = HomeScreen.exercisesFromLoader.get( x ).getMaxWeight();
+            int exerciseStartingWeight = HomeScreen.exercisesFromLoader.get( x ).getStartingWeight();
             if (kgValue == 1) {
                 double exerciseMaxWeightDouble = (exerciseMaxWeight / 2.2046);
                 exerciseMaxWeight = (int) exerciseMaxWeightDouble;
@@ -271,54 +262,50 @@ public class SettingsFragment extends android.support.v4.app.Fragment {
             rowsUpdated = getActivity().getContentResolver().update( updateUri, updateValues, null, null );
             Log.e( "updates", String.valueOf( rowsUpdated ) );
         }
+        }
     }
 
     public void updateCardioExerciseValues() {
-        Cursor cardioCursor = getActivity().getContentResolver().query( CONTENT_URI, null, null, null, null );
-        cardioCursor.moveToFirst();
-        int cardioRowsUpdated;
-        for (int y = 0; y < cardioCursor.getCount(); y++) {
-            cardioCursor.moveToPosition( y );
-            int idOfExercise = cardioCursor.getInt( cardioCursor.getColumnIndex( _ID ) );
-            int distance = cardioCursor.getInt( cardioCursor.getColumnIndex( DISTANCE ) );
-            if (kmValue == 0) {
-                double exerciseDistanceDouble = (distance / 1.609344);
-                distance = (int) exerciseDistanceDouble;
-            } else {
-                double exerciseDistanceDouble = (distance * 1.609344);
-                distance = (int) exerciseDistanceDouble;
+        if (HomeScreen.exercisesFromLoader!=null) {
+            int cardioRowsUpdated;
+            for (int y = 0; y < HomeScreen.exercisesFromLoader.size(); y++) {
+                int idOfExercise = HomeScreen.exercisesFromLoader.get( y ).getID();
+                int distance = HomeScreen.exercisesFromLoader.get( y ).getDistance();
+                if (kmValue == 0) {
+                    double exerciseDistanceDouble = (distance / 1.609344);
+                    distance = (int) exerciseDistanceDouble;
+                } else {
+                    double exerciseDistanceDouble = (distance * 1.609344);
+                    distance = (int) exerciseDistanceDouble;
+                }
+                ContentValues updateValues = new ContentValues();
+                updateValues.put( DISTANCE, distance );
+                String updateIDstring = String.valueOf( idOfExercise );
+                Uri updateUri = CONTENT_URI.buildUpon().appendPath( updateIDstring ).build();
+                cardioRowsUpdated = getActivity().getContentResolver().update( updateUri, updateValues, null, null );
+                Log.e( "updates", String.valueOf( cardioRowsUpdated ) );
             }
-            ContentValues updateValues = new ContentValues();
-            updateValues.put( DISTANCE, distance );
-            String updateIDstring = String.valueOf( idOfExercise );
-            Uri updateUri = CONTENT_URI.buildUpon().appendPath( updateIDstring ).build();
-            cardioRowsUpdated = getActivity().getContentResolver().update( updateUri, updateValues, null, null );
-            Log.e( "updates", String.valueOf( cardioRowsUpdated ) );
         }
     }
 
     public void deleteAll (){
         int exercisesDeleted;
         int workoutsDeleted;
-        Cursor cursor = getActivity().getContentResolver().query( CONTENT_URI, null, null, null, null );
-        cursor.moveToFirst();
-        for (int x = 0; x < cursor.getCount(); x++) {
-            cursor.moveToPosition( x );
-            int idOfExercise = cursor.getInt( cursor.getColumnIndex( _ID ) );
-            String exerciseIdString = String.valueOf( idOfExercise );
-            Uri deleteExercisesUri = CONTENT_URI.buildUpon().appendPath( exerciseIdString ).build();
-            exercisesDeleted = getActivity().getContentResolver().delete( deleteExercisesUri, null, null );
+        if (HomeScreen.exercisesFromLoader!=null) {
+            for (int x = 0; x < HomeScreen.exercisesFromLoader.size(); x++) {
+                int idOfExercise = HomeScreen.exercisesFromLoader.get(x).getID();
+                String exerciseIdString = String.valueOf( idOfExercise );
+                Uri deleteExercisesUri = CONTENT_URI.buildUpon().appendPath( exerciseIdString ).build();
+                exercisesDeleted = getActivity().getContentResolver().delete( deleteExercisesUri, null, null );
+            }
         }
-        Cursor cursorTwo = getActivity().getContentResolver().query( WORKOUT_CONTENT_URI, null, null, null, null );
-        cursorTwo.moveToFirst();
-        for (int x = 0; x < cursorTwo.getCount(); x++) {
-            cursorTwo.moveToPosition( x );
-            int idOfWorkout = cursorTwo.getInt( cursorTwo.getColumnIndex( _ID ) );
-            String workoutsIdString = String.valueOf( idOfWorkout );
-            Uri deleteWorkoutsUri = WORKOUT_CONTENT_URI.buildUpon().appendPath( workoutsIdString ).build();
-            workoutsDeleted = getActivity().getContentResolver().delete( deleteWorkoutsUri, null, null );
+        if (HomeScreen.workoutsFromLoader!=null) {
+            for (int x = 0; x < HomeScreen.workoutsFromLoader.size(); x++) {
+                int idOfWorkout = HomeScreen.workoutsFromLoader.get( x ).getID();
+                String workoutsIdString = String.valueOf( idOfWorkout );
+                Uri deleteWorkoutsUri = WORKOUT_CONTENT_URI.buildUpon().appendPath( workoutsIdString ).build();
+                workoutsDeleted = getActivity().getContentResolver().delete( deleteWorkoutsUri, null, null );
+            }
         }
-        cursor.close();
-        cursorTwo.close();
     }
 }

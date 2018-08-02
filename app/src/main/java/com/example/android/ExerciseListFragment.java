@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -45,8 +46,7 @@ public class ExerciseListFragment extends android.support.v4.app.Fragment{
     ArrayList<Exercise> allExercises;
     ArrayList<Exercise> exercises;
     Context mContext;
-    private RecyclerView recyclerView;
-    private ExerciseListAdapter exerciseListAdapter;
+    Toolbar mToolbar;
 
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
@@ -54,8 +54,9 @@ public class ExerciseListFragment extends android.support.v4.app.Fragment{
         exercises = applyCategoryFilter(allExercises);
         mContext = getContext();
         rootView = inflater.inflate( R.layout.exercise_list_fragment, container, false );
-        recyclerView = (RecyclerView) rootView.findViewById( R.id.exercises_list_view );
-        exerciseListAdapter = new ExerciseListAdapter( exercises, mContext );
+        mToolbar = rootView.findViewById( R.id.toolbar );
+        RecyclerView recyclerView = rootView.findViewById( R.id.exercises_list_view );
+        ExerciseListAdapter exerciseListAdapter = new ExerciseListAdapter( exercises, mContext );
         recyclerView.setAdapter( exerciseListAdapter );
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager( mContext, LinearLayoutManager.VERTICAL, false );
 
@@ -63,10 +64,10 @@ public class ExerciseListFragment extends android.support.v4.app.Fragment{
         recyclerView.setHasFixedSize(false);
 
         RecyclerView.ItemDecoration itemDecoration = new DividerItemDecoration(mContext, DividerItemDecoration.VERTICAL);
-        ItemTouchHelper.Callback callback = new RVHItemTouchHelperCallback(exerciseListAdapter, true, true,
+        ItemTouchHelper.Callback callback = new RVHItemTouchHelperCallback( exerciseListAdapter, true, true,
                 true);
         ItemTouchHelper helper = new ItemTouchHelper(callback);
-        helper.attachToRecyclerView(recyclerView);
+        helper.attachToRecyclerView( recyclerView );
 
         // Set the divider in the recyclerview
         recyclerView.addItemDecoration(new RVHItemDividerDecoration(mContext, LinearLayoutManager.VERTICAL));

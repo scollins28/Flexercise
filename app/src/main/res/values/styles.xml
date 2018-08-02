@@ -8,9 +8,4 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <style name="mySpinnerItemStyle" parent="@android:style/Widget.Holo.DropDownItem.Spinner">
-        <item name="android:textColor">@color/spinnerWhite</item>
-        <item name="android:background">@color/colorPrimaryDoubleDark</item>
-    </style>
-
 </resources>

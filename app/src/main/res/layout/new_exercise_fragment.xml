@@ -1,22 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:fab="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/new_exercise_fragment"
     android:orientation="vertical"
     android:background="@color/colorPrimaryDoubleDark">
 
-    <LinearLayout
+    <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorAccent"
+        android:elevation="24dp"
         android:orientation="vertical"
-        android:elevation="24dp">
+        app:contentInsetStart="0dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -24,7 +22,6 @@
             android:orientation="vertical">
 
             <ImageView
-                android:id="@+id/imageView"
                 android:layout_width="200dp"
                 android:layout_height="80dp"
                 android:src="@drawable/flexercise_logo_small"
@@ -41,7 +38,7 @@
                 <ImageButton
                     android:layout_width="0dp"
                     android:layout_height="40dp"
-                    android:layout_gravity="left"
+                    android:layout_gravity="start"
                     android:layout_weight="1"
                     android:background="@android:color/transparent"
                     android:contentDescription="@string/backButton"
@@ -64,9 +61,9 @@
                 <Button
                     android:layout_width="0dp"
                     android:layout_height="40dp"
-                    android:layout_gravity="right"
+                    android:layout_gravity="end"
                     android:layout_weight="2"
-                    android:layout_marginRight="8dp"
+                    android:layout_marginEnd="8dp"
                     android:background="@color/colorAccent"
                     android:textColor="@color/spinnerWhite"
                     android:contentDescription="@string/doneButton"
@@ -77,7 +74,7 @@
 
         </LinearLayout>
 
-    </LinearLayout>
+    </android.support.v7.widget.Toolbar>
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
@@ -91,7 +88,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginBottom="8dp"
-            android:background="#fff"
+            android:background="@color/spinnerWhite"
             android:orientation="vertical"
             app:layout_constraintBottom_toTopOf="@+id/adView"
             app:layout_constraintTop_toTopOf="parent">
@@ -114,7 +111,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="8dp"
-                        android:layout_marginLeft="8dp"
                         android:layout_marginStart="8dp"
                         android:layout_marginTop="8dp"
                         android:text="@string/exercise_name"
@@ -135,6 +131,7 @@
                         android:layout_marginTop="8dp"
                         android:hint="@string/exercise_name_hint"
                         android:textSize="20sp"
+                        android:maxLength="30"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/exercise_name_tv"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -154,7 +151,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="8dp"
-                        android:layout_marginLeft="8dp"
                         android:layout_marginStart="8dp"
                         android:layout_marginTop="8dp"
                         android:text="@string/exercise_type"
@@ -168,7 +164,6 @@
                         android:id="@+id/exercise_type_weight"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="24dp"
                         android:layout_marginStart="24dp"
                         android:layout_marginTop="8dp"
                         android:checked="true"
@@ -207,11 +202,9 @@
                     app:layout_constraintTop_toBottomOf="@id/exercise_type_cl">
 
                     <TextView
-                        android:id="@+id/category_name_tv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="8dp"
-                        android:layout_marginLeft="8dp"
                         android:layout_marginStart="8dp"
                         android:layout_marginTop="8dp"
                         android:text="@string/category"
@@ -222,11 +215,9 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <com.github.clans.fab.FloatingActionMenu
-                        android:id="@+id/workout_fab_menu"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="8dp"
-                        android:layout_marginRight="8dp"
                         android:contentDescription="@string/floating_action_button"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -239,9 +230,9 @@
                         fab:menu_fab_label="@string/choose_categories"
                         fab:menu_fab_size="normal"
                         fab:menu_icon="@drawable/fab_dumbell_icon_50x50"
-                        fab:menu_labels_colorNormal="#333333"
-                        fab:menu_labels_colorPressed="#444444"
-                        fab:menu_labels_colorRipple="#66FFFFFF"
+                        fab:menu_labels_colorNormal="@color/fab_label_normal"
+                        fab:menu_labels_colorPressed="@color/fab_label_pressed"
+                        fab:menu_labels_colorRipple="@color/fab_label_rippel"
                         fab:menu_labels_cornerRadius="3dp"
                         fab:menu_labels_ellipsize="none"
                         fab:menu_labels_hideAnimation="@anim/fab_slide_out_to_right"
@@ -256,7 +247,7 @@
                         fab:menu_labels_showAnimation="@anim/fab_slide_in_from_right"
                         fab:menu_labels_showShadow="true"
                         fab:menu_labels_singleLine="false"
-                        fab:menu_labels_textColor="#FFFFFF"
+                        fab:menu_labels_textColor="@color/spinnerWhite"
                         fab:menu_labels_textSize="14sp"
                         fab:menu_openDirection="down"
                         fab:menu_shadowColor="@color/colorHomeButton"
@@ -390,7 +381,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="8dp"
-                        android:layout_marginLeft="8dp"
                         android:layout_marginStart="8dp"
                         android:text="@string/exercise_media"
                         android:textColor="@color/textColor"
@@ -437,7 +427,6 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="8dp"
-                            android:layout_marginLeft="8dp"
                             android:layout_marginStart="8dp"
                             android:layout_marginTop="8dp"
                             android:text="@string/add_a_youtube_url"
@@ -474,11 +463,9 @@
                         app:layout_constraintTop_toTopOf="parent">
 
                         <TextView
-                            android:id="@+id/add_local_file_text"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="8dp"
-                            android:layout_marginLeft="8dp"
                             android:layout_marginStart="8dp"
                             android:layout_marginTop="8dp"
                             android:text="@string/add_a_local_file"
@@ -494,7 +481,6 @@
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="8dp"
                             android:layout_marginEnd="8dp"
-                            android:layout_marginRight="8dp"
                             android:layout_marginTop="8dp"
                             android:background="@color/colorAccent"
                             android:contentDescription="@string/add_a_local_file_button"
@@ -522,7 +508,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="8dp"
-                        android:layout_marginLeft="8dp"
                         android:layout_marginStart="8dp"
                         android:layout_marginTop="8dp"
                         android:text="@string/exercise_number_of_sets"
@@ -537,10 +522,10 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="8dp"
-                        android:layout_marginRight="8dp"
                         android:layout_marginTop="8dp"
                         android:hint="@string/exercise_number_of_sets_hint"
                         android:inputType="number"
+                        android:maxLength="5"
                         android:textSize="20sp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -553,14 +538,13 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp"
                     android:layout_marginTop="8dp"
-                    app:layout_constraintTop_toBottomOf="@id/exercise_number_of_sets_cl">>
+                    app:layout_constraintTop_toBottomOf="@id/exercise_number_of_sets_cl">
 
                     <TextView
                         android:id="@+id/exercise_max_weight_tv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="8dp"
-                        android:layout_marginLeft="8dp"
                         android:layout_marginStart="8dp"
                         android:layout_marginTop="8dp"
                         android:text="@string/exercise_max_weight_KG"
@@ -582,6 +566,7 @@
                         android:hint="@string/exercise_max_weight_hint_KG"
                         android:inputType="number"
                         android:textSize="20sp"
+                        android:maxLength="5"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/exercise_max_weight_tv"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -601,7 +586,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="8dp"
-                        android:layout_marginLeft="8dp"
                         android:layout_marginStart="8dp"
                         android:layout_marginTop="8dp"
                         android:text="@string/exercise_starting_weight_KG"
@@ -623,6 +607,7 @@
                         android:hint="@string/exercise_starting_weight_hint_KG"
                         android:inputType="number"
                         android:textSize="20sp"
+                        android:maxLength="5"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/exercise_starting_weight_tv"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -643,7 +628,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="8dp"
-                        android:layout_marginLeft="8dp"
                         android:layout_marginStart="8dp"
                         android:layout_marginTop="8dp"
                         android:text="@string/add_to_workout"
@@ -684,7 +668,6 @@
                         android:id="@+id/exercise_notes_tv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="8dp"
                         android:layout_marginStart="8dp"
                         android:layout_marginTop="8dp"
                         android:text="@string/exercise_notes"
@@ -704,6 +687,7 @@
                         android:layout_marginTop="8dp"
                         android:hint="@string/notes_hint"
                         android:textSize="20sp"
+                        android:maxLength="300"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/exercise_notes_tv"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -730,7 +714,7 @@
             ads:layout_constraintEnd_toEndOf="parent"
             ads:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/scrollView2" />
+            app:layout_constraintTop_toBottomOf="@+id/scrollView3" />
 
     </android.support.constraint.ConstraintLayout>
 

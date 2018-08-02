@@ -1,21 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/settings_fragment"
     android:orientation="vertical"
     android:background="@color/colorPrimaryDoubleDark">
 
-    <LinearLayout
+    <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorAccent"
+        android:elevation="24dp"
         android:orientation="vertical"
-        android:elevation="24dp">
+        app:contentInsetStart="0dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -23,30 +21,29 @@
             android:orientation="vertical">
 
             <ImageView
-                android:id="@+id/imageView"
                 android:layout_width="200dp"
                 android:layout_height="80dp"
-                android:src="@drawable/flexercise_logo_small"
-                android:contentDescription="@string/small_flexercise_logo"/>
+                android:contentDescription="@string/small_flexercise_logo"
+                android:src="@drawable/flexercise_logo_small" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/colorPrimary"
                 android:orientation="horizontal"
-                android:paddingTop="8dp"
-                android:paddingBottom="8dp">
+                android:paddingBottom="8dp"
+                android:paddingTop="8dp">
 
                 <ImageButton
+                    android:id="@+id/settings_back_button"
                     android:layout_width="0dp"
                     android:layout_height="40dp"
-                    android:layout_gravity="left"
+                    android:layout_gravity="start"
                     android:layout_weight="1"
                     android:background="@android:color/transparent"
                     android:contentDescription="@string/backButton"
                     android:scaleType="fitCenter"
-                    android:src="@drawable/back_arrow"
-                    android:id="@+id/settings_back_button"/>
+                    android:src="@drawable/back_arrow" />
 
                 <TextView
                     android:layout_width="0dp"
@@ -63,13 +60,13 @@
 
         </LinearLayout>
 
-    </LinearLayout>
+    </android.support.v7.widget.Toolbar>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/toolbar"
-        android:background="#fff"
+        android:background="@color/spinnerWhite"
         android:orientation="vertical">
 
         <LinearLayout
@@ -78,11 +75,9 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/weight_units_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
-                android:layout_marginLeft="8dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:text="@string/preferred_weight"
@@ -94,7 +89,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
-                android:layout_marginLeft="8dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:checked="true"
@@ -108,7 +102,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
-                android:layout_marginLeft="8dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:checked="false"
@@ -125,11 +118,9 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/distance_units_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
-                android:layout_marginLeft="8dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:text="@string/preferred_distance"
@@ -141,7 +132,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
-                android:layout_marginLeft="8dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:checked="true"
@@ -155,7 +145,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
-                android:layout_marginLeft="8dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:checked="false"
@@ -172,11 +161,9 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/erase_all_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
-                android:layout_marginLeft="8dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:text="@string/erase_all"
@@ -188,7 +175,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
-                android:layout_marginLeft="8dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:background="@color/colorAccent"
@@ -205,11 +191,9 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/remove_ads_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
-                android:layout_marginLeft="8dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:text="@string/remove_adverts"
@@ -221,7 +205,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
-                android:layout_marginLeft="8dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:background="@color/colorAccent"
@@ -238,11 +221,9 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/show_timer_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
-                android:layout_marginLeft="8dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:text="@string/show_timer"
@@ -254,7 +235,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
-                android:layout_marginLeft="8dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:text="@string/only_available_with_adverts_off"
@@ -266,7 +246,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
-                android:layout_marginLeft="8dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:textOn="@string/on"
@@ -289,5 +268,5 @@
         android:layout_margin="8dp"
         android:contentDescription="@string/advert"
         ads:adSize="BANNER"
-        ads:adUnitId="ca-app-pub-3940256099942544/6300978111"></com.google.android.gms.ads.AdView>
+        ads:adUnitId="ca-app-pub-3940256099942544/6300978111" />
 </RelativeLayout>

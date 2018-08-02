@@ -1,22 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     xmlns:fab="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/new_workout_fragment"
     android:orientation="vertical"
     android:background="@color/colorPrimaryDoubleDark">
 
-    <LinearLayout
+    <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorAccent"
+        android:elevation="24dp"
         android:orientation="vertical"
-        android:elevation="24dp">
+        app:contentInsetStart="0dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -24,7 +22,6 @@
             android:orientation="vertical">
 
             <ImageView
-                android:id="@+id/imageView"
                 android:layout_width="200dp"
                 android:layout_height="80dp"
                 android:src="@drawable/flexercise_logo_small"
@@ -41,7 +38,7 @@
                 <ImageButton
                     android:layout_width="0dp"
                     android:layout_height="40dp"
-                    android:layout_gravity="left"
+                    android:layout_gravity="start"
                     android:layout_weight="1"
                     android:background="@android:color/transparent"
                     android:contentDescription="@string/backButton"
@@ -64,9 +61,9 @@
                 <Button
                     android:layout_width="0dp"
                     android:layout_height="40dp"
-                    android:layout_gravity="right"
+                    android:layout_gravity="end"
                     android:layout_weight="2"
-                    android:layout_marginRight="8dp"
+                    android:layout_marginEnd="8dp"
                     android:background="@color/colorAccent"
                     android:textColor="@color/spinnerWhite"
                     android:contentDescription="@string/doneButton"
@@ -77,14 +74,14 @@
 
         </LinearLayout>
 
-    </LinearLayout>
+    </android.support.v7.widget.Toolbar>>
 
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/toolbar"
-        android:background="#fff"
+        android:background="@color/spinnerWhite"
         android:orientation="vertical">
 
         <android.support.constraint.ConstraintLayout
@@ -105,7 +102,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp"
-                    android:layout_marginLeft="8dp"
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="8dp"
                     android:text="@string/workout_name"
@@ -125,6 +121,7 @@
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="8dp"
                     android:hint="@string/workout_name_hint"
+                    android:maxLength="30"
                     android:textSize="20sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/workout_name_tv"
@@ -141,11 +138,9 @@
                 app:layout_constraintTop_toBottomOf="@id/workout_name_cl">
 
                 <TextView
-                    android:id="@+id/category_name_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp"
-                    android:layout_marginLeft="8dp"
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="8dp"
                     android:text="@string/category"
@@ -156,11 +151,9 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <com.github.clans.fab.FloatingActionMenu
-                    android:id="@+id/workout_fab_menu"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="8dp"
-                    android:layout_marginRight="8dp"
                     android:contentDescription="@string/floating_action_button"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -173,9 +166,9 @@
                     fab:menu_fab_label="@string/choose_categories"
                     fab:menu_fab_size="normal"
                     fab:menu_icon="@drawable/fab_dumbell_icon_50x50"
-                    fab:menu_labels_colorNormal="#333333"
-                    fab:menu_labels_colorPressed="#444444"
-                    fab:menu_labels_colorRipple="#66FFFFFF"
+                    fab:menu_labels_colorNormal="@color/fab_label_normal"
+                    fab:menu_labels_colorPressed="@color/fab_label_pressed"
+                    fab:menu_labels_colorRipple="@color/fab_label_rippel"
                     fab:menu_labels_cornerRadius="3dp"
                     fab:menu_labels_ellipsize="none"
                     fab:menu_labels_hideAnimation="@anim/fab_slide_out_to_right"
@@ -190,7 +183,7 @@
                     fab:menu_labels_showAnimation="@anim/fab_slide_in_from_right"
                     fab:menu_labels_showShadow="true"
                     fab:menu_labels_singleLine="false"
-                    fab:menu_labels_textColor="#FFFFFF"
+                    fab:menu_labels_textColor="@color/spinnerWhite"
                     fab:menu_labels_textSize="14sp"
                     fab:menu_openDirection="down"
                     fab:menu_shadowColor="@color/colorHomeButton"
@@ -325,7 +318,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp"
-                    android:layout_marginLeft="8dp"
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="8dp"
                     android:text="@string/exercises_to_include_tv"
@@ -368,7 +360,7 @@
         android:layout_margin="8dp"
         ads:adSize="BANNER"
         android:contentDescription="@string/advert"
-        ads:adUnitId="ca-app-pub-3940256099942544/6300978111"></com.google.android.gms.ads.AdView>
+        ads:adUnitId="ca-app-pub-3940256099942544/6300978111" />
 
 
 </RelativeLayout>

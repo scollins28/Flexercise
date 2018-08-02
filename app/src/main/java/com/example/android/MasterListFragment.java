@@ -37,10 +37,10 @@ public class MasterListFragment extends Fragment {
         final View rootView = inflater.inflate( R.layout.home_screen_fragment, container, false );
 
         //Attaching button views to variables
-        exerciseButton = (Button) rootView.findViewById(R.id.exercises_button);
-        workoutButton = (Button) rootView.findViewById(R.id.workouts_button);
-        settingsButton = (Button) rootView.findViewById(R.id.setttings_button);
-        newsButton = (Button) rootView.findViewById(R.id.news_button);
+        exerciseButton = rootView.findViewById(R.id.exercises_button);
+        workoutButton = rootView.findViewById(R.id.workouts_button);
+        settingsButton = rootView.findViewById(R.id.setttings_button);
+        newsButton = rootView.findViewById(R.id.news_button);
 
         // Setting on click listener for the three buttons
 

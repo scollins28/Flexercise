@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -30,6 +31,7 @@ public class WorkoutListFragment extends android.support.v4.app.Fragment{
     public Context mContext;
     private RecyclerView recyclerView;
     private WorkoutListAdapter workoutListAdapter;
+    Toolbar mToolbar;
 
 
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -41,7 +43,8 @@ public class WorkoutListFragment extends android.support.v4.app.Fragment{
 
         rootView = inflater.inflate( R.layout.workout_list_fragment, container, false );
 
-        recyclerView = (RecyclerView) rootView.findViewById( R.id.workouts_list_view );
+        mToolbar = rootView.findViewById( R.id.toolbar );
+        recyclerView = rootView.findViewById( R.id.workouts_list_view );
         workoutListAdapter = new WorkoutListAdapter( workouts, mContext );
         recyclerView.setAdapter( workoutListAdapter );
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager( mContext, LinearLayoutManager.VERTICAL, false );

@@ -9,6 +9,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -72,6 +73,7 @@ public class WorkoutDetailsFragment extends android.support.v4.app.Fragment impl
     com.github.clans.fab.FloatingActionButton newExerciseFabButton;
     Cursor widgetCursor;
     Cursor widgetExerciseCursor;
+    Toolbar mToolbar;
 
     public WorkoutDetailsFragment() {
     }
@@ -82,11 +84,12 @@ public class WorkoutDetailsFragment extends android.support.v4.app.Fragment impl
         exercises = getExercises();
         mContext = getContext();
         rootView = inflater.inflate( R.layout.workout_details_fragment, container, false );
+        mToolbar = rootView.findViewById( R.id.toolbar );
         widgetCursor = getActivity().getContentResolver().query( WORKOUT_CONTENT_URI, null, null, null, null );
         widgetExerciseCursor = getActivity().getContentResolver().query( CONTENT_URI, null, null, null, null );
         workoutDetailsBackButton = rootView.findViewById( R.id.workout_details_back_button );
         workoutEditButton = rootView.findViewById( R.id.workout_edit_button );
-        recyclerView = (RecyclerView) rootView.findViewById( R.id.workouts_details_view );
+        recyclerView = rootView.findViewById( R.id.workouts_details_view );
         workoutDetailsAdapter = new WorkoutDetailsAdapter( exercises, mContext );
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager( mContext, LinearLayoutManager.VERTICAL, false );
 

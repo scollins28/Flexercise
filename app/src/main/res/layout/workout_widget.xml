@@ -1,21 +1,16 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/widget_complete_view"
-    android:orientation="vertical"
-    >
+    android:orientation="vertical">
 
     <LinearLayout
-        android:id="@+id/background_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorPrimaryDark"
         android:orientation="vertical">
 
         <LinearLayout
-            android:id="@+id/linearLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -25,7 +20,6 @@
             android:background="@color/colorAccent">
 
             <ImageView
-                android:id="@+id/widget_icon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:contentDescription="@string/flexercise_logo"
@@ -46,7 +40,7 @@
                 android:layout_marginTop="8dp"
                 android:gravity="center_horizontal"
                 android:text="@string/please_select_a_workout"
-                android:textColor="#ffffff"
+                android:textColor="@color/spinnerWhite"
                 android:textSize="18sp"
                 android:textStyle="bold|italic"
                 android:visibility="gone"/>
@@ -55,8 +49,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
-                android:layout_marginRight="8dp"
-                android:layout_centerInParent="true"
+                android:gravity="center"
                 android:paddingTop="8dp"
                 android:text="@string/load_workouts"
                 android:contentDescription="@string/load_workouts"
@@ -67,8 +60,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:id="@+id/linear_layout_widget_details">
+            android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/appwidget_text"
@@ -83,7 +75,7 @@
                 android:layout_weight="6"
                 android:gravity="center_horizontal"
                 android:text="@string/exercise_name_placeholder"
-                android:textColor="#ffffff"
+                android:textColor="@color/spinnerWhite"
                 android:textSize="18sp"
                 android:textStyle="bold|italic" />
 
@@ -99,8 +91,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/zero_placeholder"
-                android:layout_marginRight="8dp"
-                android:textColor="#ffffff"
+                android:layout_marginEnd="8dp"
+                android:textColor="@color/spinnerWhite"
                 android:textSize="12sp"
                 android:textStyle="bold|italic" />
 
@@ -111,7 +103,7 @@
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
                 android:text="@string/of"
-                android:textColor="#ffffff"
+                android:textColor="@color/spinnerWhite"
                 android:textSize="12sp"
                 android:textStyle="bold|italic" />
 
@@ -119,9 +111,9 @@
                 android:id="@+id/appwidget_exercise_number_of_x"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="8dp"
+                android:layout_marginStart="8dp"
                 android:text="@string/zero_placeholder"
-                android:textColor="#ffffff"
+                android:textColor="@color/spinnerWhite"
                 android:textSize="12sp"
                 android:textStyle="bold|italic" />
             </LinearLayout>
@@ -129,14 +121,12 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/constraintLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:orientation="horizontal">
 
             <LinearLayout
-                android:id="@+id/text_one"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="4"
@@ -149,7 +139,7 @@
                     android:layout_gravity="center_vertical"
                     android:gravity="center_horizontal"
                     android:text="@string/number_of_set_text"
-                    android:textColor="#ffffff"
+                    android:textColor="@color/spinnerWhite"
                     android:textSize="12sp"
                     android:textStyle="bold|italic" />
 
@@ -160,13 +150,12 @@
                     android:layout_gravity="center_vertical"
                     android:gravity="center_horizontal"
                     android:text="@string/zero_placeholder"
-                    android:textColor="#ffffff"
+                    android:textColor="@color/spinnerWhite"
                     android:textSize="12sp"
                     android:textStyle="bold|italic" />
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/text_two"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="7"
@@ -180,7 +169,7 @@
                     android:layout_gravity="center_vertical"
                     android:gravity="center_horizontal"
                     android:text="@string/max_weight_text"
-                    android:textColor="#ffffff"
+                    android:textColor="@color/spinnerWhite"
                     android:textSize="12sp"
                     android:textStyle="bold|italic" />
 
@@ -191,7 +180,7 @@
                     android:layout_gravity="center_vertical"
                     android:gravity="center_horizontal"
                     android:text="@string/zero_placeholder"
-                    android:textColor="#ffffff"
+                    android:textColor="@color/spinnerWhite"
                     android:textSize="12sp"
                     android:textStyle="bold|italic" />
 
@@ -202,14 +191,13 @@
                     android:layout_gravity="center_vertical"
                     android:gravity="center_horizontal"
                     android:text="@string/KG"
-                    android:textColor="#ffffff"
+                    android:textColor="@color/spinnerWhite"
                     android:textSize="12sp"
                     android:textStyle="bold|italic" />
 
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/text_three"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="7"
@@ -222,7 +210,7 @@
                     android:layout_gravity="center_vertical"
                     android:gravity="center_horizontal"
                     android:text="@string/starting_weight_text"
-                    android:textColor="#ffffff"
+                    android:textColor="@color/spinnerWhite"
                     android:textSize="12sp"
                     android:textStyle="bold|italic" />
 
@@ -233,7 +221,7 @@
                     android:layout_gravity="center_vertical"
                     android:gravity="center_horizontal"
                     android:text="@string/zero_placeholder"
-                    android:textColor="#ffffff"
+                    android:textColor="@color/spinnerWhite"
                     android:textSize="12sp"
                     android:textStyle="bold|italic" />
 
@@ -244,7 +232,7 @@
                     android:layout_gravity="center_vertical"
                     android:gravity="center_horizontal"
                     android:text="@string/KG"
-                    android:textColor="#ffffff"
+                    android:textColor="@color/spinnerWhite"
                     android:textSize="12sp"
                     android:textStyle="bold|italic" />
 
@@ -263,7 +251,6 @@
             android:layout_marginTop="8dp">
 
             <LinearLayout
-                android:id="@+id/button_one_view"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -274,7 +261,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_marginEnd="8dp"
-                    android:layout_marginRight="8dp"
                     android:paddingTop="8dp"
                     android:contentDescription="@string/previousButton"
                     android:text="@string/previousButton"
@@ -282,7 +268,6 @@
             </LinearLayout>
 
             <RelativeLayout
-                android:id="@+id/button_two_view"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -293,7 +278,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="8dp"
-                    android:layout_marginRight="8dp"
                     android:layout_centerInParent="true"
                     android:paddingTop="8dp"
                     android:text="@string/load_exercise"
@@ -302,18 +286,17 @@
             </RelativeLayout>
 
             <RelativeLayout
-                android:id="@+id/button_three_view"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:orientation="horizontal"
-                android:layout_gravity="right">
+                android:layout_gravity="end">
 
                 <Button
                     android:id="@+id/widget_next"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"
                     android:paddingTop="8dp"
                     android:text="@string/next"
                     android:contentDescription="@string/nextButton"

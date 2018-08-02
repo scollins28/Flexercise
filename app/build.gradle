@@ -4,11 +4,11 @@ def keystoreProperties = new Properties()
 keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 android {
     signingConfigs {
-        config {
-            keyAlias keystoreProperties['keyAlias']
-            keyPassword keystoreProperties['keyPassword']
-            storeFile file(keystoreProperties['storeFile'])
-            storePassword keystoreProperties['storePassword']
+        release {
+            keyAlias 'flexercise'
+            keyPassword 'flexercise'
+            storeFile file('C:/Users/scoll/OneDrive/Desktop/Udacity/Flexercise/app/src/main/flexercise.jks')
+            storePassword 'flexercise'
         }
     }
     sourceSets {
@@ -22,19 +22,24 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.com.example.android.flexercise.test.runner.AndroidJUnitRunner"
-        signingConfig signingConfigs.config
         buildConfigField "String", "API_KEY", '"1dccb9e6b15f48bb8acba117832869f8"'
         buildConfigField "String", "YOUTUBE_API_KEY", '"AIzaSyC8pfqbJu_rWhBcn5nEAORpczMJkpavah4"'
+        signingConfig signingConfigs.release
     }
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+        }
+        debug {
+            signingConfig signingConfigs.release
         }
     }
     dependencies {
         implementation fileTree(include: ['*.jar'], dir: 'libs')
         implementation 'com.android.support:appcompat-v7:27.1.1'
+        implementation 'com.android.support:customtabs:27.1.1'
         implementation 'com.android.support.constraint:constraint-layout:1.1.2'
         testImplementation 'junit:junit:4.12'
         implementation 'com.android.support:design:27.1.1'

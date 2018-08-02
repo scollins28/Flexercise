@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -83,6 +84,7 @@ public class EditWorkoutFragment extends android.support.v4.app.Fragment{
     EditText workoutNameEditText;
     MultiSelectSpinner exerciseListMultiSpinner;
     MultiSelectSpinner addToWorkoutSpinner;
+    Toolbar mToolbar;
 
 
     public EditWorkoutFragment() {
@@ -91,6 +93,7 @@ public class EditWorkoutFragment extends android.support.v4.app.Fragment{
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         rootView = inflater.inflate( R.layout.new_workout_fragment, container, false );
+        mToolbar = rootView.findViewById( R.id.toolbar );
         mContext = getActivity();
         context = mContext;
         addToWorkoutSpinner = rootView.findViewById( R.id.new_exercise_workout_list_spinner );
@@ -109,7 +112,6 @@ public class EditWorkoutFragment extends android.support.v4.app.Fragment{
         workoutNameEditText = rootView.findViewById( R.id.workout_name_edit_text );
         workoutNameEditText.setText( workoutToEdit.getWorkoutName() );
         subheading.setText( R.string.edit_workout );
-        exerciseListMultiSpinner= rootView.findViewById( R.id.edit_exercise_workout_list_spinner);
 
 
         editWorkoutCategoryOneValue = workoutToEdit.mCategoryOneValue;
@@ -297,7 +299,7 @@ public class EditWorkoutFragment extends android.support.v4.app.Fragment{
             options.add(newExercise);
         }
         cursor.close();
-        final MultiSelectSpinner multiSelectSpinner = (MultiSelectSpinner) rootView.findViewById(R.id.new_exercise_workout_list_spinner);
+        final MultiSelectSpinner multiSelectSpinner = rootView.findViewById(R.id.new_exercise_workout_list_spinner);
         ArrayAdapter<String> adapter = new ArrayAdapter <String>(getActivity(), android.R.layout.simple_list_item_multiple_choice, options);
 
 

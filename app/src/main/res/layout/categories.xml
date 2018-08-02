@@ -1,21 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/settings_fragment"
     android:orientation="vertical"
     android:background="@color/colorPrimaryDoubleDark">
 
-    <LinearLayout
+    <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorAccent"
+        android:elevation="24dp"
         android:orientation="vertical"
-        android:elevation="24dp">
+        app:contentInsetStart="0dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -23,7 +21,6 @@
             android:orientation="vertical">
 
             <ImageView
-                android:id="@+id/imageView"
                 android:layout_width="200dp"
                 android:layout_height="80dp"
                 android:src="@drawable/flexercise_logo_small"
@@ -64,7 +61,8 @@
 
         </LinearLayout>
 
-    </LinearLayout>
+    </android.support.v7.widget.Toolbar>
+
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"

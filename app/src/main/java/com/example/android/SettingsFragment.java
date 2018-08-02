@@ -9,7 +9,10 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -50,6 +53,7 @@ public class SettingsFragment extends android.support.v4.app.Fragment {
     int removeAdvertsValue;
     Switch timerSwitch;
     int timerSwitchValue;
+    Toolbar mToolbar;
 
 
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -63,6 +67,7 @@ public class SettingsFragment extends android.support.v4.app.Fragment {
         removeAdvertsValue = sharedPref.getInt( "removeAdvertsValue", removeAdvertsValue );
 
         rootView = inflater.inflate( R.layout.settings_fragment, container, false );
+        mToolbar = rootView.findViewById( R.id.toolbar );
         kgCheckbox = rootView.findViewById( R.id.weight_unit_kg_checkbox );
         lbsCheckbox = rootView.findViewById( R.id.weight_unit_lbs_checkbox );
         kmCheckbox = rootView.findViewById( R.id.distance_unit_km_checkbox );

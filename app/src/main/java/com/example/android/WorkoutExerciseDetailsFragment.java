@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,7 +34,6 @@ import static com.example.android.WorkoutDetailsFragment.getExerciseTableNames;
 public class WorkoutExerciseDetailsFragment extends android.support.v4.app.Fragment{
 
     View rootView;
-    ConstraintLayout navigationButtons;
     ImageButton exerciseDetailsBackButton;
     Button exerciseDoneButton;
     Button nextButton;
@@ -52,11 +52,10 @@ public class WorkoutExerciseDetailsFragment extends android.support.v4.app.Fragm
     Button mediaButton;
     Button startButton;
     Button restartButton;
-    String media;
-    Boolean allowed;
     int mediaType = 0;
     int removeAdvertsValue = 0;
     String youTubeString;
+    Toolbar mToolbar;
 
     public WorkoutExerciseDetailsFragment() {
     }
@@ -64,6 +63,8 @@ public class WorkoutExerciseDetailsFragment extends android.support.v4.app.Fragm
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         createWorkout();
         rootView = inflater.inflate( R.layout.workout_exercise_details_fragment, container, false );
+
+        mToolbar = rootView.findViewById( R.id.toolbar );
         exerciseDetailsBackButton = rootView.findViewById( R.id.workout_exercise_details_back_button );
         exerciseDoneButton = rootView.findViewById( R.id.workout_exercise_done_button );
         nextButton = rootView.findViewById( R.id.exercise_next_button );

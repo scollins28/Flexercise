@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -41,6 +42,7 @@ public class ExerciseDetailsFragment extends android.support.v4.app.Fragment {
     int mediaType;
     String youTubeString;
     int exerciseType;
+    Toolbar mToolbar;
 
     public ExerciseDetailsFragment() {
     }
@@ -49,6 +51,7 @@ public class ExerciseDetailsFragment extends android.support.v4.app.Fragment {
 
         rootView = inflater.inflate( R.layout.exercise_details_fragment, container, false );
 
+        mToolbar = rootView.findViewById( R.id.toolbar );
         exerciseDetailsBackButton = rootView.findViewById( R.id.exercise_details_back_button );
         exerciseEditButton = rootView.findViewById( R.id.exercise_edit_button );
         mediaButton = rootView.findViewById( R.id.media_button );

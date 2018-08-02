@@ -88,6 +88,9 @@ public class HomeScreen extends FragmentActivity implements MasterListFragment.O
     public static long mTime;
     public static ArrayList<WidgetWorkoutDetails> widgetWorkoutDetails;
     public static ArrayList<News> news = new ArrayList<>(  );
+    public static ArrayList<Workout> workoutsFromLoader;
+    public static ArrayList<Exercise> exercisesFromLoader;
+
 
 
     FragmentManager fragmentManager;
@@ -814,7 +817,11 @@ public class HomeScreen extends FragmentActivity implements MasterListFragment.O
 
     @Override
     public Loader<ArrayList<News>> onCreateLoader(int id, Bundle args) {
-        return new NewsLoader(this, getString( R.string.newsJson ));
+        if (id>10){
+            return new FlexLoader (this, id);
+        }else {
+            return new NewsLoader(this, getString( R.string.newsJson ));
+        }
     }
 
     @Override

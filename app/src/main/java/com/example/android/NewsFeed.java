@@ -9,6 +9,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -31,8 +32,7 @@ public class NewsFeed extends android.support.v4.app.Fragment {
     ImageButton newsListBackButton;
     ArrayList<News> news;
     public Context mContext;
-    private RecyclerView recyclerView;
-    private NewsListAdapter newsListAdapter;
+    Toolbar mToolbar;
 
 
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -47,8 +47,8 @@ public class NewsFeed extends android.support.v4.app.Fragment {
                 Log.e( "News is not 0", String.valueOf( news ) );
                 rootView = inflater.inflate( R.layout.news_feed_fragment, container, false );
 
-                recyclerView = (RecyclerView) rootView.findViewById( R.id.news_list_view );
-                newsListAdapter = new NewsListAdapter( news, mContext );
+                RecyclerView recyclerView = rootView.findViewById( R.id.news_list_view );
+                NewsListAdapter newsListAdapter = new NewsListAdapter( news, mContext );
                 recyclerView.setAdapter( newsListAdapter );
                 LinearLayoutManager linearLayoutManager = new LinearLayoutManager( mContext, LinearLayoutManager.VERTICAL, false );
                 recyclerView.setLayoutManager( linearLayoutManager );
@@ -126,6 +126,7 @@ public class NewsFeed extends android.support.v4.app.Fragment {
 
 
         }
+        mToolbar = rootView.findViewById( R.id.toolbar );
         return rootView;
     }
 

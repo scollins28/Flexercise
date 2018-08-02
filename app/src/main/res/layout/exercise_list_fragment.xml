@@ -2,20 +2,19 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:fab="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/exercise_list_fragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorPrimaryDoubleDark"
     android:orientation="vertical">
 
-    <LinearLayout
+    <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorAccent"
         android:elevation="24dp"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        app:contentInsetStart="0dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -23,7 +22,6 @@
             android:orientation="vertical">
 
             <ImageView
-                android:id="@+id/imageView"
                 android:layout_width="200dp"
                 android:layout_height="80dp"
                 android:src="@drawable/flexercise_logo_small"
@@ -41,7 +39,7 @@
                     android:id="@+id/exercise_back_button"
                     android:layout_width="0dp"
                     android:layout_height="40dp"
-                    android:layout_gravity="left"
+                    android:layout_gravity="start"
                     android:layout_weight="1"
                     android:background="@android:color/transparent"
                     android:contentDescription="@string/backButton"
@@ -63,7 +61,7 @@
 
         </LinearLayout>
 
-    </LinearLayout>
+    </android.support.v7.widget.Toolbar>
 
     <android.support.constraint.ConstraintLayout
         android:id="@+id/constraintLayout2"
@@ -104,14 +102,12 @@
         </ScrollView>
 
         <com.github.clans.fab.FloatingActionMenu
-            android:id="@+id/exercise_fab_menu"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_above="@+id/adView"
-            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
             android:layout_marginBottom="8dp"
             android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
             android:contentDescription="@string/floating_action_button"
             app:layout_constraintBottom_toTopOf="@+id/adView"
             app:layout_constraintEnd_toEndOf="parent"
@@ -124,9 +120,9 @@
             fab:menu_fab_label=""
             fab:menu_fab_size="normal"
             fab:menu_icon="@drawable/fab_dumbell_icon_50x50"
-            fab:menu_labels_colorNormal="#333333"
-            fab:menu_labels_colorPressed="#444444"
-            fab:menu_labels_colorRipple="#66FFFFFF"
+            fab:menu_labels_colorNormal="@color/fab_label_normal"
+            fab:menu_labels_colorPressed="@color/fab_label_pressed"
+            fab:menu_labels_colorRipple="@color/fab_label_rippel"
             fab:menu_labels_cornerRadius="3dp"
             fab:menu_labels_ellipsize="none"
             fab:menu_labels_hideAnimation="@anim/fab_slide_out_to_right"
@@ -141,7 +137,7 @@
             fab:menu_labels_showAnimation="@anim/fab_slide_in_from_right"
             fab:menu_labels_showShadow="true"
             fab:menu_labels_singleLine="false"
-            fab:menu_labels_textColor="#FFFFFF"
+            fab:menu_labels_textColor="@color/spinnerWhite"
             fab:menu_labels_textSize="14sp"
             fab:menu_openDirection="up"
             fab:menu_shadowColor="@color/colorHomeButton"
@@ -164,24 +160,24 @@
         </com.github.clans.fab.FloatingActionMenu>
 
 
-    <com.google.android.gms.ads.AdView xmlns:ads="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/adView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_margin="8dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginStart="8dp"
-        ads:adSize="BANNER"
-        android:contentDescription="@string/advert"
-        ads:adUnitId="ca-app-pub-3940256099942544/6300978111"
-        ads:layout_constraintBottom_toBottomOf="@+id/constraintLayout2"
-        ads:layout_constraintEnd_toEndOf="parent"
-        ads:layout_constraintStart_toStartOf="parent"></com.google.android.gms.ads.AdView>
+        <com.google.android.gms.ads.AdView xmlns:ads="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/adView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="8dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginStart="8dp"
+            ads:adSize="BANNER"
+            android:contentDescription="@string/advert"
+            ads:adUnitId="ca-app-pub-3940256099942544/6300978111"
+            ads:layout_constraintBottom_toBottomOf="@+id/constraintLayout2"
+            ads:layout_constraintEnd_toEndOf="parent"
+            ads:layout_constraintStart_toStartOf="parent" />
     </android.support.constraint.ConstraintLayout>
 
 </android.support.constraint.ConstraintLayout>

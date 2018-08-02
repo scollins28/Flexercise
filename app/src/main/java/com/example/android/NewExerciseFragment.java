@@ -8,11 +8,11 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -24,8 +24,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.example.android.Database.ExerciseUpdateWorkoutLists;
-import com.example.android.Exercise;
-import com.example.android.HomeScreen;
 import com.example.android.free.R;
 
 import java.util.ArrayList;
@@ -111,13 +109,15 @@ public class NewExerciseFragment extends android.support.v4.app.Fragment{
     int exerciseType = 0;
     CheckBox weightCheckbox;
     CheckBox cardioCheckbox;
-    public NewExerciseFragment(){
+    Toolbar mToolbar;
+    MultiSelectSpinner addToWorkoutSpinner;
 
-    }
+    public NewExerciseFragment(){}
 
     public View onCreateView(@NonNull final LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         rootView = inflater.inflate( R.layout.new_exercise_fragment, container, false );
+        mToolbar = rootView.findViewById( R.id.toolbar );
         mContext = getActivity();
         context = mContext;
         newExerciseBackButton = rootView.findViewById( R.id.new_exercise_back_button );
@@ -140,6 +140,7 @@ public class NewExerciseFragment extends android.support.v4.app.Fragment{
         youtubeConstraintLayout = rootView.findViewById( R.id.youtube_entry_cl );
         localVideoConstraintLayout = rootView.findViewById( R.id.local_video_entry_cl );
         selectLocalVideoButton = rootView.findViewById( R.id.local_video_button);
+        addToWorkoutSpinner = rootView.findViewById( R.id.new_exercise_workout_list_spinner );
 
         if (HomeScreen.kgValue==1){
             maxWeightTv.setText( R.string.exercise_max_weight_KG );
@@ -199,6 +200,7 @@ public class NewExerciseFragment extends android.support.v4.app.Fragment{
                     }
                 }
                 else if (v == newExerciseDoneButton){
+                    int proceed = 1;
                     if (mediaType==1){
                     EditText youtubeEditText = rootView.findViewById( R.id.add_youtube_string_edit_text );
                     String editTextText = youtubeEditText.getText().toString();
@@ -207,6 +209,7 @@ public class NewExerciseFragment extends android.support.v4.app.Fragment{
                             insertNewData( newExercise );
                             new ExerciseUpdateWorkoutLists( newExercise, mContext );
                             position = 1;
+                            proceed = 0;
                             mCallback.onNewExerciseButtonSelected( position );
                         } else {
                             android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder( getContext() );
@@ -224,9 +227,10 @@ public class NewExerciseFragment extends android.support.v4.app.Fragment{
                                 public void onClick(DialogInterface dialog, int which) {
                                 }
                             } );
-
+                            proceed = 0;
                             android.support.v7.app.AlertDialog dialog = builder.create();
                             dialog.show();
+                    }
                     }
                         if (newExerciseCategoryOneValue == 0 && newExerciseCategoryTwoValue == 0 &&
                                 newExerciseCategoryThreeValue == 0 && newExerciseCategoryFourValue == 0
@@ -246,12 +250,38 @@ public class NewExerciseFragment extends android.support.v4.app.Fragment{
                                 public void onClick(DialogInterface dialog, int which) {
                                 }
                             } );
-
+                            proceed = 0;
                             android.support.v7.app.AlertDialog dialog = builder.create();
                             dialog.show();
                         }
+                    boolean[] checkingMax = addToWorkoutSpinner.getSelected();
+                    int selectedItems = 0;
+                        for (int l = 0; l<checkingMax.length; l++){
+                            if (checkingMax[l]){
+                                selectedItems++;
+                            }
+                        }
+                    if (selectedItems>19){
+                        android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder( getContext() );
+                        builder.setCancelable( true );
+                        builder.setTitle( R.string.too_many_workouts );
+                        builder.setMessage( R.string.please_reduce_workouts);
+                        builder.setPositiveButton( R.string.confirm,
+                                new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                    }
+                                } );
+                        builder.setNegativeButton( R.string.cancel, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                            }
+                        } );
+                        proceed = 0;
+                        android.support.v7.app.AlertDialog dialog = builder.create();
+                        dialog.show();
                     }
-                    else {
+                    if (proceed == 1) {
                         Exercise newExercise = addExercise();
                         insertNewData( newExercise );
                         new ExerciseUpdateWorkoutLists( newExercise, mContext );
@@ -411,7 +441,7 @@ public class NewExerciseFragment extends android.support.v4.app.Fragment{
             }
             cursor.close();
         }
-        MultiSelectSpinner multiSelectSpinner = (MultiSelectSpinner) rootView.findViewById(R.id.new_exercise_workout_list_spinner);
+        MultiSelectSpinner multiSelectSpinner = rootView.findViewById(R.id.new_exercise_workout_list_spinner);
         ArrayAdapter<String> adapter = new ArrayAdapter <String>(getActivity(), android.R.layout.simple_list_item_multiple_choice, options);
 
         multiSelectSpinner
@@ -502,7 +532,7 @@ public class NewExerciseFragment extends android.support.v4.app.Fragment{
             startingWeight = 0;
             time = Integer.parseInt( startingWeightAsString );
         }
-        MultiSelectSpinner addToWorkoutSpinner = rootView.findViewById( R.id.new_exercise_workout_list_spinner );
+
         boolean[] checked = addToWorkoutSpinner.getSelected();
         ArrayList<String>  addToWorkoutRawValues =  new ArrayList<String>();
         ArrayList<Integer> workoutsExerciseIsOn = new ArrayList<>( );

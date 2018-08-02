@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -74,6 +75,7 @@ public class NewWorkoutFragment extends android.support.v4.app.Fragment{
     Context mContext;
     static Context context;
     ArrayList<String> options;
+    Toolbar mToolbar;
 
     public NewWorkoutFragment(){
 
@@ -84,6 +86,8 @@ public class NewWorkoutFragment extends android.support.v4.app.Fragment{
         rootView = inflater.inflate( R.layout.new_workout_fragment, container, false );
         mContext = getActivity();
         context = mContext;
+
+        mToolbar = rootView.findViewById( R.id.toolbar );
 
         newWorkoutBackButton = rootView.findViewById( R.id.new_workout_back_button );
         newWorkoutDoneButton = rootView.findViewById( R.id.new_workout_done_button);
@@ -249,7 +253,7 @@ public class NewWorkoutFragment extends android.support.v4.app.Fragment{
             options.add(newExercise);
         }
         cursor.close();
-        MultiSelectSpinner multiSelectSpinner = (MultiSelectSpinner) rootView.findViewById(R.id.new_exercise_workout_list_spinner);
+        MultiSelectSpinner multiSelectSpinner = rootView.findViewById(R.id.new_exercise_workout_list_spinner);
         ArrayAdapter<String> adapter = new ArrayAdapter <String>(getActivity(), android.R.layout.simple_list_item_multiple_choice, options);
 
         multiSelectSpinner

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +23,7 @@ public class WorkoutsCategories extends Fragment {
     ImageButton absCategoryButton;
     ImageButton legsCategoryButton;
     ImageButton cardioCategoryButton;
+    Toolbar mToolbar;
 
 
     //Empty constructor
@@ -36,7 +38,7 @@ public class WorkoutsCategories extends Fragment {
 
         mContext = getContext();
         final View rootView = inflater.inflate( R.layout.categories, container, false );
-
+        mToolbar = rootView.findViewById( R.id.toolbar );
         //Attaching button views to variables
 
         backButton = rootView.findViewById(R.id.categories_back_button);

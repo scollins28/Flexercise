@@ -1,5 +1,6 @@
 package com.example.android;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.database.Cursor;
@@ -7,6 +8,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -70,22 +72,24 @@ public class EditExerciseFragment extends android.support.v4.app.Fragment{
     TextView startingWeightTv;
     MultiSelectSpinner exerciseListMultiSpinner;
     MultiSelectSpinner addToWorkoutSpinner;
-    LinearLayout youTubeURLEditor;
     ConstraintLayout youtubeConstraintLayout;
     CheckBox weightCheckbox;
     CheckBox cardioCheckbox;
     int mediaType = 0;
     int exerciseType = 0;
+    Toolbar mToolbar;
 
     public EditExerciseFragment () {
 
     }
 
+    @SuppressLint("CutPasteId")
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         exerciseType = exerciseToEdit.getExerciseType();
 
         rootView = inflater.inflate( R.layout.new_exercise_fragment, container, false );
+        mToolbar = rootView.findViewById( R.id.toolbar );
         mContext = getActivity();
         context = mContext;
         subheading = rootView.findViewById( R.id.new_exercise_subheading);
@@ -160,7 +164,6 @@ public class EditExerciseFragment extends android.support.v4.app.Fragment{
         notesEditText = rootView.findViewById( R.id.exercise_notes_edit_text);
         notesEditText.setText( exerciseToEdit.getNotes());
         mediaSpinner = rootView.findViewById( R.id.exercise_media_spinner);
-        youTubeURLEditor = rootView.findViewById( R.id.exercise_youtube_cl );
         exerciseListMultiSpinner= rootView.findViewById( R.id.new_exercise_workout_list_spinner);
         addToWorkoutSpinner = rootView.findViewById( R.id.new_exercise_workout_list_spinner);
 
@@ -451,7 +454,7 @@ public class EditExerciseFragment extends android.support.v4.app.Fragment{
             options.add(newWorkout);
         }
         cursor.close();
-        final MultiSelectSpinner multiSelectSpinner = (MultiSelectSpinner) rootView.findViewById(R.id.new_exercise_workout_list_spinner);
+        final MultiSelectSpinner multiSelectSpinner = rootView.findViewById(R.id.new_exercise_workout_list_spinner);
         ArrayAdapter<String> adapter = new ArrayAdapter <String>(getActivity(), android.R.layout.simple_list_item_multiple_choice, options);
 
         multiSelectSpinner

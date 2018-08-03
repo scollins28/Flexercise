@@ -4,18 +4,24 @@ def keystoreProperties = new Properties()
 keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 android {
     signingConfigs {
-        release {
-            keyAlias 'flexercise'
+        flexercise {
+            keyAlias 'flexerciseKeyStore'
             keyPassword 'flexercise'
-            storeFile file('C:/Users/scoll/OneDrive/Desktop/Udacity/Flexercise/app/src/main/flexercise.jks')
+            storeFile file('/flexerciseKeyStore.jks')
             storePassword 'flexercise'
         }
     }
+    buildTypes {
+        release {
+            signingConfig signingConfigs.flexercise
+        }
+    }
+
     sourceSets {
         main { java.srcDirs = ['src/main/java', 'src/free/java'] }
     }
-    compileSdkVersion 27
     defaultConfig {
+        compileSdkVersion 27
         applicationId "com.example.android.flexercise"
         minSdkVersion 22
         targetSdkVersion 27
@@ -24,18 +30,9 @@ android {
         testInstrumentationRunner "android.support.com.example.android.flexercise.test.runner.AndroidJUnitRunner"
         buildConfigField "String", "API_KEY", '"1dccb9e6b15f48bb8acba117832869f8"'
         buildConfigField "String", "YOUTUBE_API_KEY", '"AIzaSyC8pfqbJu_rWhBcn5nEAORpczMJkpavah4"'
-        signingConfig signingConfigs.release
+        signingConfig signingConfigs.flexercise
     }
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.release
-        }
-        debug {
-            signingConfig signingConfigs.release
-        }
-    }
+
     dependencies {
         implementation fileTree(include: ['*.jar'], dir: 'libs')
         implementation 'com.android.support:appcompat-v7:27.1.1'

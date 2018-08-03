@@ -7,7 +7,7 @@ android {
         flexercise {
             keyAlias 'flexerciseKeyStore'
             keyPassword 'flexercise'
-            storeFile file('/flexerciseKeyStore.jks')
+            storeFile file('../app/flexerciseKeyStore.jks')
             storePassword 'flexercise'
         }
     }
